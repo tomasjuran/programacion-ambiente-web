@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="TP1 - Introducción al maquetado con HTML - Programación en Ambiente Web - Universidad Nacional de Luján - 2018">
+	<meta name="keywords" content="HTML, CSS, XML, JavaScript">
+	<meta name="author" content="Juran, Martín Tomás & Marazzo, Leonardo José">
+	<title>TP1 - Introducción al maquetado con HTML</title>
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<base target="_blank">
+</head>
+<body>
+	<header>
+		<h2>Trabajo Práctico #1</h2>
+		<h1>Introducción al maquetado con HTML</h1>
+		<p>Programación en Ambiente Web - 11086</p>
+		<p>Universidad Nacional de Luján 2018</p>
+		<img src="res/logo-unlu.png" alt="Logo UNLu">
+		<p>
+			Juran, Martín Tomás - 143191 - 
+			<a href="mailto:tomasjuran96@gmail.com">tomasjuran96@gmail.com</a>
+		</p>
+		<p>
+			Marazzo, Leonardo José - 143112 - 
+			<a href="mailto:leonardojmarazzo@gmail.com">leonardojmarazzo@gmail.com</a>
+		</p>
+	</header>
+	<br>
+	<br>
+	<main>
+		<h2>Objetivo: Obtener los conocimientos básicos sobre el maquetado de una página web.</h2>
+		<br>
+		<section>
+			<h3>
+				1. ¿Qué es un lenguaje de marcado? ¿Cuál es su utilidad? ¿Qué es un tag? ¿Qué es un atributo?
+			</h3>
+			<p>
+				Un lenguaje de marcado es un lenguaje donde el texto se encuentra etiquetado de cierta manera. La utilidad de esto es que se pueda leer el texto e interpretar las etiquetas y lo que está dentro de las mismas, realizando distintas acciones o simplemente identificando el contenido. 
+			</p>
+			<p>
+				Los tags o etiquetas son los elementos que proveen esta identificación; por ejemplo, en HTML, un texto que se encuentra entre las etiquetas <em>&lt;p&gt;</em> y <em>&lt;/p&gt;</em> es identificado como texto de párrafo. Los atributos son propiedades definidas dentro de un tag para controlar el comportamiento del mismo; por ejemplo, el atributo <em>href</em> especifica la URL de la página a la cual apunta un enlace, como puede ser el del tag <em>&lt;a&gt;</em> en HTML.
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				2. ¿Cuál es la utilidad de HTML? ¿Qué conjunto mínimo de tags debe contener un documento elaborado en este lenguaje? Describa brevemente su utilidad.
+			</h3>
+			<p>
+				HTML (Hypertext Markup Language) sirve para describir <em>semánticamente</em> un documento, actualmente en su mayoría páginas web.
+			</p>
+			<p>
+				Los tags mínimos necesarios definidos por la <a href="https://www.w3.org/TR/html52/">W3C</a> son los siguientes:
+			</p>
+			<ul>
+				<li>
+					<p>
+						&lt;html&gt; indica el comienzo del documento (raíz).
+					</p>
+				</li>
+				<li>
+					<p>
+						&lt;head&gt; contiene todos los elementos de cabecera, como pueden ser el título del documento, scripts, estilos, etc. Los tags que pueden ser definidos dentro de &lt;head&gt; son &lt;title&gt;, &lt;style&gt;, &lt;base&gt;, &lt;link&gt;, &lt;meta&gt;, &lt;script&gt; y &lt;noscript&gt;.
+					</p>
+				</li>
+				<li>
+					<p>
+						&lt;title&gt; define el título del documento.
+					</p> 
+				</li>
+				<li>
+					<p>
+						&lt;body&gt; define el cuerpo del documento. Dentro del elemento &lt;body&gt; se encuentran los contenidos del documento HTML, incluyendo texto, imágenes, listas, etc.
+					</p>
+				</li>
+			</ul>
+			<p>
+				Aunque no es un <em>tag</em> HTML, todo documento HTML debe tener la declaración &lt;!DOCTYPE html&gt; al principio para que el navegador sepa que se trata de un documento HTML.
+			</p> 
+		</section>
+		<br>
+		<section>
+			<h3>
+				3. ¿Cuál es la utilidad e importancia de los enlaces o links entre páginas? ¿Qué significa hipertexto? ¿Un link solo puede apuntar a otra página? ¿Qué importancia tiene esto último?
+			</h3>
+			<p>
+				Los enlaces o hipervínculos permiten a los usuarios navegar de manera más rápida y cómoda, ya que no tienen que manualmente escribir la URL del recurso al cual quieren acceder, sino que las páginas se interconectan unas con otras para formar sitios complejos o apuntar a otros sitios.
+			</p>
+			<p>
+				El hipertexto es texto con referencias (hipervínculos) a otros recursos a los cuales se puede acceder. Un hipervínculo no necesariamente apunte a otra página, sino que puede hacer referencia a otro texto dentro de la misma página (caso más común de los <em>anchors</em> en HTML). Esto permite al usuario navegar en la página sin necesidad de hacer una nueva petición al servidor cada vez que se accede a un enlace.
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				4. Elabore en HTML5 una página que contenga su currículum vítae. Tenga en cuenta enlaces a páginas web o a direcciones de correo electrónico y que la foto debe ser un enlace a la propia imagen. Determine qué <em>tags</em> con qué atributos son necesarios en cada caso.
+			</h3>
+			<p>
+				La estructura HTML se encuentra en el archivo <a href="4/ejercicio4.html">Currículum Vitae</a>
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				5. Elabore el código necesario para representar la siguiente tabla:
+			</h3>
+			<figure>
+				<img src="res/tabla.png" alt="Tabla">
+				<figcaption>Figura 1. Tabla</figcaption>
+			</figure>
+			<p>
+				La estructura HTML se encuentra en el archivo <a href="5/tabla.html">Tabla</a>
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				6. Dado el siguiente Wireframe, armar la estructura HTML necesaria para construir una Home Page de un sitio web de e-Commerce.
+			</h3>
+			<figure>
+				<img src="res/home-page.png" alt="Wireframe de la Home Page">
+				<figcaption>
+					Figura 2. Wireframe de la Home Page para e-Commerce
+				</figcaption>
+			</figure>
+			<p>
+				La estructura HTML se encuentra en el archivo <a href="6/home-page.html">Home Page</a>
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				7. Dibujar el Wireframe correspondiente a la página de un video de YouTube y en función a este desarrollar el código HTML correspondiente.
+			</h3>
+			<figure>
+				<img src="res/youtube-wireframe.png" alt="Wireframe de YouTube">
+				<figcaption>
+					Figura 3. Wireframe de la página de un video de YouTube
+				</figcaption>
+			</figure>
+			<p>
+				La estructura HTML se encuentra en el archivo <a href="7/youtube.html">YouTube video</a>
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				8. Pasar el siguiente folleto a HTML
+			</h3>
+			<figure>
+				<img src="res/folleto.png" alt="Folleto">
+				<figcaption>
+					Figura 4. Folleto
+				</figcaption>
+			</figure>
+			<p>
+				La estructura HTML se encuentra en el archivo <a href="8/folleto.html">Folleto</a>
+			</p>
+		</section>
+	</main>
+</body>
+</html>
