@@ -83,6 +83,29 @@
 				3. Extienda la instalación de Apache para que el mismo pueda servir páginas desarrolladas en PHP (como módulo). Describa someramente los pasos realizados. Prueba la instalación mediante la función phpinfo(). ¿Qué información brinda la misma?
 			</h3>
 			<p>
+				La instalación se realizó en un SO Fedora 26 (versión de kernel 4.15.10-200.fc26.x86_64).
+			</p>
+			<p>
+				Para instalar PHP (versión 7.1), ejecutar desde una terminal
+			</p>
+			<p>
+				<code>
+					$sudo dnf install php
+				</code>
+			</p>
+			<p>
+				Para probar la instalación, crear en el directorio por defecto de páginas web de apache <strong>/var/www/html</strong> el archivo test.php, cuyo contenido es
+			</p>
+			<p>
+				<pre><code>
+					<?php
+						phpinfo();
+				</code></pre>
+			</p>
+			<p>
+				Finalmente, acceder a http://localhost/test.php desde el navegador.
+			</p>
+			<p>
 				
 			</p>
 		</section>
