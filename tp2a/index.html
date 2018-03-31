@@ -44,117 +44,128 @@
 		<br>
 		<section>
 			<h3>
-				2. ¿Cuál es la utilidad de HTML? ¿Qué conjunto mínimo de tags debe contener un documento elaborado en este lenguaje? Describa brevemente su utilidad.
+				2. Instale el servidor Web Apache. Describa someramente los pasos realizados.
 			</h3>
 			<p>
-				HTML (Hypertext Markup Language) sirve para describir <em>semánticamente</em> un documento, actualmente en su mayoría páginas web.
-			</p>
-			<p>
-				Los tags mínimos necesarios definidos por la <a href="https://www.w3.org/TR/html52/">W3C</a> son los siguientes:
-			</p>
-			<ul>
-				<li>
-					<p>
-						&lt;html&gt; indica el comienzo del documento (raíz).
-					</p>
-				</li>
-				<li>
-					<p>
-						&lt;head&gt; contiene todos los elementos de cabecera, como pueden ser el título del documento, scripts, estilos, etc. Los tags que pueden ser definidos dentro de &lt;head&gt; son &lt;title&gt;, &lt;style&gt;, &lt;base&gt;, &lt;link&gt;, &lt;meta&gt;, &lt;script&gt; y &lt;noscript&gt;.
-					</p>
-				</li>
-				<li>
-					<p>
-						&lt;title&gt; define el título del documento.
-					</p> 
-				</li>
-				<li>
-					<p>
-						&lt;body&gt; define el cuerpo del documento. Dentro del elemento &lt;body&gt; se encuentran los contenidos del documento HTML, incluyendo texto, imágenes, listas, etc.
-					</p>
-				</li>
-			</ul>
-			<p>
-				Aunque no es un <em>tag</em> HTML, todo documento HTML debe tener la declaración &lt;!DOCTYPE html&gt; al principio para que el navegador sepa que se trata de un documento HTML.
+				La instalación se realizó en un SO Fedora 26 (versión de kernel 4.15.10-200.fc26.x86_64).
 			</p> 
-		</section>
-		<br>
-		<section>
-			<h3>
-				3. ¿Cuál es la utilidad e importancia de los enlaces o links entre páginas? ¿Qué significa hipertexto? ¿Un link solo puede apuntar a otra página? ¿Qué importancia tiene esto último?
-			</h3>
 			<p>
-				Los enlaces o hipervínculos permiten a los usuarios navegar de manera más rápida y cómoda, ya que no tienen que manualmente escribir la URL del recurso al cual quieren acceder, sino que las páginas se interconectan unas con otras para formar sitios complejos o apuntar a otros sitios.
+				Para instalar Apache, se ejecuta desde una terminal
 			</p>
 			<p>
-				El hipertexto es texto con referencias (hipervínculos) a otros recursos a los cuales se puede acceder. Un hipervínculo no necesariamente apunte a otra página, sino que puede hacer referencia a otro texto dentro de la misma página (caso más común de los <em>anchors</em> en HTML). Esto permite al usuario navegar en la página sin necesidad de hacer una nueva petición al servidor cada vez que se accede a un enlace.
+				<code>
+					$sudo dnf install httpd
+				</code>
 			</p>
-		</section>
-		<br>
-		<section>
-			<h3>
-				4. Elabore en HTML5 una página que contenga su currículum vítae. Tenga en cuenta enlaces a páginas web o a direcciones de correo electrónico y que la foto debe ser un enlace a la propia imagen. Determine qué <em>tags</em> con qué atributos son necesarios en cada caso.
-			</h3>
 			<p>
-				La estructura HTML se encuentra en el archivo <a href="4/ejercicio4.html">Currículum Vitae</a>
+				Luego, se deben crear las reglas de firewall para permitir las conexiones entrantes en los puertos 80 y 443
 			</p>
-		</section>
-		<br>
-		<section>
-			<h3>
-				5. Elabore el código necesario para representar la siguiente tabla:
-			</h3>
-			<figure>
-				<img src="res/tabla.png" alt="Tabla">
-				<figcaption>Figura 1. Tabla</figcaption>
-			</figure>
 			<p>
-				La estructura HTML se encuentra en el archivo <a href="5/tabla.html">Tabla</a>
+				<code>
+					$sudo firewall-cmd --add-service=http --add-service=https --permanent
+					<br>
+					$sudo firewall-cmd --reload
+				</code>
+			</p>
+
+			<p>
+				Finalmente, se le puede dar inicio al servicio
+			</p>
+			<p>
+				<code>
+					$sudo systemctl start httpd
+				</code>
 			</p>
 		</section>
 		<br>
 		<section>
 			<h3>
-				6. Dado el siguiente Wireframe, armar la estructura HTML necesaria para construir una Home Page de un sitio web de e-Commerce.
+				3. Extienda la instalación de Apache para que el mismo pueda servir páginas desarrolladas en PHP (como módulo). Describa someramente los pasos realizados. Prueba la instalación mediante la función phpinfo(). ¿Qué información brinda la misma?
 			</h3>
-			<figure>
-				<img src="res/home-page.png" alt="Wireframe de la Home Page">
-				<figcaption>
-					Figura 2. Wireframe de la Home Page para e-Commerce
-				</figcaption>
-			</figure>
 			<p>
-				La estructura HTML se encuentra en el archivo <a href="6/home-page.html">Home Page</a>
+				
 			</p>
 		</section>
 		<br>
 		<section>
 			<h3>
-				7. Dibujar el Wireframe correspondiente a la página de un video de YouTube y en función a este desarrollar el código HTML correspondiente.
+				4. ¿Qué archivo de configuración se debe modificar para cambiar los mensajes de error mostrados por el servidor cuando ocurre un error en nuestro sitio? ¿Cómo cambiaría el mensaje default para que frente a un error 404 se muestre una imagen particular?
 			</h3>
-			<figure>
-				<img src="res/youtube-wireframe.png" alt="Wireframe de YouTube">
-				<figcaption>
-					Figura 3. Wireframe de la página de un video de YouTube
-				</figcaption>
-			</figure>
 			<p>
-				La estructura HTML se encuentra en el archivo <a href="7/youtube.html">YouTube video</a>
+				
 			</p>
 		</section>
 		<br>
 		<section>
 			<h3>
-				8. Pasar el siguiente folleto a HTML
+				5. ¿Cómo hago para que el servidor limite el acceso a partes de mi sitio sólo a usuarios ubicados en un país en particular?
 			</h3>
-			<figure>
-				<img src="res/folleto.png" alt="Folleto">
-				<figcaption>
-					Figura 4. Folleto
-				</figcaption>
-			</figure>
 			<p>
-				La estructura HTML se encuentra en el archivo <a href="8/folleto.html">Folleto</a>
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				6. ¿Para qué sirve el archivo “.htaccess”? ¿Cuáles son las principales herramientas que permite utilizar?
+			</h3>
+			<p>
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				7. De un ejemplo de una regla de reescritura junto con la explicación de su uso.
+			</h3>
+			<p>
+			</p>
+		</section>
+		<br>
+		<h2>
+			PHP - Entender que parte se debe procesar en el Cliente y que en el Servidor
+		</h2>
+		<br>
+		<section>
+			<h3>
+				8. Elabore un script PHP que imprima un formulario para la carga de los datos de una persona para pedir turno en el médico. A saber: Titulo (Sr. Sra. Dr. etc), Nombre, email, teléfono, Edad, Talla de calzado (desde 20 a 45 enteros), Altura (usar la herramienta de deslizador), fecha de nacimiento, color de pelo, horario del turno (seleccionable desde las 8:00 hasta las 17:00 con turnos cada 15minutos). Y 2 botones: Enviar y Limpiar.
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				9. Extienda el ejercicio anterior para que al enviar el formulario mediante el método POST se impriman los valores recibidos. Realice las modificaciones necesarias para que el script reciba los datos mediante el método GET. ¿Qué diferencia nota? ¿Cuándo es conveniente usar cada método?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				10. Generar un formulario que permita guardar imágenes en un directorio del servidor Web. Además, generar una miniatura de esas imágenes (100px x 75px) y guardarlas dentro de un directorio “thumbs” que se creará dentro del directorio en el que se guardan las imágenes originales. Recuerde verificar que los permisos sobre el directorio aseguren que los archivos no puedan ser borrados por un usuario mal intencionado.
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				11. Utilice las herramientas para desarrollador del navegador que utilice y observe cómo fueron codificados por el navegador los datos enviados por el navegador en los dos ejercicios anteriores. ¿Qué diferencia nota?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<br>
+		<section>
+			<h3>
+				12. Elabore una aplicación similar a un blog. Dicha aplicación deberá permitir dar de alta artículos con un título, una descripción y opcionalmente una imagen. Para cada artículo, además, deberá almacenarse la fecha de publicación. La persistencia de los mismo debe realizarse mediante archivos. Además, la aplicación deberá permitir editar y borrar los post.
+			</h3>
+			<p>
+				
 			</p>
 		</section>
 	</main>
