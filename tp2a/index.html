@@ -134,7 +134,15 @@
 				4. ¿Qué archivo de configuración se debe modificar para cambiar los mensajes de error mostrados por el servidor cuando ocurre un error en nuestro sitio? ¿Cómo cambiaría el mensaje default para que frente a un error 404 se muestre una imagen particular?
 			</h3>
 			<p>
-				
+				.htaccess es el archivo de configuración que se debe modificar para, entre otras cosas, cambiar los mensajes de error que se muestran en el sitio. Para cambiar la pantalla de error 404, basta con agregar la siguiente línea
+			</p>
+			<p>
+				<code>
+					ErrorDocument 404 /404.html
+				</code>
+			</p>
+			<p>
+				Donde "404.html" es la página de error que se quiere mostrar, ubicada en el directorio raíz.
 			</p>
 		</section>
 		<br>
@@ -151,7 +159,25 @@
 				6. ¿Para qué sirve el archivo “.htaccess”? ¿Cuáles son las principales herramientas que permite utilizar?
 			</h3>
 			<p>
+				.htaccess es un archivo de configuración para servidores web corriendo Apache. Este archivo es detectado en el directorio raíz que carga Apache y ejecutado. Algunas de las funcionalidades que permite realizar son:
 			</p>
+			<ul>
+				<li>
+					<p>Cambiar las pantallas de error que se muestran</p>
+				</li>
+				<li>
+					<p>Redireccionar al usuario que consulta una página a otra</p>
+				</li>
+				<li>
+					<p>Requerir contraseña para acceder a directorios específicos en el servidor</p>
+				</li>
+				<li>
+					<p>Bloquear tráfico de IPs o URLs específicas</p>
+				</li>
+				<li>
+					<p>Prevenir el "hot-linking" (que otros sitios web utilicen los recursos del servidor, generando tráfico)</p>
+				</li>
+			</ul>
 		</section>
 		<br>
 		<section>
@@ -209,6 +235,13 @@
 			<p>
 				
 			</p>
+		</section>
+		<br>
+		<section>
+			<h2>Bibliografía</h2>
+			<ul>
+				<li><a href="http://www.htaccess-guide.com">htaccess-Guide</a></li>
+			</ul>
 		</section>
 	</main>
 </body>
