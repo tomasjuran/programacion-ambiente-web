@@ -52,30 +52,23 @@
 			<p>
 				Para instalar Apache, se ejecuta desde una terminal
 			</p>
-			<p>
-				<code>
+			<code>
 					$sudo dnf install httpd
-				</code>
-			</p>
+			</code>
 			<p>
 				Luego, se deben crear las reglas de firewall para permitir las conexiones entrantes en los puertos 80 y 443
 			</p>
-			<p>
-				<code>
+			<code>
 					$sudo firewall-cmd --add-service=http --add-service=https --permanent
 					<br>
 					$sudo firewall-cmd --reload
-				</code>
-			</p>
-
+			</code>
 			<p>
 				Finalmente, se le puede dar inicio al servicio
 			</p>
-			<p>
-				<code>
-					$sudo systemctl start httpd
-				</code>
-			</p>
+			<code>
+				$sudo systemctl start httpd
+			</code>
 		</section>
 		<br>
 		<section>
@@ -88,22 +81,18 @@
 			<p>
 				Para instalar PHP (versión 7.1), ejecutar desde una terminal
 			</p>
-			<p>
-				<code>
-					$sudo dnf install php
-				</code>
-			</p>
+			<code>
+				$sudo dnf install php
+			</code>
 			<p>
 				Para probar la instalación, crear en el directorio por defecto de páginas web de apache <strong>/var/www/html</strong> el archivo test.php, cuyo contenido es
 			</p>
-			<p>
-				<code>
+			<code>
 <pre>
 &lt;?php
 	phpinfo();
 </pre>					
-				</code>
-			</p>
+			</code>
 			<p>
 				Finalmente, acceder a http://localhost/test.php desde el navegador.
 			</p>
@@ -136,11 +125,9 @@
 			<p>
 				.htaccess es el archivo de configuración que se debe modificar para, entre otras cosas, cambiar los mensajes de error que se muestran en el sitio. Para cambiar la pantalla de error 404, basta con agregar la siguiente línea
 			</p>
-			<p>
-				<code>
-					ErrorDocument 404 /404.html
-				</code>
-			</p>
+			<code>
+				ErrorDocument 404 /404.html
+			</code>
 			<p>
 				Donde "404.html" es la página de error que se quiere mostrar, ubicada en el directorio raíz.
 			</p>
@@ -151,7 +138,51 @@
 				5. ¿Cómo hago para que el servidor limite el acceso a partes de mi sitio sólo a usuarios ubicados en un país en particular?
 			</h3>
 			<p>
+				Una manera de limitar el acceso a partes de un sitio a usuarios con <strong>IPs</strong> de un país en particular es utilizando el módulo de Apache maxminddb_module.
 			</p>
+			<ol>
+				<li>
+					<h4>Instalar una base de datos con IPs por país (GeoLite2)</h4>
+					<p>
+						Descargar GeoLite2 Country y copiar el archivo GeoLite2-Country.mmdb a un directorio que Apache pueda encontrar. Para este ejemplo, se utilizará
+						<code>/usr/local/share/GeoIP/GeoLite2-Country.mmdb</code>
+					</p>
+				</li>
+				<li>
+					<h4>Instalar las dependencias para el módulo</h4>
+					<p>Instalar las siguientes dependencias:</p>
+					<code>
+						#dnf install libmaxminddb libmaxminddb-devel
+						<br>
+						#dnf install httpd24-devel
+					</code>
+				</li>
+				<li>
+					<h4>Instalar el módulo maxminddb</h4>
+					<p>
+						Descargar el módulo maxminddb (por ejemplo, de <a href="https://github.com/maxmind/mod_maxminddb">GitHub</a>) e instalarlo (instrucciones en README.md).
+					</p>
+				</li>
+				<li>
+					<h4>Configuración</h4>
+					<p>
+						Agregar las directivas necesarias en el archivo de configuración (httpd.conf o VirtualHost), por ejemplo, para bloquear a Rusia, Alemania y Francia:
+					</p>
+					<code>
+<pre>
+&lt;Location /&gt;
+	MaxMindDBEnable On
+	MaxMindDBFile DB /usr/local/share/GeoIP/GeoLite2-Country.mmdb
+	MaxMindDBEnv MM_COUNTRY_CODE DB/country/iso_code
+	SetEnvIf MM_COUNTRY_CODE <strong>^(RU|DE|FR)</strong> BlockCountry
+	Order deny,allow
+	Allow from all
+	Deny from env=BlockCountry
+&lt;/Location&gt;
+</pre>
+					</code>
+				</li>
+			</ol>
 		</section>
 		<br>
 		<section>
@@ -178,6 +209,24 @@
 					<p>Prevenir el "hot-linking" (que otros sitios web utilicen los recursos del servidor, generando tráfico)</p>
 				</li>
 			</ul>
+			<p>
+				.htaccess debe ubicarse en el directorio raíz sobre el cual se quiere que tenga efecto, afectando a todos los subdirectorios. Si el archivo no existe, debe crearse y otorgar permisos a apache para que pueda leerlo y ejecutarlo.
+			</p>
+			<code>
+				#chmod 755 .htaccess
+				<br>
+				#chgrp apache .htaccess
+			</code>
+			<p>
+				Además, se debe modificar el archivo de configuración (httpd.conf o VirtualHost) para que permita a .htaccess sobreescribir la configuración, teniendo la línea
+			</p>
+			<code>
+<pre>
+&lt;Directory "directorio donde se encuentra .htaccess"&gt;
+	...
+	<strong>AllowOverride = All</strong>
+&lt;/Directory&gt;
+			</code>
 		</section>
 		<br>
 		<section>
@@ -241,6 +290,8 @@
 			<h2>Bibliografía</h2>
 			<ul>
 				<li><a href="http://www.htaccess-guide.com">htaccess-Guide</a></li>
+				<li><a href="https://httpd.apache.org/docs/2.4/rewrite/intro.html">Apache mod_rewrite Introduction</a></li>
+				<li><a href="https://www.itsfullofstars.de/2017/07/block-access-from-country-by-ip-in-apache/">Block access from country by IP in Apache</a></li>
 			</ul>
 		</section>
 	</main>
