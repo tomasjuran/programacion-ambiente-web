@@ -232,12 +232,38 @@
 			<h3>
 				7. De un ejemplo de una regla de reescritura junto con la explicación de su uso.
 			</h3>
+			<code>
+				RewriteCond %{REQUEST_URI} !-f
+				<br>
+				RewriteRule ^/([a-z]+)$ show_user.php?user=$1 [NC,L]
+			</code>
 			<p>
+				Condición: si el URI solicitado no es un archivo (!-f).
+				<br>
+				Regla: enviar la URI como parámetro "user" al script show_user.php. Nótese cómo se referencia en el segundo cuerpo con "$1" a lo que está en paréntesis en el primero ([a-z]+, o una cadena de caracteres formada por letras). La bandera NC hace que la regla no diferencie entre mayúsculas y minúsculas. La bandera L signica no aplicar más reglas.
+				<br>
+				<br>
+				<strong>ejemplo.com/tomas</strong>
+				<br>
+				<br>
+				Cambiaría a
+				<br>
+				<br>
+				<strong>ejemplo.com/show_user.php?user=tomas</strong>
+				<br>
+				<br>
+				Mientras que si existe el archivo "index" en el directorio raíz
+				<br>
+				<br>
+				<strong>ejemplo.com/index</strong>
+				<br>
+				<br>
+				Se mantendría igual
 			</p>
 		</section>
 		<br>
 		<h2>
-			PHP - Entender que parte se debe procesar en el Cliente y que en el Servidor
+			PHP - Entender qué parte se debe procesar en el Cliente y que en el Servidor
 		</h2>
 		<br>
 		<section>
