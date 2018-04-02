@@ -53,21 +53,21 @@
 				Para instalar Apache, se ejecuta desde una terminal
 			</p>
 			<code>
-					$sudo dnf install httpd
+					#dnf install httpd
 			</code>
 			<p>
 				Luego, se deben crear las reglas de firewall para permitir las conexiones entrantes en los puertos 80 y 443
 			</p>
 			<code>
-					$sudo firewall-cmd --add-service=http --add-service=https --permanent
+					#firewall-cmd --add-service=http --add-service=https --permanent
 					<br>
-					$sudo firewall-cmd --reload
+					#firewall-cmd --reload
 			</code>
 			<p>
 				Finalmente, se le puede dar inicio al servicio
 			</p>
 			<code>
-				$sudo systemctl start httpd
+				#systemctl start httpd
 			</code>
 		</section>
 		<br>
@@ -82,7 +82,7 @@
 				Para instalar PHP (versión 7.1), ejecutar desde una terminal
 			</p>
 			<code>
-				$sudo dnf install php
+				#dnf install php
 			</code>
 			<p>
 				Para probar la instalación, crear en el directorio por defecto de páginas web de apache <strong>/var/www/html</strong> el archivo test.php, cuyo contenido es
