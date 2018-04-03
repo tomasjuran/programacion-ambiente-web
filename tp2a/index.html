@@ -280,17 +280,38 @@
 				9. Extienda el ejercicio anterior para que al enviar el formulario mediante el método POST se impriman los valores recibidos. Realice las modificaciones necesarias para que el script reciba los datos mediante el método GET. ¿Qué diferencia nota? ¿Cuándo es conveniente usar cada método?
 			</h3>
 			<p>
-				En el archivo <a href="9/index.php">ejercicio 9</a> se encuentran dos formularios HTML. De los cuales uno utiliza el metodo GET mientras que el otro utiliza el metodo POST y darle submit al formulario una vez recargada la pagina se pueden ver los valores previamente cargados.
+				En el archivo <a href="9/index.php">ejercicio 9</a> se encuentran dos formularios HTML.
 			</p>
 			<p>
-				La diferencia que se puede apreciar a simple vista es que al enviarse el formulario por el metodo GET los campos completados aparecen en la barra de direcciones del navagador mientras que esto no sucede con el metodo POST. Ademas de esta diferencia existen otras como las siguientes:
-				<ul>
-					<li>Los formularios enviados por metodo POST no pueden ser almacenados en cache</li>
-					<li>Los datos de los formularios con metodo post no son almacenados en el historial ni ueden ser almacenados en marcadores(Favoritos)</li>
-					<li>Los datos enviados por metodo GET tienen limite de longitud</li>
-					<li>Los datos enviados por metodo GET solo pueden ser caracterses ASCII</li>
-				</ul>
+				La diferencia que se puede apreciar a simple vista es que al enviarse el formulario por el método GET los campos completados aparecen en la barra de direcciones del navegador mientras que esto no sucede con el método POST. Además de esta diferencia existen otras como las siguientes:
 			</p>
+			<ul>
+				<li>
+					<p>
+						Los formularios enviados por método POST no pueden ser almacenados en caché
+					</p>
+				</li>
+				<li>
+					<p>
+						Los datos de los formularios con método POST no son almacenados en el historial ni pueden ser almacenados en marcadores (Favoritos)
+					</p>
+				</li>
+				<li>
+					<p>
+						Los navegadores piden confirmación para el reenvío de datos enviados por POST (por esta razón y la visibilidad en la barra de navegaciones <em>nunca</em> debería usarse GET para enviar datos sensibles)
+					</p>
+				</li>
+				<li>
+					<p>
+						Los datos enviados por método GET tienen límite de longitud
+					</p>
+				</li>
+				<li>
+					<p>
+						Los datos enviados por método GET solo pueden ser caracteres ASCII
+					</p>
+				</li>
+			</ul>
 		</section>
 		<br>
 		<section>

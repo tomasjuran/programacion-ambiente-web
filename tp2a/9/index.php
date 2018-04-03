@@ -23,6 +23,19 @@ $fechaP = date("Y-m-d");
 $colP = "";
 $horaP = "08:00";
 
+foreach ($_GET as $key => $value) {
+	if (isset($_GET[$key])) {
+		$$key = $_GET[$key];
+	}
+}
+
+foreach ($_POST as $key => $value) {
+	if (isset($_POST[$key])) {
+		$$key = $_POST[$key];
+	}
+}
+
+/*
 
 if (isset($_GET['Nombre'])){
 	$nombreG = $_GET['Nombre'];
@@ -86,6 +99,6 @@ if (isset($_POST['Turno'])) {
 	$horaP = $_POST['Turno'];
 }
 
-
+*/
 
 require 'vista.php';
