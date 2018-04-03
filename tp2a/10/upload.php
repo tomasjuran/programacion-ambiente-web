@@ -1,41 +1,62 @@
 <?php
-	$archivo = $_FILES['foto']['name'];
-	$filename = "imagenes/thumbs/" . $archivo;
-	copy($_FILES['foto']['tmp_name'],"imagenes/".$archivo);
-	copy("imagenes/".$archivo, $filename);
-	$info = getimagesize($filename);
-	$extension = image_type_to_extension($info[2]);
-	$res = false;
-    switch ($extension) {
-        case '.jpeg':
-        	$image = imagecreatefromjpeg($filename);
-            $newimage = imagescale($image, 100, 75);
-    		imagejpeg($newimage, $filename);
-            $res = true;
-    	break;
+if (isset($_POST["enviar"])) {
 
-        case '.jpg':
-            $image = imagecreatefromjpeg($filename);
-            $newimage = imagescale($image, 100, 75);
-    		imagejpeg($newimage, $filename);
-            $res = true;
+    $width = 100;
+    $height = 75;
+
+    $filename = $_FILES["imagen_up"]["name"];
+    $tempname = $_FILES["imagen_up"]["tmp_name"];
+
+    $imgdir = "images/";
+    $thumbdir = $imgdir . "thumbs/";
+
+    $imagen = $imgdir . basename($filename);
+    $thumbnail = $thumbdir . basename($filename);
+
+    # Verificar si ya existe
+    if (file_exists($imagen)) {
+
+    }
+
+    # Verificar el formato
+    $imgtype = strtolower(pathinfo($imagen, PATHINFO_EXTENSION));
+    if ($imgtype != "jpg" &&
+        $imgtype != "jpeg" &&
+        $imgtype != "png" &&
+        $imgtype != "gif")
+    {
+        
+    }
+
+    # Verificar si es imagen
+    if (!getimagesize($tempname)) {
+        
+    }
+
+    # Guardar la imagen
+    move_uploaded_file($tempname, $imagen);
+
+    # Crear el Thumbnail
+    switch ($imgtype) {
+        case "png":
+            $res_img = imagecreatefrompng($imagen);
+            $newimage = imagescale($res_img, $width, $height);
+            imagepng($newimage, $thumbnail);
         break;
 
-        case '.png':
-            $image = imagecreatefrompng($filename);
-            $newimage = imagescale($image, 100, 75);
-            imagepng($newimage, $filename);
-            $res = true;
+        case "gif":
+            $res_img = imagecreatefromgif($imagen);
+            $newimage = imagescale($res_img, $width, $height);
+            imagegif($newimage, $thumbnail);
         break;
 
-        case '.gif':
-            $image = imagecreatefromgif($filename);
-            $newimage = imagescale($image, 100, 75);
-            imagegif($newimage, $filename);
-            $res = true;
+        default:
+            $res_img = imagecreatefromjpeg($imagen);
+            $newimage = imagescale($res_img, $width, $height);
+            imagejpeg($newimage, $thumbnail);
         break;
-    };
+    }
 
-    require 'vista.php';
-    
-    
+}
+
+require "index.php";
