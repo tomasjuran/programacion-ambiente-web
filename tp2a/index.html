@@ -319,11 +319,25 @@
 				10. Generar un formulario que permita guardar imágenes en un directorio del servidor Web. Además, generar una miniatura de esas imágenes (100px x 75px) y guardarlas dentro de un directorio “thumbs” que se creará dentro del directorio en el que se guardan las imágenes originales. Recuerde verificar que los permisos sobre el directorio aseguren que los archivos no puedan ser borrados por un usuario mal intencionado.
 			</h3>
 			<p>
-				El ejercicio se encuentra resuelto en <a href="10/upload.php">upload.php</a> (nótese que se debe tener la opción <em>AllowOverride All</em> para que el archivo .htaccess de la carpeta imagenes tenga efecto).
+				El ejercicio se encuentra resuelto en <a href="10/upload.php">upload.php</a>.
 			</p>
-			<p>
-				<strong>Es necesario tener instalada la librería php-gd.</strong>
-			</p>
+			<ul>
+				<li>
+					<p>
+						Asegurarse de tener la opción <em>AllowOverride All</em> para que el archivo .htaccess de la carpeta images tenga efecto).
+					</p>
+				</li>
+				<li>
+					<p>
+						Es necesario tener instalada la librería php-gd.
+					</p>
+				</li>
+				<li>
+					<p>
+						Se debe dar permisos de escritura al grupo apache para que pueda guardar las imágenes (al menos en la carpeta images)
+					</p>
+				</li>
+			</ul>
 		</section>
 		<br>
 		<section>
