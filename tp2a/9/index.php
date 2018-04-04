@@ -25,13 +25,13 @@ $horaP = "08:00";
 
 foreach ($_GET as $key => $value) {
 	if (isset($_GET[$key])) {
-		$$key = $_GET[$key];
+		$$key = htmlspecialchars($_GET[$key]);
 	}
 }
 
 foreach ($_POST as $key => $value) {
 	if (isset($_POST[$key])) {
-		$$key = $_POST[$key];
+		$$key = htmlspecialchars($_POST[$key]);
 	}
 }
 
