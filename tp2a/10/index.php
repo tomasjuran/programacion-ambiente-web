@@ -11,5 +11,6 @@
 	</form>
 	<img src="<?=${imagen}?>" alt="Imagen">
 	<img src="<?=${thumbnail}?>" alt="Thumbnail">
+	<p><?=${mostrar_error}?></p>
 </body>
 </html>

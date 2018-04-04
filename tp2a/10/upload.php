@@ -1,37 +1,30 @@
 <?php
-if (isset($_POST["enviar"])) {
+
+# Devuelve un String con el resultado de lo ocurrido
+function upload($filename, $tempname, $imagen, $thumbnail) {
 
     $width = 100;
     $height = 75;
 
-    $filename = $_FILES["imagen_up"]["name"];
-    $tempname = $_FILES["imagen_up"]["tmp_name"];
-
-    $imgdir = "images/";
-    $thumbdir = $imgdir . "thumbs/";
-
-    $imagen = $imgdir . basename($filename);
-    $thumbnail = $thumbdir . basename($filename);
-
-    # Verificar si ya existe
-    if (file_exists($imagen)) {
-
-    }
-
     # Verificar el formato
-    $imgtype = strtolower(pathinfo($imagen, PATHINFO_EXTENSION));
+    $imgtype = pathinfo($filename, PATHINFO_EXTENSION);
     if ($imgtype != "jpg" &&
         $imgtype != "jpeg" &&
         $imgtype != "png" &&
         $imgtype != "gif")
     {
-        
+        return "El archivo debe tener formato de imagen (.jpg, .jpeg, .png o .gif)";
     }
 
     # Verificar si es imagen
     if (!getimagesize($tempname)) {
-        
+        return "El archivo no es una imagen";
     }
+
+    # Verificar si ya existe
+    if (file_exists($imagen)) {
+        return "El archivo ya existe";
+    } 
 
     # Guardar la imagen
     move_uploaded_file($tempname, $imagen);
@@ -57,6 +50,22 @@ if (isset($_POST["enviar"])) {
         break;
     }
 
+    return "La imagen se subió correctamente";
+}
+
+
+
+$filename = $_FILES["imagen_up"]["name"];
+$tempname = $_FILES["imagen_up"]["tmp_name"];
+
+$imgdir = "images/";
+$thumbdir = $imgdir . "thumbs/";
+
+$imagen = $imgdir . basename($filename);
+$thumbnail = $thumbdir . basename($filename);
+
+if (isset($_POST["enviar"])) {
+    $mostrar_error = upload($filename, $tempname, $imagen, $thumbnail);
 }
 
 require "index.php";
