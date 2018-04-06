@@ -8,6 +8,9 @@ $xml_path = "blog.xml";
 
 $accion = "editar_post.php";
 
+$error_imagen = "";
+$resultado_post = "";
+
 if (file_exists($xml_path)) {
 	$blog = simplexml_load_file($xml_path);
 } else {
@@ -36,8 +39,6 @@ if (isset($_POST["publicar"])) {
 		$post[0]->cuerpo = $cuerpo;
 	}
 
-	$error_imagen = "";
-
 	$tempname = $_FILES["imagen_up"]["tmp_name"];
 	# Si se subió una imagen
 	if (is_uploaded_file($tempname)) {
@@ -57,16 +58,24 @@ if (isset($_POST["publicar"])) {
 		
 		# Si se guardó correctamente
 		if (upload_img($filename, $tempname, $imagen, $imgtype)){
-			# Si no tenía una imagen asociada, se agrega
-			# De otra forma, como se guarda el path, ya queda actualizada
+			
 			if (empty($post[0]->xpath("//imagen"))) {
+				# Si no tenía una imagen asociada, se agrega
 				$post[0]->addchild("imagen", $imagen);
+			} else {
+				# De otra forma, se elimina la anterior
+				unlink($post[0]->imagen);
+				$post[0]->imagen = $imagen;
 			}
 		}
 	}
 
+	# Lo único que puede dar error es la subida de la imagen
 	if ($error_imagen == "") {
 		$blog->asXML($xml_path);
+		$resultado_post = "El post se publicó correctamente";
+	} else {
+		$resultado_post = "No se pudo publicar el post";
 	}
 
 # Se vino desde otra página
@@ -131,6 +140,20 @@ function upload_img($filename, $tempname, $imagen, $imgtype) {
 
 
 require "cabeza.php";
+
+echo "<section>";
+
+if ($resultado_post != "") {
+	echo "<p>" . $resultado_post . "</p>";
+}
+
+if ($error_imagen != "") {
+	echo "<p>Error al subir la imagen</p>";
+	echo "<p>" . $error_imagen . "</p>";
+}
+
+
+echo "</section>";
 
 require "post.php";
 
