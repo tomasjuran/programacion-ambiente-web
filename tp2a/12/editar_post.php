@@ -141,19 +141,7 @@ function upload_img($filename, $tempname, $imagen, $imgtype) {
 
 require "cabeza.php";
 
-echo "<section>";
-
-if ($resultado_post != "") {
-	echo "<p>" . $resultado_post . "</p>";
-}
-
-if ($error_imagen != "") {
-	echo "<p>Error al subir la imagen</p>";
-	echo "<p>" . $error_imagen . "</p>";
-}
-
-
-echo "</section>";
+require "header_editar.php";
 
 require "post.php";
 

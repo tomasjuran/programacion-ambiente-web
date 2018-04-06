@@ -1,3 +1,3 @@
 <?xml version="1.0"?>
 <blog>
-<post><idpost>0</idpost><titulo>Mi primer most</titulo><cuerpo>Hola la verdad que estoy muy contento</cuerpo><imagen>images/img000.png</imagen></post><post><idpost>1</idpost><titulo>Mi t&#xED;tulo</titulo><cuerpo>Mi cuerpo del mensaje</cuerpo><imagen>images/img001.png</imagen></post></blog>
+<post><idpost>0</idpost><titulo>El t&#xED;tulo del post</titulo><cuerpo>Incre&#xED;ble t&#xED;tulo +10 y a reco</cuerpo><imagen>images/img000.jpg</imagen></post><post><idpost>1</idpost><titulo>El t&#xED;tulo</titulo><cuerpo>Incre&#xED;ble este sitio</cuerpo><imagen>images/img001.png</imagen></post></blog>
