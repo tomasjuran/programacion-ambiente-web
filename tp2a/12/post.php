@@ -1,4 +1,3 @@
-
 <article>
 	<form action="<?=${accion}?>" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="idpost" value="<?=${idpost}?>">
