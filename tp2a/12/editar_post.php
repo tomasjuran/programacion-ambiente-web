@@ -1,27 +1,43 @@
 <?php
 /*
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 */
 
+$xml_path = "blog.xml";
+
 $accion = "editar_post.php";
 
-$blog = simplexml_load_file("blog.xml");
+if (file_exists($xml_path)) {
+	$blog = simplexml_load_file($xml_path);
+} else {
+	exit("No se encuentra el archivo con los posts.");
+}
 
+# Se apretó el botón "Publicar"
 if (isset($_POST["publicar"])) {
+	$title = "Editar post";
 	# Guardar el post
 	foreach ($_POST as $key => $value)
 		if (isset($_POST[$key])) {
 			$$key = htmlspecialchars($value);
 		}
 
-	$post = $blog->addchild("post");
-	$post->addchild("idpost", $idpost);
-	$post->addchild("titulo", $titulo);
-	$post->addchild("cuerpo", $cuerpo);
-	
+	# Buscar el ID para saber si modificar o agregar
+	$post = $blog->xpath("//post[idpost=$idpost]");
+	if (empty($post)) {
+		$post = $blog->addchild("post");
+		$post->addchild("idpost", $idpost);
+		$post->addchild("titulo", $titulo);
+		$post->addchild("cuerpo", $cuerpo);
+	} else {
+		$post[0]->idpost = $idpost;
+		$post[0]->titulo = $titulo;
+		$post[0]->cuerpo = $cuerpo;
+	}
+
 	$error_imagen = "";
+
 	$tempname = $_FILES["imagen_up"]["tmp_name"];
 	# Si se subió una imagen
 	if (is_uploaded_file($tempname)) {
@@ -41,17 +57,19 @@ if (isset($_POST["publicar"])) {
 		
 		# Si se guardó correctamente
 		if (upload_img($filename, $tempname, $imagen, $imgtype)){
-			$post->addchild("imagen", $imagen);
+			# Si no tenía una imagen asociada, se agrega
+			# De otra forma, como se guarda el path, ya queda actualizada
+			if (empty($post[0]->xpath("//imagen"))) {
+				$post[0]->addchild("imagen", $imagen);
+			}
 		}
-	} else {
-		# No se subió ninguna imagen
-		$post->addchild("imagen", "");
 	}
 
-	if ($error_imagen != "") {
-		$blog->asXML("blog.xml");
+	if ($error_imagen == "") {
+		$blog->asXML($xml_path);
 	}
 
+# Se vino desde otra página
 } else {
 
 	if (!isset($_POST["idpost"])) {
@@ -61,7 +79,7 @@ if (isset($_POST["publicar"])) {
 		if ($blog->count() < 1) {
 			$idpost = 0;
 		} else {
-			$idpost = $blog->post[$blog->count()-1]->id + 1;
+			$idpost = $blog->post[$blog->count()-1]->idpost + 1;
 		}
 
 		$titulo = "";
@@ -74,9 +92,10 @@ if (isset($_POST["publicar"])) {
 		$idpost = $_POST["idpost"];
 		$idpost = 1;
 		
-		$result = $blog->xpath("//post[idpost=$idpost]");
+		$post = $blog->xpath("//post[idpost=$idpost]");
 
-		foreach ($result[0]->children() as $elemento) {
+		# Cargar los valores del post
+		foreach ($post[0]->children() as $elemento) {
 			${$elemento->getname()} = $elemento;
 		}
 
