@@ -15,4 +15,22 @@ require "cabeza.php";
 
 require "header_index.php";
 
+$result = $blog->xpath("//post");
+foreach ($result as $key => $post) {
+	echo "
+<article>
+	<h2></h2>
+	<p></p>
+	<img src=\"" . $post->imagen . "\" alt=\"\">
+	<form action=\"\" method=\"post\">
+		<input type=\"hidden\">
+		<input type=\"submit\">
+	</form>
+	<form action=\"\" method=\"post\">
+		<input type=\"submit\">
+</article>
+";
+
+}
+
 require "pie.php";

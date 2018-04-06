@@ -5,3 +5,6 @@
 		<input type="submit" name="nuevo" value="Publicar nuevo">
 	</form>
 </header>
+<section>
+	<p><?=${eliminar}?></p>
+</section>
