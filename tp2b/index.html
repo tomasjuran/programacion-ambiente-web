@@ -40,7 +40,20 @@
 				1. Instale el Sistema Gestor de Bases de Datos MySQL y las extensiones necesarias para poder interactuar con la misma desde PHP. Documente someramente los pasos realizados.
 			</h3>
 			<p>
+				La instalación se realizó en un SO Fedora 26 (versión de kernel 4.15.10-200.fc26.x86_64).
 			</p>
+			<p>
+				Instalar el servidor de base de datos MySQL con el siguiente comando:
+			</p>
+			<code>
+				#dnf install mariadb-server
+			</code>
+			<p>
+				Instalar la API de PHP para MySQL:
+			</p>
+			<code>
+				#dnf install php-mysqlnd
+			</code>
 		</section>
 		<br>		
 		<h2>PHP – Persistencia sobre la base de datos</h2>
