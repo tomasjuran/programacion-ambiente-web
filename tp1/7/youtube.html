@@ -6,92 +6,106 @@
 </head>
 <body>
 	<header>
-		<div id="menu"></div>
+		<nav id="menu"></nav>
 		
-		<div id="logo">
-			<img src="" alt="">
-		</div>
+		<a href="http://www.youtube.com" id="logo"><img src="" alt=""></a>
 		
 		<form id="search" action="">
-			<input type="text" name="query">
-			<input type="submit">
+			<input type="search" name="query">
+			<input type="submit" name="search_button" value="SEARCH">
 		</form>
 
-		<div id="upload"></div>
+		<a href="" id="upload"></a>
 
-		<div id="app"></div>
+		<nav id="app"></nav>
 
-		<div id="notification"></div>
+		<nav id="notification"></nav>
 
-		<div id="user-panel"></div>
+		<nav id="user_panel"></nav>
 	</header>
 
 	<aside>
-		<div id="advertisement"></div>
-		<div id="up-next">
+		<article id="advertisement"></article>
+		<article id="up_next">
 			<p>Up next</p>
-			<p>Autoplay</p>
-			<div id="autoplay-switch"></div>
-			<div class="video-preview"></div>
-		</div>
-		<div id="related">
-			<div class="video-preview"></div>
-			<div class="video-preview"></div>
-			<div class="video-preview"></div>
-		</div>
-		<div id="more-related"></div>
+			<form action="">
+				<label for="autoplay_switch">Autoplay</label>
+				<input type="checkbox" id="autoplay_switch" name="autoplay_switch">
+			<article class="video_preview"></article>
+		</article>
+		<section id="related">
+			<article class="video_preview"></article>
+			<article class="video_preview"></article>
+			<article class="video_preview"></article>
+		</section>
+		<a href="" id="more_related"></a> 
 	</aside>
 
 	<main>
-		<div id="video-player"></div>
+		<video id="video_player"></video>
 
-		<div id="title">
+		<section id="title">
 			<p></p>
-		</div>
+		</section>
 
-		<div id="actions">
-			<div id="views">
+		<section id="actions">
+			<section id="views">
 				<p></p>
-			</div>
-			<div id="likes"></div>
-			<div id="share"></div>
-			<div id="add-to"></div>
-			<div id="more-video"></div>	
-		</div>
+			</section>
+			<section id="likes">
+				<a href="" id="like"></a>
+				<a href="" id="dislike"></a>
+			</section>
+			<a href="" id="share"></a>
+			<a href="" id="add_to"></a>
+			<a href="" id="more_video"></a>	
+		</section>
 		
-		<div id="description">
-			<div class="user"></div>
+		<section id="description">
+			<div class="user">
+				<a href=""></a>
+			</div>
 			<p></p>
 			<form action="">
-				<input id="subscribe" type="submit">
+				<input type="submit" id="subscribe" value="SUBSCRIBE">
 			</form>
-		</div>
+		</section>
 
-		<div id="comments">
+		<section id="comments">
 			<p></p>
-			<div id="sort-comments"></div>
-			<div id="add-comment">
-				<div class="user"></div>
+			<a href="" id="sort_comments"></a>
+			<section id="add_comment">
+				<div class="user">
+					<a href=""></a>
+				</div>
 				<form action="">
-					<input type="text">
+					<textarea name="new_comment" id="new_comment"></textarea>
+					<input type="submit" name="submit_comment" value="COMMENT">
+					<input type="reset" name="cancel_comment" value="CANCEL">
 				</form>
-			</div>
+			</section>
 
-			<div id="user-comments">
-				<div class="user-comment-show">
-					<div class="user"></div>
+			<section id="user_comments">
+				<article class="user_comment_show">
+					<div class="user">
+						<a href=""></a>
+					</div>
 					<p></p>
-				</div>
-				<div class="user-comment-show">
-					<div class="user"></div>
+				</article>
+				<article class="user_comment_show">
+					<div class="user">
+						<a href=""></a>
+					</div>
 					<p></p>
-				</div>
-				<div class="user-comment-show">
-					<div class="user"></div>
+				</article>
+				<article class="user_comment_show">
+					<div class="user">
+						<a href=""></a>
+					</div>
 					<p></p>
-				</div>
-			</div>
-		</div>
+				</article>
+			</section>
+		</section>
 	</main>
 </body>
 </html>
