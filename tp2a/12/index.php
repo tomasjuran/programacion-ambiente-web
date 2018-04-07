@@ -18,6 +18,7 @@ if (isset($_POST["eliminar"])) {
 	} else {
 		$idpost = $_POST["idpost"];
 		$post = $blog->xpath("//post[idpost=$idpost]");
+		unlink($post[0]->imagen);
 		$dom = dom_import_simplexml($post[0]);
     	$dom->parentNode->removeChild($dom);
     	$blog->asXML($xml_path);
