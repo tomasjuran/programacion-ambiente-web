@@ -1,0 +1,8 @@
+CREATE TABLE peliculas (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(300) NOT NULL,
+  anio_estreno INT NOT NULL,
+  reparto VARCHAR(5000) NULL,
+  cartel VARCHAR(300) NULL,
+  PRIMARY KEY (id)
+);

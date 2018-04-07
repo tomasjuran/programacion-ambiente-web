@@ -33,15 +33,21 @@ if (isset($_POST["publicar"])) {
 		$post->addchild("idpost", $idpost);
 		$post->addchild("titulo", $titulo);
 		$post->addchild("cuerpo", $cuerpo);
+		$post->addchild("fecha", date('r'));
 	} else {
 		$post[0]->idpost = $idpost;
 		$post[0]->titulo = $titulo;
 		$post[0]->cuerpo = $cuerpo;
+		$post[0]->fecha = date('r');
 	}
 
 	$tempname = $_FILES["imagen_up"]["tmp_name"];
-	# Si se subió una imagen
-	if (is_uploaded_file($tempname)) {
+	
+	if (!is_uploaded_file($tempname)) {
+		# Si no se subió una imagen, mantener la anterior
+		$imagen = $post[0]->xpath("//imagen") ? $post[0]->imagen : "";
+	} else {
+		# Si se subió una imagen
 		
 		# Numerar 001...999
 		$idimg = $idpost;
@@ -57,7 +63,7 @@ if (isset($_POST["publicar"])) {
 		$imagen = "images/img" . $idimg . "." . $imgtype;
 		
 		# Si se guardó correctamente
-		if (upload_img($filename, $tempname, $imagen, $imgtype)){
+		if (upload_img($filename, $tempname, $imagen, $imgtype)) {
 			
 			if (empty($post[0]->xpath("//imagen"))) {
 				# Si no tenía una imagen asociada, se agrega
@@ -99,7 +105,6 @@ if (isset($_POST["publicar"])) {
 		# Editar un post existente
 		$title = "Editar post";
 		$idpost = $_POST["idpost"];
-		$idpost = 1;
 		
 		$post = $blog->xpath("//post[idpost=$idpost]");
 
@@ -141,7 +146,7 @@ function upload_img($filename, $tempname, $imagen, $imgtype) {
 
 require "cabeza.php";
 
-require "header_editar.php";
+require "vista_editar.php";
 
 require "post.php";
 
