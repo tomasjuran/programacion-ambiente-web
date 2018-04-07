@@ -21,10 +21,9 @@ if (file_exists($xml_path)) {
 if (isset($_POST["publicar"])) {
 	$title = "Editar post";
 	# Guardar el post
-	foreach ($_POST as $key => $value)
-		if (isset($_POST[$key])) {
-			$$key = htmlspecialchars($value);
-		}
+	foreach ($_POST as $key => $value) {
+		$$key = htmlspecialchars($value);
+	}
 
 	# Buscar el ID para saber si modificar o agregar
 	$post = $blog->xpath("//post[idpost=$idpost]");
