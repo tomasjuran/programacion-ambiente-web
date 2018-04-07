@@ -1,0 +1,39 @@
+body {
+	text-align: center;
+}
+
+article {
+	display: block;
+	margin: auto;
+	width: 80%;
+	padding: 1em 1.5em;
+    border: 0.2em solid #ccc;
+    border-radius: 1em;
+    background-color: #f8f8f8;
+    font-size: 1.2em;
+}
+
+ul {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+form * {
+	display: block;
+	margin: auto;
+}
+
+input#titulo {
+	width: 50%;
+}
+
+textarea {
+	width: 50%;
+	height: 20em;
+	padding: 1em 1.5em;
+    border: 0.2em solid #ccc;
+    border-radius: 0.5em;
+    font-size: 1.2em;
+    resize: none;
+}

@@ -1,0 +1,5 @@
+Options -Indexes
+order allow,deny
+<Files ~ "\.(jpe?g|png|gif)$">
+	allow from all
+</Files>
