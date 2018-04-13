@@ -1,8 +1,6 @@
 <?php
-
 require '../Base/Conexion.php';
 require '../Util/Util.php';
-
 /**
 * 
 */
@@ -12,7 +10,6 @@ class Turno
 	private $Persona;
 	private $fecha_hora;
 	private $campos = ["Persona", "Fecha_hora"];
-
     /**
      * @return mixed
      */
@@ -20,7 +17,6 @@ class Turno
     {
         return $this->Numero;
     }
-
     /**
      * @param mixed $nro
      *
@@ -29,10 +25,8 @@ class Turno
     public function setNro($nro)
     {
         $this->Numero = $nro;
-
         return $this;
     }
-
     /**
      * @return mixed
      */
@@ -40,7 +34,6 @@ class Turno
     {
         return $this->Persona;
     }
-
     /**
      * @param mixed $persona
      *
@@ -49,10 +42,8 @@ class Turno
     public function setPersona($persona)
     {
         $this->Persona = $persona;
-
         return $this;
     }
-
     /**
      * @return mixed
      */
@@ -60,7 +51,6 @@ class Turno
     {
         return $this->Fecha_hora;
     }
-
     /**
      * @param mixed $fecha_hora
      *
@@ -69,17 +59,15 @@ class Turno
     public function setFechaHora($fecha, $hora)
     {
         $this->Fecha_hora = Util::format_date_Y_mm_dd($fecha) . " " . $hora;
-
         return $this;
     }
-
     public function guardar()
     {
     	$campos = $this->getCampos();
     	try {
     		//$this->persona->guardar();
     		$pdo = Conexion::getPDO();
-    		$st = "INSERT INTO Turnos ($campos) VALUES ('".$this->Persona->getDocumento."', '".$this->Fecha_hora."')";
+    		$st = "INSERT INTO Turnos ($campos) VALUES ('".$this->Persona->getDocumento()."', '".$this->Fecha_hora."')";
     		echo $st . "\n";
     		$query = $pdo->prepare($st);
     		if($query->execute()){
@@ -90,14 +78,11 @@ class Turno
     			
     		}
     	} catch (Exception $e) {
-
     		return false;
     		
     	}
     }
-
     public function getCampos() {
         return join(',', $this->campos);
     }
-
 }
