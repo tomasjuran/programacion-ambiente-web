@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="TP3 - Modificando el estilo - CSS - Cascading Style Sheets - Programación en Ambiente Web - Universidad Nacional de Luján - 2018">
+	<meta name="keywords" content="HTML, CSS, XML, JavaScript, Apache, PHP">
+	<meta name="author" content="Gómez Vicente, Javier Elías; Juran, Martín Tomás; Marazzo, Leonardo José">
+	<title>TP3 - Modificando el estilo - CSS - Cascading Style Sheets</title>
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<base target="_blank">
+</head>
+<body>
+	<header>
+		<h2>Trabajo Práctico #3</h2>
+		<h1>
+			Modificando el estilo
+			<br>
+			<em>CSS - Cascading Style Sheets</em>
+		</h1>
+		<p>Programación en Ambiente Web - 11086</p>
+		<p>Universidad Nacional de Luján 2018</p>
+		<img src="res/logo-unlu.png" alt="Logo UNLu" height="300px">
+		<p>
+			Gómez Vicente, Javier Elías - 117040 - 
+			<a href="mailto:eliasgomezv@gmail.com">eliasgomezv@gmail.com</a>
+		</p>
+		<p>
+			Juran, Martín Tomás - 143191 - 
+			<a href="mailto:tomasjuran96@gmail.com">tomasjuran96@gmail.com</a>
+		</p>
+		<p>
+			Marazzo, Leonardo José - 143112 - 
+			<a href="mailto:leonardojmarazzo@gmail.com">leonardojmarazzo@gmail.com</a>
+		</p>
+	</header>
+	<main>
+		<h2>Entendiendo CSS</h2>
+		<section>
+			<h3>
+				1. ¿Qué significa que los estilos se apliquen en cascada? ¿Cómo se aplica el concepto de herencia?
+			</h3>
+			<p>
+				La aplicación en cascada de los estilos se refiere a que una regla definida para un elemento se aplicará también a todos los elementos contenidos por este, e.g. si se define en &lt;body&gt; un tamaño de fuente de 16px, todos &lt;p&gt; dentro de ese &lt;body&gt; tendrán un tamaño de fuente de 16px.
+			</p>
+			<p>
+				Todos los elementos que no tengan reglas CSS definidas específicamente, heredarán el estilo del elemento que los contiene, subiendo en la jerarquía hasta llegar a las reglas de estilo por defecto del navegador. Es importante notar que no todas las propiedades pueden heredarse, e.g. margin, border, padding <strong>no</strong> son heredables, mientras que color y font-family sí.
+			</p>
+		</section>
+		<section>
+			<h3>
+				2. ¿Por qué es necesario utilizar un CSS de Reset?
+			</h3>
+			<p>
+				Un CSS Reset es necesario porque cada navegador tiene su propia hoja de estilo que aplica por defecto, por lo que una página generalmente no se ve igual en todos los navegadores. Al utilizar una hoja de estilo que sobreescribe todas las reglas que aplica el navegador y luego reescribiendo con nuestras propias reglas, nos aseguramos de que nuestra página se vea igual en todos los navegadores (si se tienen en cuenta cuestiones de compatibilidad).
+			</p>
+			<p>
+				Dependiendo de cómo se maneje, puede resultar en una carga extra para el usuario (si una regla del Reset se redefine posteriormente) y doble trabajo para el desarrollador.
+			</p>
+		</section>
+		<section>
+			<h3>
+				3. ¿Qué es el CSS box model?
+			</h3>
+			<p>
+				El espacio total que ocupa un elemento en una página no está dado solamente por su ancho y alto, sino que está comprendido por una o más "cajas" rectangulares que lo contienen. A esto se lo conoce como CSS box model.
+			</p>
+			<figure>
+				<img src="res/css-box-model.jpg" alt="CSS box model">
+				<figcaption>CSS box model</figcaption>
+			</figure>
+			<p>
+				Cada caja, como muestra la figura, tiene hasta 4 componentes; desde más interno a más externo, estos son la altura y ancho efectivamente del elemento (que puede ser una imagen, un texto u otro elemento junto con su caja en el caso de un contenedor), un <em>padding</em> o relleno, un <em>border</em> o borde y un <em>margin</em> o margen.
+				<br>
+				Finalmente, el "ancho total" de un elemento estará definido por la suma de sus márgenes, bordes, padding (tanto izquierdos como derechos para los tres casos) y el ancho del elemento en sí. Ocurre un caso análogo con la altura.
+				<br>
+				Hay que tener en cuenta también la manera en que las cajas interactúan unas con otras, siendo un caso común de confusión cuando dos márgenes colapsan entre sí.
+			</p>
+			<pre><code>&lt;p style=&quot;margin-bottom:30px;&quot;&gt;
+&lt;p style=&quot;margin-top:40px;&quot;&gt;</code></pre>
+			<p>
+				El espacio entre los dos &lt;p&gt; será de <strong>40px</strong>, no de 70px.
+			</p>
+		</section>
+		<section>
+			<h3>
+				4. ¿Cuál es el código que hay que insertar en una hoja de estilo para poder usar WebFonts?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				5. ¿Qué son y para qué sirven los pseudoElementos?
+			</h3>
+			<p>
+
+			</p>
+		</section>
+		<section>
+			<h3>
+				6. ¿Cómo se calcula la prioridad de una regla CSS?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				7. ¿Qué es el view port? ¿Cómo se configura? ¿Qué problema soluciona?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				8. ¿Qué son las media Querys? Enumere los distintos tipos de medios y las principales características de cada uno de ellos.
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				9. ¿En qué circunstancias se pueden utilizar las variables css? ¿Qué problemas pueden traer aparejadas? ¿Cuándo consideras que sería bueno utilizarlas?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				10. CSS Grid Layout ¿Qué es? Explicar las reglas que intervienen en el armado de una grilla. ¿Qué ventajas y desventajas tiene frente a otros Layouts?
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+
+		<hr>
+		
+		<h2>Aplicando CSS. Responsive: First mobile</h2>
+		<section>
+			<h3>
+				11. Generar las hojas de Estilo para los ejercicios 6 y 8 del TP1: HTML.
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				12. Generar las hojas de Estilo para los ejercicios 8 al 10 y el 12 del TP2: Apache + PHP.
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+		<section>
+			<h3>
+				13. Ampliar las hojas de Estilo para el ejercicio 4 del TP 2 parte 2 (El Blog) de modo que cuando se quiera imprimir el artículo se imprima en una página y los comentarios en las siguientes, agregando números de página, encabezado y pie de página y acomodando el contenido para que quede más legible en papel.
+			</h3>
+			<p>
+				
+			</p>
+		</section>
+
+		<hr>
+		
+		<section>
+			<h2>Bibliografía</h2>
+			<ul>
+				<li><a href="https://css-tricks.com/specifics-on-css-specificity/">Specifics on CSS Specificity - Chris Coyier 2010</a></li>
+				<li><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Cascade_and_inheritance">Cascade and Inheritance - MDN web docs</a></li>
+			</ul>
+		</section>
+	</main>
+</body>
+</html>
