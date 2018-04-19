@@ -87,13 +87,8 @@
 			<p>
 				Para probar la instalación, crear en el directorio por defecto de páginas web de apache <strong>/var/www/html</strong> el archivo test.php, cuyo contenido es
 			</p>
-			<pre>
-<code>
-&lt;?php
-	phpinfo();
-</code>
-			</pre>					
-			
+			<pre><code>&lt;?php
+	phpinfo();</code></pre>					
 			<p>
 				Finalmente, acceder a http://localhost/test.php desde el navegador.
 			</p>
@@ -167,9 +162,7 @@
 					<p>
 						Agregar las directivas necesarias en el archivo de configuración (httpd.conf o VirtualHost), por ejemplo, para bloquear a Rusia, Alemania y Francia:
 					</p>
-					<pre>
-<code>
-&lt;Location /&gt;
+					<pre><code>&lt;Location /&gt;
 	MaxMindDBEnable On
 	MaxMindDBFile DB /usr/local/share/GeoIP/GeoLite2-Country.mmdb
 	MaxMindDBEnv MM_COUNTRY_CODE DB/country/iso_code
@@ -177,9 +170,7 @@
 	Order deny,allow
 	Allow from all
 	Deny from env=BlockCountry
-&lt;/Location&gt;
-</code>
-					</pre>
+&lt;/Location&gt;</code></pre>
 				</li>
 			</ol>
 		</section>
@@ -219,14 +210,10 @@
 			<p>
 				Además, se debe modificar el archivo de configuración (httpd.conf o VirtualHost) para que permita a .htaccess sobreescribir la configuración, teniendo la línea
 			</p>
-			<pre>
-<code>
-&lt;Directory "directorio donde se encuentra .htaccess"&gt;
+			<pre><code>&lt;Directory "directorio donde se encuentra .htaccess"&gt;
 	...
 	<strong>AllowOverride All</strong>
-&lt;/Directory&gt;
-</code>
-			</pre>
+&lt;/Directory&gt;</code></pre>
 		</section>
 		<br>
 		<section>
