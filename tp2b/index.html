@@ -95,13 +95,24 @@
 			<p>
 				Un ataque de inyección de código SQL es una técnica donde un atacante altera consultas SQL existentes, combinando entradas del usuario con parámetros estáticos de las mismas. Ésta técnica, podría exponer datos ocultos, registrar nuevos o sobreescribir los existentes, y hasta ejecutar comandos peligrosos a nivel de sistema en el host de la base de datos.
 				<br>
-				Una manera efectiva de prevenir estos ataques es vinculando explícitamente datos dinámicos con consultas parametrizadas. Adicionalmente, resulta importante que los usuarios que accedan desde las aplicaciones no tengan privilegios suficientes para realizar modificaciones sobre el esquema.
+				Una manera efectiva de prevenir estos ataques es vinculando explícitamente datos dinámicos con consultas parametrizadas. Adicionalmente, resulta importante que los usuarios que accedan desde las aplicaciones no tengan privilegios suficientes para realizar modificaciones sobre los esquemas.
+				<br><br>
+				- CÓDIGO VULNERABLE -
 			</p>
-			<code>
-				<strong> EXAMPLE </strong>
-				<strong> EXAMPLE </strong>
-				<strong> EXAMPLE </strong> 
-			</code>
+			<pre>
+			<code>&lt;?php
+			$sql = "SELECT id, nombre, apellido FROM clientes WHERE $where";
+			$mysqli->query($sql);
+			</code></pre>
+			<p>
+				- SOLUCIÓN DE VULNERABILIDAD -
+			</p>
+			<pre>
+			<code>&lt;?php
+			$sql = $pdo->prepare("SELECT id, nombre, apellido FROM clientes WHERE ?");
+			$sql->bind_param($where);
+			$sql->execute();
+			</code></pre>
 		</section>
 		<br>
 		<section>
@@ -109,7 +120,7 @@
 				6. ¿Qué es un motor de persistencia ORM (Object-Relational Mapping; Mapeo objeto-relacional? ¿Qué problemática resuelve?
 			</h3>
 			<p>
-				Un motor de persistencia ORM es aquel nos permite mapear objetos de un lenguaje de programación orientada a objetos a tuplas de una base de datos relacional. De esta manera se resuelve la persistencia abstrayéndonos del motor de base de datos.
+				Un motor de persistencia ORM permite mapear objetos de un lenguaje de programación orientada a objetos a tuplas de una base de datos relacional. De esta manera se resuelve la persistencia abstrayéndonos del motor de base de datos.
 			</p>
 		</section>
 		<br>
