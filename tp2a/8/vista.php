@@ -27,8 +27,8 @@
 			<input type="date" id="Nacimiento" name="Nacimiento"><br>
 			<label for="pelo">Color de pelo</label>
 			<input type="text" id="pelo" name="Pelo"><br>
-			<label for="turno">Horio del turno</label>
-			<input name="turno" id="turno" type="time" min="08:00:00" max="17:00:00" step="900" value=<?= ${horap}?>>
+			<label for="turno">Horario del turno</label>
+			<input name="turno" id="turno" type="time" min="08:00:00" max="17:00:00" step="900">
 			<br>
 			<input type="submit" name="Aceptar" value="Aceptar">
 			<input type="reset" name="Limpiar" value="Limpiar"> 

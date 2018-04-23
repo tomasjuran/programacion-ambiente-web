@@ -53,19 +53,22 @@ function upload($filename, $tempname, $imagen, $thumbnail) {
     return "La imagen se subió correctamente";
 }
 
+$mostrar_error = "";
 
+if (isset($_FILES["imagen_up"])) {
+    $filename = $_FILES["imagen_up"]["name"];
+    $tempname = $_FILES["imagen_up"]["tmp_name"];
 
-$filename = $_FILES["imagen_up"]["name"];
-$tempname = $_FILES["imagen_up"]["tmp_name"];
+    $imgdir = "images/";
+    $thumbdir = $imgdir . "thumbs/";
 
-$imgdir = "images/";
-$thumbdir = $imgdir . "thumbs/";
+    $imagen = $imgdir . basename($filename);
+    $thumbnail = $thumbdir . basename($filename);
 
-$imagen = $imgdir . basename($filename);
-$thumbnail = $thumbdir . basename($filename);
-
-if (isset($_POST["enviar"])) {
-    $mostrar_error = upload($filename, $tempname, $imagen, $thumbnail);
+    if (isset($_POST["enviar"])) {
+        $mostrar_error = upload($filename, $tempname, $imagen, $thumbnail);
+    }
 }
+
 
 require "index.php";

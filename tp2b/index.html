@@ -97,11 +97,15 @@
 				<br>
 				Una manera efectiva de prevenir estos ataques es vinculando explícitamente datos dinámicos con consultas parametrizadas. Adicionalmente, resulta importante que los usuarios que accedan desde las aplicaciones no tengan privilegios suficientes para realizar modificaciones sobre el esquema.
 			</p>
-			<code>
-				<strong> EXAMPLE </strong>
-				<strong> EXAMPLE </strong>
-				<strong> EXAMPLE </strong> 
-			</code>
+			<p>Código vulnerable (usando PDO):</p>
+			<pre><code>public function insert($pdo, $documento) {
+    $pdo->exec("INSERT INTO persona (documento) VALUES ('$documento')";
+}</code></pre>
+			<p>Solución (usando PDO):</p>
+			<pre><code>public function insert($pdo, $documento) {
+    $query = $pdo->prepare("INSERT INTO persona (documento) VALUES (?)");
+    $query->execute($documento);
+}</code></pre>
 		</section>
 		<br>
 		<section>
@@ -109,7 +113,7 @@
 				6. ¿Qué es un motor de persistencia ORM (Object-Relational Mapping; Mapeo objeto-relacional? ¿Qué problemática resuelve?
 			</h3>
 			<p>
-				Un motor de persistencia ORM es aquel nos permite mapear objetos de un lenguaje de programación orientada a objetos a tuplas de una base de datos relacional. De esta manera se resuelve la persistencia abstrayéndonos del motor de base de datos.
+				Un motor de persistencia ORM es aquel que permite mapear objetos de un lenguaje de programación orientada a objetos a tuplas de una base de datos relacional. De esta manera se resuelve la persistencia abstrayéndonos del motor de base de datos.
 			</p>
 		</section>
 		<br>

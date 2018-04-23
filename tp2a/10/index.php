@@ -9,8 +9,8 @@
 		<input type="file" id="imagen_up" name="imagen_up">
 		<input type="submit" name="enviar" value="Enviar">
 	</form>
-	<img src="<?=${imagen}?>" alt="Imagen">
-	<img src="<?=${thumbnail}?>" alt="Thumbnail">
-	<p><?=${mostrar_error}?></p>
+	<img src="<?=$imagen?>" alt="Imagen">
+	<img src="<?=$thumbnail?>" alt="Thumbnail">
+	<p><?=$mostrar_error?></p>
 </body>
 </html>
