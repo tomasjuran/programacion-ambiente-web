@@ -1,5 +1,5 @@
 <?php
-require '../Base/Conexion.php';
+require '../../base/Conexion.php';
 require '../Util/Util.php';
 /**
 * 
