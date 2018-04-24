@@ -72,6 +72,7 @@ if (isset($_POST["publicar"])) {
 			# Se está agregando un post
 			$post->insert();
 		}
+		$resultado_post = "El post se publicó correctamente";
 	} else {
 		$resultado_post = "No se pudo publicar el post";
 	}
