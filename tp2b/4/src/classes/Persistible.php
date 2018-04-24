@@ -55,7 +55,7 @@ abstract class Persistible {
 	  * @return type
 	  */
 	protected function getSet() {
-		$set = "SET $this->campos[0] = :$this->campos[0] ";
+		$set = "SET " . $this->campos[0] . " = :" . $this->campos[0];
 		for ($i = 1; $i < count($this->campos); $i++) {
 			$set .= ", $this->campos[$i] = :$this->campos[$i] ";
 		}
@@ -67,7 +67,7 @@ abstract class Persistible {
 	 * @return type
 	 */
 	protected function getWhere() {
-		$where = "WHERE $this->claves[0] = :$this->claves[0] ";
+		$where = "WHERE " . $this->claves[0] . " = :" . $this->claves[0];
 		for ($i = 1; $i < count($this->claves); $i++) {
 			$where .= "AND $this->claves[$i] = :$this->claves[$i] ";
 		}

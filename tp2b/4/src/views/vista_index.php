@@ -6,7 +6,7 @@
 	<form action="editar_post.php">
 		<input type="submit" name="nuevo" value="Publicar nuevo">
 	</form>
-	<!--<p><?= $resultado_eliminar ?></p>-->
+	<p><?= $resultado_eliminar ?></p>
 </section>
 <main>
 	<section id="view_posts">
