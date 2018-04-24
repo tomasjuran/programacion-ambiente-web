@@ -3,14 +3,14 @@
 </header>
 <section>
 	<p>Hay <?= $q_posts ?> posts en el blog actualmente</p>
-	<form action="editar_post.php">
+	<form action="editar.php">
 		<input type="submit" name="nuevo" value="Publicar nuevo">
 	</form>
 	<p><?= $resultado_eliminar ?></p>
 </section>
 <main>
 	<section id="view_posts">
-	<?php if($posts) : ?>
+	<?php if ($posts) : ?>
 		<ul>
 		<?php foreach ($posts as $key => $post) : ?>
 			<li>

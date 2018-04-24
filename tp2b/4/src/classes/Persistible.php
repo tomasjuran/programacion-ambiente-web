@@ -12,7 +12,7 @@ abstract class Persistible {
 
 	public function selectAll() {
 		$pdo = Conexion::getPDO();
-		$query = $pdo->prepare("SELECT * FROM $this->tabla");
+		$query = $pdo->prepare("SELECT * FROM ".$this->tabla);
 		$query->execute();
 		return $query->fetchAll();
 	}
@@ -20,8 +20,8 @@ abstract class Persistible {
 	public function select() {
 		$where = $this->getWhere();
 		$pdo = Conexion::getPDO();
-		$query = $pdo->prepare("SELECT * FROM $this->tabla $where");
-		$query->execute($this->getValues());
+		$query = $pdo->prepare("SELECT * FROM ".$this->tabla." $where");
+		$query->execute($this->getKeys());
 		return $query->fetchAll();
 	}
 
@@ -30,7 +30,7 @@ abstract class Persistible {
 		$vals = $this->getVals();
 
 		$pdo = Conexion::getPDO();
-		$query = $pdo->prepare("INSERT INTO $this->tabla ($cols) VALUES ($vals)");
+		$query = $pdo->prepare("INSERT INTO ".$this->tabla." ($cols) VALUES ($vals)");
 		$query->execute($this->getValues());
 	}
 
@@ -39,15 +39,15 @@ abstract class Persistible {
 		$where = $this->getWhere();
 
 		$pdo = Conexion::getPDO();
-		$query = $pdo->prepare("UPDATE $this->tabla $set $where");
-		$query->execute($this->getValues());
+		$query = $pdo->prepare("UPDATE " .$this->tabla." $set $where");
+		$query->execute(array_merge($this->getValues(),$this->getKeys()));
 	}
 
 	public function delete() {
 		$where = $this->getWhere();
 		$pdo = Conexion::getPDO();
-		$query = $pdo->prepare("DELETE FROM $this->tabla $where");
-		$query->execute($this->getValues());
+		$query = $pdo->prepare("DELETE FROM ".$this->tabla." $where");
+		$query->execute($this->getKeys());
 	}
 
 	/**
@@ -57,7 +57,7 @@ abstract class Persistible {
 	protected function getSet() {
 		$set = "SET " . $this->campos[0] . " = :" . $this->campos[0];
 		for ($i = 1; $i < count($this->campos); $i++) {
-			$set .= ", $this->campos[$i] = :$this->campos[$i] ";
+			$set .= ", " . $this->campos[$i] . "= :" . $this->campos[$i];
 		}
 		return $set;
 	}
@@ -69,8 +69,9 @@ abstract class Persistible {
 	protected function getWhere() {
 		$where = "WHERE " . $this->claves[0] . " = :" . $this->claves[0];
 		for ($i = 1; $i < count($this->claves); $i++) {
-			$where .= "AND $this->claves[$i] = :$this->claves[$i] ";
+			$where .= "AND " . $this->claves[$i] . " = :" . $this->claves[$i];
 		}
+		return $where;
 	}
 
 	/**
@@ -100,5 +101,17 @@ abstract class Persistible {
 			$data[":".$campo] = $this->getCampo($campo);
 		}
 		return $data;
+	}
+
+	/**
+	 * Devuelve un array asociativo, tal que $keys[":key" => key]
+	 * @return type
+	 */
+	protected function getKeys() {
+		$keys = [];
+		foreach ($this->claves as $clave) {
+			$keys[":".$clave] = $this->getCampo($clave);
+		}
+		return $keys;
 	}
 }
