@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . "../../../base/Conexion.php";
+require __DIR__ . "/Persistible.php";
 
-class Post {
+class Post extends Persistible {
 	private $idpost;
 	private $titulo;
 	private $cuerpo;
@@ -11,13 +11,16 @@ class Post {
 	private $tags;
 	private $comentarios;
 
-	private $tabla = "posts";
-	private $claves = ["idpost"];
-	private $campos = ["idpost", "titulo", "cuerpo", "fecha", "imagen", "tags", "comentarios"];
+	function __construct() {
+		$this->tabla = "posts";
+		$this->claves = ["idpost"];
+		$this->campos = ["idpost", "titulo", "cuerpo", "fecha", "imagen", "tags"];
+	}
 
 	public function setAll($datos) {
 		if (!$datos["idpost"]) {
 			throw new Exception("El post debe tener un ID", 1);
 		}
-		parent::setAll();
+		parent::setAll($datos);
 	}
+}

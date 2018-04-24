@@ -24,7 +24,7 @@ class Conexion
 			'basename' => ''
 		];
 		$dom = new DOMDocument;
-		$dom->load('Parametros.xml');
+		$dom->load(__DIR__ . '/Parametros.xml');
 		$dbConfig['host'] = $dom->getElementsByTagName('host')->item(0)->nodeValue;
 		$dbConfig['user'] = $dom->getElementsByTagName('user')->item(0)->nodeValue;
 		$dbConfig['pass'] = $dom->getElementsByTagName('pass')->item(0)->nodeValue;
