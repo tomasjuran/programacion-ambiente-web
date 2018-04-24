@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . "/../../../base/Conexion.php";
+require_once __DIR__ . "/../../../base/Conexion.php";
 
 abstract class Persistible {
 
@@ -14,7 +14,7 @@ abstract class Persistible {
 		$pdo = Conexion::getPDO();
 		$query = $pdo->prepare("SELECT * FROM ".$this->tabla);
 		$query->execute();
-		return $query->fetchAll();
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	public function select() {
@@ -22,7 +22,7 @@ abstract class Persistible {
 		$pdo = Conexion::getPDO();
 		$query = $pdo->prepare("SELECT * FROM ".$this->tabla." $where");
 		$query->execute($this->getKeys());
-		return $query->fetchAll();
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 
 	public function insert() {

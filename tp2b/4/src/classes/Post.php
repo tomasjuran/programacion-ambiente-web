@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/Persistible.php";
+require_once __DIR__ . "/../../../base/Conexion.php";
 
 class Post extends Persistible {
 	private $idpost;
@@ -27,7 +28,11 @@ class Post extends Persistible {
 	}
 
 	public function setAll($datos) {
-		if (!$datos["titulo"]) {
+        
+    echo("<pre>");
+    print_r($datos);
+    echo("</pre>");
+		if (is_null($datos["titulo"])) {
 			throw new Exception("El post debe tener un título", 1);
 		}
 	
@@ -35,6 +40,13 @@ class Post extends Persistible {
 			$this->$campo = $datos[$campo];
 		}
 	}
+
+    public function getMaxId() {
+        $pdo = Conexion::getPDO();
+        $query = $pdo->prepare("SELECT MAX(idpost) FROM posts");
+        $query->execute();
+        return $query->fetch()[0];
+    }
 
     /**
      * @return mixed

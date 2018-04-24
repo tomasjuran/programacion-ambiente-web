@@ -3,7 +3,7 @@
 </header>
 <section>
 	<p>Hay <?= $q_posts ?> posts en el blog actualmente</p>
-	<form action="editar.php">
+	<form action="editar.php" method="post">
 		<input type="submit" name="nuevo" value="Publicar nuevo">
 	</form>
 	<p><?= $resultado_eliminar ?></p>

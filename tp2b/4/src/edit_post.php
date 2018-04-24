@@ -112,9 +112,7 @@ if (isset($_POST["publicar"])) {
 
 }
 
-function upload_img($filename, $tempname, $imagen, $imgtype) {
-
-	global $error_imagen;
+function upload_img($filename, $tempname, $imagen, $imgtype, &$error_imagen) {
 
     # Verificar el formato
     if ($imgtype != "jpg" &&

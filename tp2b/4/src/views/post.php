@@ -1,5 +1,5 @@
 <article>
-	<form action="<?= $accion ?>" method="post" enctype="multipart/form-data">
+	<form action="editar.php" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="idpost" value="<?= $idpost ?>">
 		<label for="titulo">Título</label>
 		<input type="text" name="titulo" id="titulo" value="<?= $titulo ?>" maxlength="200" placeholder="Ingrese el título">
