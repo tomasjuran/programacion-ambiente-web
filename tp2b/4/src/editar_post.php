@@ -13,19 +13,15 @@ if (isset($_POST["publicar"])) {
 	# Guardar los datos
 	$datos = [];
 	foreach ($_POST as $key => $value) {
-		if (isset($value)) {
-			$datos[$key] = $value;
-		}
+		$datos[$key] = $value;
+		# Guardar el post
+		$$key = htmlspecialchars($value);
 	}
-
-    echo("<pre>");
-    print_r($datos);
-    echo("</pre>");
 
 	$post = new Post();
 	# Editar un post existente
-	if (isset($_POST["idpost"])) {
-		$post->setIdpost($_POST["idpost"]);
+	if (!empty($idpost)) {
+		$post->setIdpost($idpost);
 		$post->setAll($post->select());
 	} else {
 		$post->setIdpost(Post::getMaxId());
@@ -69,7 +65,7 @@ if (isset($_POST["publicar"])) {
 
 	# Lo único que puede dar error es la subida de la imagen
 	if ($error_imagen == "") {
-		if (isset($_POST["idpost"])) {
+		if (!empty($idpost)) {
 			# Se está modificando un post
 			$post->update();
 		} else {

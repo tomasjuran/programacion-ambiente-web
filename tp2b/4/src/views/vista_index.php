@@ -19,7 +19,7 @@
 					<p><em><?= $post["fecha"] ?></em></p>
 					<p><?= $post["cuerpo"] ?></p>
 					<img src="<?= $post["imagen"] ?>" alt="">
-					<form action="editar_post.php" method="post">
+					<form action="editar.php" method="post">
 						<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
 						<input type="submit" name="modificar" value="Modificar">
 					</form>

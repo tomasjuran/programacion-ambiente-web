@@ -13,7 +13,7 @@ class Post extends Persistible {
 	private $comentarios;
 
 	function __construct() {
-		$this->tabla = "posts";
+        $this->tabla = "posts";
 		$this->claves = ["idpost"];
 		$this->campos = [#"idpost",
 				"titulo",
@@ -28,16 +28,14 @@ class Post extends Persistible {
 	}
 
 	public function setAll($datos) {
-        
-    echo("<pre>");
-    print_r($datos);
-    echo("</pre>");
 		if (is_null($datos["titulo"])) {
 			throw new Exception("El post debe tener un título", 1);
 		}
 	
 		foreach ($this->campos as $campo) {
-			$this->$campo = $datos[$campo];
+            if (isset($datos[$campo])) {
+                $this->$campo = $datos[$campo];
+            }
 		}
 	}
 
