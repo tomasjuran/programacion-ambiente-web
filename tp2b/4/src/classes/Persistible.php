@@ -8,11 +8,7 @@ abstract class Persistible {
 	protected $claves = [];
 	protected $campos = [];
 
-	public function setAll($datos) {
-		foreach ($this->campos as $campo) {
-			$this->$campo = $datos[$campo];
-		}
-	}
+	abstract protected function getCampo($campo);
 
 	public function selectAll() {
 		$pdo = Conexion::getPDO();
@@ -101,7 +97,7 @@ abstract class Persistible {
 	protected function getValues() {
 		$data = [];
 		foreach ($this->campos as $campo) {
-			$data[":".$campo] = $this->$campo;
+			$data[":".$campo] = $this->getCampo($campo);
 		}
 		return $data;
 	}

@@ -14,13 +14,25 @@ class Post extends Persistible {
 	function __construct() {
 		$this->tabla = "posts";
 		$this->claves = ["idpost"];
-		$this->campos = ["idpost", "titulo", "cuerpo", "fecha", "imagen", "tags"];
+		$this->campos = [#"idpost",
+				"titulo",
+				"cuerpo",
+				#"fecha",
+				"imagen",
+				"tags"];
+	}
+
+	protected function getCampo($campo) {
+		return $this->$campo;
 	}
 
 	public function setAll($datos) {
-		if (!$datos["idpost"]) {
-			throw new Exception("El post debe tener un ID", 1);
+		if (!$datos["titulo"]) {
+			throw new Exception("El post debe tener un título", 1);
 		}
-		parent::setAll($datos);
+	
+		foreach ($this->campos as $campo) {
+			$this->$campo = $datos[$campo];
+		}
 	}
 }

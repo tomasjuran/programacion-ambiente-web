@@ -3,5 +3,5 @@
 	<host>localhost</host>
 	<user>root</user>
 	<pass></pass>
-	<base>tp2b</base>
+	<base>paw_tp2b</base>
 </parametros>

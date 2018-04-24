@@ -2,10 +2,10 @@
 
 require __DIR__ . "/classes/Post.php";
 
-$datos = ["idpost"=>1,
-		"titulo"=>"Mi título",
+
+$datos = [
+		"titulo"=>"Mi otro título",
 		"cuerpo"=>"Hola qué tal",
-		"fecha"=>date("r"),
 		"imagen"=>"",
 		"tags"=>""
 		];
