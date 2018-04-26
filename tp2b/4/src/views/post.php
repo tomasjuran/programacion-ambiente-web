@@ -1,4 +1,4 @@
-<article>
+<article class="article_post">
 	<form action="editar.php" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="idpost" value="<?= $idpost ?>">
 		<label for="titulo">Título</label>

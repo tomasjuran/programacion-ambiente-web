@@ -1,16 +1,88 @@
-body {
-	text-align: center;
+* {
+	box-sizing: border-box;
 }
 
-article {
+body {
+	text-align: center;
+	font-size: 12pt;
+	background-color: lightblue;
+	margin: 0;
+}
+
+header > p {
+	color: white;
+	background-color: darkcyan;
+	padding: 0.5em 0;
+	margin: 0;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+nav {
+	margin: 1em 0;
+}
+
+section.panel_superior {
+	background-color: lightsteelblue;
+	padding: 1em 0;
+}
+
+section.panel_superior * {
+	margin: 1em auto;
+	display: block;
+}
+
+section.panel_superior *:first-child {
+	margin-top: 0;
+}
+
+section.panel_superior *:last-child {
+	margin-bottom: 0;
+}
+
+@media only screen and (min-width: 768px) {
+	section.panel_superior * {
+		display: inline-block;
+		width: 49%;
+	}
+	
+	section.panel_superior *:first-child,
+	section.panel_superior *:last-child {
+		margin: 0;
+	}
+}
+
+
+section.aviso_usuario > p.resultado {
+	border-left: 6px solid rgb(255, 235, 59);
+	border-right: 6px solid rgb(255, 235, 59);
+	background-color: #ffc;
+	padding: 1em 0;
+	margin: 1em 2em;
+}
+
+article.article_post {
 	display: block;
 	margin: auto;
-	width: 80%;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	width: 95%;
 	padding: 1em 1.5em;
     border: 0.2em solid #ccc;
     border-radius: 1em;
     background-color: #f8f8f8;
-    font-size: 1.2em;
+}
+
+@media only screen and (min-width: 768px) {
+	article.article_post {
+		width: 75%;
+		font-size: 1.2em;
+	}
+}
+
+article.article_post > img {
+	max-width: 100%;
+	height: auto;
 }
 
 ul {
@@ -25,15 +97,14 @@ form * {
 }
 
 input#titulo {
-	width: 50%;
+	width: 75%;
 }
 
 textarea {
-	width: 50%;
-	height: 20em;
+	width: 75%;
+	height: 10em;
 	padding: 1em 1.5em;
     border: 0.2em solid #ccc;
     border-radius: 0.5em;
-    font-size: 1.2em;
     resize: none;
 }
