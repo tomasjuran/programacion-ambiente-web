@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/Persistible.php";
+require_once __DIR__ . "/Comentario.php";
 require_once __DIR__ . "/../../../base/Conexion.php";
 
 class Post extends Persistible {
@@ -171,6 +172,11 @@ class Post extends Persistible {
      */
     public function getComentarios()
     {
+        if (!$comentarios) {
+            $comentario = new Comentario();
+            $comentario->setIdpost($this->idpost);
+            $comentario->select();
+        }
         return $this->comentarios;
     }
 

@@ -10,19 +10,12 @@ abstract class Persistible {
 
 	abstract protected function getCampo($campo);
 
-	public function selectAll() {
-		$pdo = Conexion::getPDO();
-		$query = $pdo->prepare("SELECT * FROM ".$this->tabla);
-		$query->execute();
-		return $query->fetchAll(PDO::FETCH_ASSOC);
-	}
-
 	public function select() {
 		$where = $this->getWhere();
 		$pdo = Conexion::getPDO();
 		$query = $pdo->prepare("SELECT * FROM ".$this->tabla." $where");
 		$query->execute($this->getKeys());
-		return $query->fetch(PDO::FETCH_ASSOC);
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	public function insert() {
@@ -55,9 +48,18 @@ abstract class Persistible {
 	  * @return type
 	  */
 	protected function getSet() {
-		$set = "SET " . $this->campos[0] . " = :" . $this->campos[0];
-		for ($i = 1; $i < count($this->campos); $i++) {
-			$set .= ", " . $this->campos[$i] . "= :" . $this->campos[$i];
+		$campoConDatos = [];
+		foreach ($this->campos as $campo) {
+			if ($this->getCampo($campo)) {
+				$campoConDatos[] = $campo;
+			}
+		}
+		$set = "";
+		if ($campoConDatos) {
+			$set = "SET " . $campoConDatos[0] . " = :" . $campoConDatos[0];
+			for ($i = 1; $i < count($campoConDatos); $i++) {
+				$set .= ", " . $campoConDatos[$i] . "= :" . $campoConDatos[$i];
+			}
 		}
 		return $set;
 	}
@@ -67,10 +69,20 @@ abstract class Persistible {
 	 * @return type
 	 */
 	protected function getWhere() {
-		$where = "WHERE " . $this->claves[0] . " = :" . $this->claves[0];
-		for ($i = 1; $i < count($this->claves); $i++) {
-			$where .= "AND " . $this->claves[$i] . " = :" . $this->claves[$i];
+		$claveConDatos = [];
+		foreach ($this->claves as $clave) {
+			if ($this->getCampo($clave)) {
+				$claveConDatos[] = $clave;
+			}
 		}
+		$where = "";
+		if ($claveConDatos) {
+			$where = "WHERE " . $claveConDatos[0] . " = :" . $claveConDatos[0];
+			for ($i = 1; $i < count($claveConDatos); $i++) {
+				$where .= "AND " . $claveConDatos[$i] . " = :" . $claveConDatos[$i];
+			}	
+		}
+		
 		return $where;
 	}
 
@@ -79,7 +91,13 @@ abstract class Persistible {
 	 * @return String
 	 */
 	protected function getCols() {
-		return implode(",", $this->campos);
+		$campoConDatos = [];
+		foreach ($this->campos as $campo) {
+			if ($this->getCampo($campo)) {
+				$campoConDatos[] = $campo;
+			}
+		}
+		return implode(",", $campoConDatos);
 	}
 
 	/**
@@ -88,7 +106,13 @@ abstract class Persistible {
 	 * @return type
 	 */
 	protected function getVals() {
-		return ":".implode(", :", $this->campos);
+		$campoConDatos = [];
+		foreach ($this->campos as $campo) {
+			if ($this->getCampo($campo)) {
+				$campoConDatos[] = $campo;
+			}
+		}
+		return ":".implode(", :", $campoConDatos);
 	}
 
 	/**
@@ -98,7 +122,9 @@ abstract class Persistible {
 	protected function getValues() {
 		$data = [];
 		foreach ($this->campos as $campo) {
-			$data[":".$campo] = $this->getCampo($campo);
+			if ($this->getCampo($campo)) {
+				$data[":".$campo] = $this->getCampo($campo);
+			}
 		}
 		return $data;
 	}
@@ -110,7 +136,9 @@ abstract class Persistible {
 	protected function getKeys() {
 		$keys = [];
 		foreach ($this->claves as $clave) {
-			$keys[":".$clave] = $this->getCampo($clave);
+			if ($this->getCampo($clave)) {
+				$keys[":".$clave] = $this->getCampo($clave);
+			}
 		}
 		return $keys;
 	}

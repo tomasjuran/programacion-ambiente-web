@@ -11,7 +11,7 @@ if (isset($_POST["eliminar"])) {
 	} else {
 		$post = new Post();
 		$post->setIdpost($_POST["idpost"]);
-		$post->setAll($post->select());
+		$post->setAll($post->select()[0]);
 		unlink($post->getImagen());
 		$post->delete();
 		$resultado_eliminar = "El post se eliminó correctamente";

@@ -15,7 +15,7 @@ $post = new Post();
 # Editar un post existente
 if (!empty($idpost)) {
 	$post->setIdpost($idpost);
-	$post->setAll($post->select());
+	$post->setAll($post->select()[0]);
 } else {
 	$post->setIdpost(Post::getMaxId());
 }

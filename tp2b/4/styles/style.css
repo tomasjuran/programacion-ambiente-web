@@ -71,12 +71,13 @@ article.article_post {
     border: 0.2em solid #ccc;
     border-radius: 1em;
     background-color: #f8f8f8;
+    font-size: 0.8em;
 }
 
 @media only screen and (min-width: 768px) {
 	article.article_post {
 		width: 75%;
-		font-size: 1.2em;
+		font-size: 1em;
 	}
 }
 
@@ -107,4 +108,14 @@ textarea {
     border: 0.2em solid #ccc;
     border-radius: 0.5em;
     resize: none;
+}
+
+@media only screen and (min-width: 768px) {
+	input#titulo, textarea {
+		font-size: 1.2em;
+	}
+
+	textarea {
+		height: 20em;
+	}
 }
