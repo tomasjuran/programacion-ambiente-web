@@ -12,13 +12,13 @@ foreach ($_POST as $key => $value) {
 }
 
 $post = new Post();
+
 # Editar un post existente
 if (!empty($idpost)) {
 	$post->setIdpost($idpost);
 	$post->setAll($post->select()[0]);
-} else {
-	$post->setIdpost(Post::getMaxId());
 }
+
 # Reemplazar con los datos ingresados
 $post->setAll($datos);
 
@@ -31,7 +31,7 @@ if (!is_uploaded_file($tempname)) {
 	# Si se subió una imagen
 	
 	# Numerar 001...999
-	$idimg = $post->getIdpost();
+	$idimg = $post->getIdpost() ? $post->getIdpost() : Post::getMaxId() + 1;
 	if ((int) $idimg < 100) {
 		$idimg = "0" . $idimg;
 		if ((int) $idimg < 10) {

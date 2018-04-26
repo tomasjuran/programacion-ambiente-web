@@ -4,9 +4,15 @@
 
 body {
 	text-align: center;
-	font-size: 12pt;
+	font-size: 16pt;
 	background-color: lightblue;
 	margin: 0;
+}
+
+@media only screen and (min-width: 768px) {
+	body {
+		font-size: 12pt;
+	}
 }
 
 header > p {
@@ -22,38 +28,41 @@ nav {
 	margin: 1em 0;
 }
 
-section.panel_superior {
+form > input[type="submit"] {
+
+}
+
+section.panel-superior {
 	background-color: lightsteelblue;
 	padding: 1em 0;
 }
 
-section.panel_superior * {
+section.panel-superior * {
 	margin: 1em auto;
 	display: block;
 }
 
-section.panel_superior *:first-child {
+section.panel-superior *:first-child {
 	margin-top: 0;
 }
 
-section.panel_superior *:last-child {
+section.panel-superior *:last-child {
 	margin-bottom: 0;
 }
 
 @media only screen and (min-width: 768px) {
-	section.panel_superior * {
+	section.panel-superior * {
 		display: inline-block;
 		width: 49%;
 	}
 	
-	section.panel_superior *:first-child,
-	section.panel_superior *:last-child {
+	section.panel-superior *:first-child,
+	section.panel-superior *:last-child {
 		margin: 0;
 	}
 }
 
-
-section.aviso_usuario > p.resultado {
+p.aviso {
 	border-left: 6px solid rgb(255, 235, 59);
 	border-right: 6px solid rgb(255, 235, 59);
 	background-color: #ffc;
@@ -61,29 +70,120 @@ section.aviso_usuario > p.resultado {
 	margin: 1em 2em;
 }
 
-article.article_post {
+article.article-post {
 	display: block;
 	margin: auto;
 	margin-top: 1em;
 	margin-bottom: 1em;
 	width: 95%;
-	padding: 1em 1.5em;
-    border: 0.2em solid #ccc;
-    border-radius: 1em;
+	padding: 0.5em 1em;
+    border: 4px solid #ccc;
+    border-radius: 32px;
     background-color: #f8f8f8;
     font-size: 0.8em;
 }
 
 @media only screen and (min-width: 768px) {
-	article.article_post {
+	article.article-post {
 		width: 75%;
 		font-size: 1em;
 	}
 }
 
-article.article_post > img {
+article.article-post > img {
 	max-width: 100%;
 	height: auto;
+}
+
+.fecha {
+	text-align: left;
+	font-style: oblique;
+	font-size: 0.6em;
+}
+
+article.article-post .post-cuerpo {
+	text-align: left;
+}
+
+article.article-post-edit label {
+	display: block;
+	margin: 0.5em;
+}
+
+article.article-post-edit input#titulo {
+	width: 95%;
+}
+
+textarea {
+	width: 95%;
+	height: 10em;
+	padding: 0.5em;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    resize: none;
+}
+
+article.article-post-edit *:first-child,
+article.article-post-edit *:last-child {
+	margin: 0;
+}
+
+@media only screen and (min-width: 768px) {
+	article.article-post-edit input#titulo,
+	article.article-post-edit textarea {
+		width: 75%;
+		font-size: 1.2em;
+	}
+
+	article.article-post-edit textarea {
+		height: 20em;
+	}
+}
+
+section.section-comentarios {
+	margin-top: 1em;
+	border-top: 1px solid gray;
+	display: block;
+}
+
+div.div-nuevo-comentario p {
+	display: inline-block;
+}
+
+form.nuevo-comentario input[id^=com-autor] {
+	width: 95%;
+}
+
+@media only screen and (min-width: 768px) {
+	form.nuevo-comentario textarea {
+		font-size: 1em;
+		height: 10em;
+	}
+}
+
+div.div-comentario {
+	margin-top: 1em;
+	border-top: 1px solid gray;
+}
+
+div.div-comentario .comentario-autor,
+div.div-comentario .fecha {
+	text-align: left;
+	display: inline-block;
+}
+
+div.div-comentario .comentario-autor {
+	font-weight: bold;
+}
+
+div.div-comentario .fecha {
+	padding-left: 0.5em;
+}
+
+div.div-comentario .comentario-cuerpo {
+	margin-top: 0;
+	text-align: left;
+	display: block;
 }
 
 ul {
@@ -92,30 +192,20 @@ ul {
     padding: 0;
 }
 
-form * {
-	display: block;
-	margin: auto;
+div[class|=arrow] {
+	border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    position: relative;
+    left: 0.5em;
+    top: -0.1em;
 }
 
-input#titulo {
-	width: 75%;
+div.arrow-down {
+	transform: rotate(45deg);
 }
 
-textarea {
-	width: 75%;
-	height: 10em;
-	padding: 1em 1.5em;
-    border: 0.2em solid #ccc;
-    border-radius: 0.5em;
-    resize: none;
-}
-
-@media only screen and (min-width: 768px) {
-	input#titulo, textarea {
-		font-size: 1.2em;
-	}
-
-	textarea {
-		height: 20em;
-	}
+div.arrow-right {
+	transform: rotate(-45deg);
 }

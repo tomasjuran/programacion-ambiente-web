@@ -1,15 +1,15 @@
 <header>
 	<p>¡Bienvenidos al blog!</p>
 </header>
-<section class="panel_superior">
-	<p class="q_posts">Hay <?= $q_posts ?> posts en el blog actualmente</p>
-	<form class="publicar_nuevo" action="editar.php" method="post">
+<section class="panel-superior">
+	<p class="q-posts">Hay <?= $q_posts ?> posts en el blog actualmente</p>
+	<form class="publicar-nuevo" action="editar.php" method="post">
 		<input type="submit" name="nuevo" value="Publicar nuevo">
 	</form>
 </section>
-<section class="aviso_usuario">
+<section class="aviso-usuario">
 	<?php if ($resultado_eliminar) : ?>
-	<p class="resultado"><?= $resultado_eliminar ?></p>
+	<p class="aviso"><?= $resultado_eliminar ?></p>
 	<?php endif; ?>
 </section>
 <main>
@@ -18,25 +18,43 @@
 		<ul>
 		<?php foreach ($posts as $key => $post) : ?>
 			<li>
-				<article class="article_post">
-					<h2><?= $post["titulo"] ?></h2>
-					<p><em><?= $post["fecha"] ?></em></p>
-					<p><?= $post["cuerpo"] ?></p>
+				<article class="article-post">
+					<h2 class="post-titulo"><?= $post["titulo"] ?></h2>
+					<p class="fecha">Publicado <?= $post["fecha"] ?></p>
+					<p class="post-cuerpo"><?= $post["cuerpo"] ?></p>
 					<img src="<?= $post["imagen"] ?>" alt="">
 					<form action="editar.php" method="post">
 						<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
 						<input type="submit" name="modificar" value="Modificar">
+						<input type="submit" name="eliminar" value="Eliminar" formaction="eliminar.php">
 					</form>
-					<form action="index.php" method="post">
-						<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
-						<input type="submit" name="eliminar" value="Eliminar">
-					</form>
+					<section class="section-comentarios">
+						
+						<div class="div-nuevo-comentario">
+							<p>Escriba un comentario</p>
+							<div class="arrow-down"></div>
+						</div>
+						<form class="nuevo-comentario">
+							<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
+							<input type="text" name="com-autor<?= $post["idpost"] ?>" id="com-autor<?= $post["idpost"] ?>" maxlength="60" placeholder="Ingrese su nombre" >
+							<textarea name="com-cuerpo<?= $post["idpost"] ?>" id="com-cuerpo<?= $post["idpost"] ?>" maxlength="1000"></textarea>
+							<input type="submit" name="comentar" value="Comentar">
+						</form>	
+						
+						<?php foreach ($post["comentarios"] as $comentario) : ?>
+						<div class="div-comentario">
+							<p class="comentario-autor"><?= $comentario["autor"] ?></p>
+							<p class="fecha"><?= $comentario["fecha"] ?></p>
+							<p class="comentario-cuerpo"><?= $comentario["cuerpo"] ?></p>
+						</div>
+						<?php endforeach; ?>
+					</section>
 				</article>
 			</li>
 		<?php endforeach; ?>
 		</ul>
 	<?php else : ?>
-		<p>No hay posts para ver</p>
+		<p class="aviso">No hay posts para ver</p>
 	<?php endif; ?>
 	</section>
 </main>

@@ -11,7 +11,7 @@ class Post extends Persistible {
 	private $fecha;
 	private $imagen;
 	private $tags;
-	private $comentarios;
+    private $comentarios;
 
 	function __construct() {
         $this->tabla = "posts";
@@ -172,23 +172,8 @@ class Post extends Persistible {
      */
     public function getComentarios()
     {
-        if (!$comentarios) {
-            $comentario = new Comentario();
-            $comentario->setIdpost($this->idpost);
-            $comentario->select();
-        }
-        return $this->comentarios;
-    }
-
-    /**
-     * @param mixed $comentarios
-     *
-     * @return self
-     */
-    public function setComentarios($comentarios)
-    {
-        $this->comentarios = $comentarios;
-
-        return $this;
+        $comentarioModel = new Comentario();
+        $comentarioModel->setIdpost($this->idpost);
+        return $comentarioModel->select();
     }
 }
