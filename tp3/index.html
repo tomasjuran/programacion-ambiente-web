@@ -110,7 +110,28 @@
 				7. ¿Qué es el view port? ¿Cómo se configura? ¿Qué problema soluciona?
 			</h3>
 			<p>
-				
+				El viewport es el área visible para el usuario de una página web. Este varía dependiendo del dispositivo desde el cual se accede a la página, siendo más pequeño para teléfonos que para monitores en computadoras de escritorio.
+			</p>
+			<p>
+				Para poder dar instrucciones al navegador de cómo controlar las dimensiones y escala de la página configurando el viewport, se debe agregar un tag &lt;meta&gt; en el &lt;head&gt; del HTML con los siguientes atributos:
+			</p>
+			<code>
+				&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+			</code>
+			<ul>
+				<li>
+					<p>
+						<strong>width=device-width</strong> configura el ancho de la página con respecto al ancho de la pantalla del dispositivo desde el cual se ve.
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>initial-scale=1.0</strong> configura el zoom inicial de la página cuando se carga.
+					</p>
+				</li>
+			</ul>
+			<p>
+				El problema que resuelve configurar el viewport está relacionado a que el acceso a una página web se puede realizar desde distintos dispositivos, todos con tamaño variable, y una página con un diseño y tamaño estático no se vería bien en todos los tamaños.
 			</p>
 		</section>
 		<section>
@@ -118,8 +139,33 @@
 				8. ¿Qué son las media Querys? Enumere los distintos tipos de medios y las principales características de cada uno de ellos.
 			</h3>
 			<p>
-				
+				Media query es una técnica para incluir un bloque de reglas CSS sólo si se cumple cierta condición, utilizando la regla <strong>@media</strong>. Esto permite aplicar estilos específicos a distintos tipos de medios o dispositivos.
 			</p>
+			<p>
+				Los tipos de medios definidos son:
+			</p>
+			<ul>
+				<li>
+					<p>
+						<strong>all</strong>: el tipo por defecto
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>print</strong>: utilizado para imprimir
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>screen</strong>: utilizado para pantallas (monitores, tablets, teléfonos, etc.)
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>speech</strong>: utilizado para lectores de pantalla
+					</p>
+				</li>
+			</ul>
 		</section>
 		<section>
 			<h3>
