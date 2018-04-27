@@ -51,7 +51,7 @@
 				2. ¿Por qué es necesario utilizar un CSS de Reset?
 			</h3>
 			<p>
-				Un CSS Reset es necesario porque cada navegador tiene su propia hoja de estilo que aplica por defecto, por lo que una página generalmente no se ve igual en todos los navegadores. Al utilizar una hoja de estilo que sobreescribe todas las reglas que aplica el navegador y luego reescribiendo con nuestras propias reglas, nos aseguramos de que nuestra página se vea igual en todos los navegadores (si se tienen en cuenta cuestiones de compatibilidad).
+				Un CSS Reset puede llegar a ser necesario porque cada navegador tiene su propia hoja de estilo que aplica por defecto, por lo que una página generalmente no se ve igual en todos los navegadores. Al utilizar una hoja de estilo que sobreescribe todas las reglas que aplica el navegador y luego reescribiendo con nuestras propias reglas, nos aseguramos de que nuestra página se vea igual en todos los navegadores (si se tienen en cuenta cuestiones de compatibilidad).
 			</p>
 			<p>
 				Dependiendo de cómo se maneje, puede resultar en una carga extra para el usuario (si una regla del Reset se redefine posteriormente) y doble trabajo para el desarrollador.
@@ -86,16 +86,29 @@
 				4. ¿Cuál es el código que hay que insertar en una hoja de estilo para poder usar WebFonts?
 			</h3>
 			<p>
-				
+				Para usar una WebFont, se debe utilizar la regla @font-face, definiendo al menos el nombre de la fuente y la URL del recurso (.woff, .ttf, etc.). Por ejemplo:
 			</p>
+			<pre><code>@font-face {
+    font-family: miFuente;
+    src: url(mi_fuente.woff);
+}</code></pre>
+			<p>
+				Luego, para utilizarla:
+			</p>
+			<pre><code>body {
+    font-family: miFuente;
+}</code></pre>
 		</section>
 		<section>
 			<h3>
 				5. ¿Qué son y para qué sirven los pseudoElementos?
 			</h3>
 			<p>
-
+				Los pseudo-elementos son modificadores especiales de un selector que se utilizan para dar un estilo particular a partes específicas de un elemento, como por ejemplo hacer más grande la primer letra de un párrafo o insertar contenido antes o después de un elemento. Un ejemplo del primero:
 			</p>
+			<pre><code>p::first-letter {
+    font-size: xx-large;
+}</code></pre>
 		</section>
 		<section>
 			<h3>
@@ -110,7 +123,7 @@
 				7. ¿Qué es el view port? ¿Cómo se configura? ¿Qué problema soluciona?
 			</h3>
 			<p>
-				El viewport es el área visible para el usuario de una página web. Este varía dependiendo del dispositivo desde el cual se accede a la página, siendo más pequeño para teléfonos que para monitores en computadoras de escritorio.
+				El viewport es el área visible para el usuario de una página web. Este varía dependiendo del dispositivo desde el cual se accede a la página, siendo más pequeño para teléfonos que para monitores, por ejemplo.
 			</p>
 			<p>
 				Para poder dar instrucciones al navegador de cómo controlar las dimensiones y escala de la página configurando el viewport, se debe agregar un tag &lt;meta&gt; en el &lt;head&gt; del HTML con los siguientes atributos:
