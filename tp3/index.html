@@ -104,7 +104,7 @@
 				5. ¿Qué son y para qué sirven los pseudoElementos?
 			</h3>
 			<p>
-				Los pseudo-elementos son modificadores especiales de un selector que se utilizan para dar un estilo particular a partes específicas de un elemento, como por ejemplo hacer más grande la primer letra de un párrafo o insertar contenido antes o después de un elemento. Un ejemplo del primero:
+				Los pseudo-elementos son selectores especiales para elementos que no están <em>directamente</em> presentes en la estructura del HTML, como la primer letra de un párrafo o la primera línea. Estos se usan para dar un estilo particular a partes específicas del documento; por ejemplo, hacer más grande la primer letra de un párrafo o insertar contenido antes o después de un elemento. Un ejemplo del primero:
 			</p>
 			<pre><code>p::first-letter {
     font-size: xx-large;
@@ -297,6 +297,8 @@ p { background-color: 20px; }</code></pre>
 		<section>
 			<h2>Bibliografía</h2>
 			<ul>
+				<li><a href="https://www.w3.org/TR/selectors/">Selectors Level 4
+- W3C Working Draft, 2 February 2018</a></li>
 				<li><a href="https://css-tricks.com/specifics-on-css-specificity/">Specifics on CSS Specificity - Chris Coyier 2010</a></li>
 				<li><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Cascade_and_inheritance">Cascade and Inheritance - MDN web docs</a></li>
 				<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">Using CSS custom properties (variables) - MDN web docs</a></li>
