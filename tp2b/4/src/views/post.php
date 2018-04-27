@@ -9,5 +9,7 @@
 		<input type="file" name="imagen_up" id="imagen_up">
 		<input type="submit" name="publicar" value="Publicar">
 	</form>
+	<?php if ($imagen) : ?>
 	<img src="<?= $imagen ?>" alt="Imagen">
+	<?php endif; ?>
 </article>

@@ -211,15 +211,15 @@ div.arrow-right {
 }
 
 @media print {
-	header, footer, aside, form,
+	header, footer, nav, aside, form,
 	section.aviso-usuario,
 	section.panel-superior,
 	div.div-nuevo-comentario {
-		display: none;
+		display: none !important;
 	}
 
 	section.section-comentarios {
-		border: 0 !important;
+		border: 0;
 	}
 
 	body {
@@ -236,7 +236,6 @@ div.arrow-right {
 		font-size: 1em;
 		page-break-after: always;
 	}
-
 }
 
 @page {
