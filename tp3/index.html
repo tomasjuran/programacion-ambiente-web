@@ -115,8 +115,66 @@
 				6. ¿Cómo se calcula la prioridad de una regla CSS?
 			</h3>
 			<p>
-				
+				Calcular la prioridad (qué regla se aplica) de una regla CSS es un proceso complejo pero con pasos definidos, de mayor a menor prioridad, que se detallan a continuación:
+				important>inline>specificity(style tag(order) > stylesheet(order))>browser default
 			</p>
+			<ol>
+				<li>
+					<h4>La regla !important</h4>
+					<p>
+						Cuando se utiliza !important en una regla de estilo, esta tiene prioridad sobre todo lo demás. La única manera de sobreescribir una regla !important es con otra regla !important. En ese caso, la prioridad la determina la especificidad (punto 3).
+					</p>
+				</li>
+				<li>
+					<h4>Estilo "inline"</h4>
+					<p>
+						Las reglas CSS definidas inline son las segundas con mayor prioridad. Por ejemplo <code>&lt;p style=&quot;color:blue;&quot;&gt;</code> sobreescribirá a cualquier regla que no sea !important para ese párrafo únicamente.
+					</p>
+				</li>
+				<li>
+					<h4>Especificidad (Specificity)</h4>
+					<p>
+						La especificidad es la parte más compleja para calcular la prioridad de una regla CSS. Esta se divide en tres partes:
+					</p>
+					<ol>
+						<li>
+							<h4>Cálculo de especificidad</h4>
+							<p>
+								La prioridad estará determinada por cuán específica es una regla. Para esto, se definen tres números:
+							</p>
+							<ul>
+								<li>
+									<p></p>
+								</li>
+								<li>
+									<p></p>
+								</li>
+								<li>
+									<p></p>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<h4>Ubicación de la regla</h4>
+							<p>
+								Además de definir una regla inline, se puede definir de otras dos maneras: en el tag &lt;style&gt; del HTML o en una hoja de estilo, a la cual se hace referencia en el tag &lt;link&gt;. Dadas dos reglas con la misma especificidad, una en el tag &lt;style&gt; y la otra en una hoja de estilo, tendrá más prioridad la del tag &lt;style&gt;.
+							</p>
+						</li>
+						<li>
+							<h4>Orden de la regla</h4>
+							<p>
+								Si dos reglas con la misma especificidad se encuentran declaradas en el mismo lugar (las dos en el tag &lt;style&gt; del HTML o las dos en hojas de estilo), tendrá prioridad aquella que esté declarada <strong>última</strong> en orden. En el caso de dos reglas en hojas de estilo distintas, tendrá prioridad la que esté en la última hoja de estilo que cargue el navegador.
+							</p>
+						</li>
+					</ol>
+				</li>
+				<li>
+					<h4>Estilo por defecto del navegador</h4>
+					<p>
+						Por último, cualquier estilo no definido (o heredado) utilizará las reglas definidas por el navegador.
+					</p>
+				</li>
+			</ol>
 		</section>
 		<section>
 			<h3>
