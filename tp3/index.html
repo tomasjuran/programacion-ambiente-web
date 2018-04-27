@@ -152,7 +152,32 @@
 				</li>
 				<li>
 					<p>
+						<strong>aural</strong>: utilizado para discursos y sintetizadores de voz
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>braille</strong>: utilizado para dispositivos táctiles con braille
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>embossed</strong>: utilizado para impresoras de braille paginadas
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>handheld</strong>: utilizado para dispositivos pequeños o de mano
+					</p>
+				</li>
+				<li>
+					<p>
 						<strong>print</strong>: utilizado para imprimir
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>projection</strong>: utilizado para presentaciones (como diapositivas)
 					</p>
 				</li>
 				<li>
@@ -165,6 +190,16 @@
 						<strong>speech</strong>: utilizado para lectores de pantalla
 					</p>
 				</li>
+				<li>
+					<p>
+						<strong>tty</strong>: utilizado para medios que usen una grilla de caracteres de ancho fijo, como terminales
+					</p>
+				</li>
+				<li>
+					<p>
+						<strong>tv</strong>: utilizado para dispositivos como televisores
+					</p>
+				</li>
 			</ul>
 		</section>
 		<section>
@@ -172,8 +207,40 @@
 				9. ¿En qué circunstancias se pueden utilizar las variables css? ¿Qué problemas pueden traer aparejadas? ¿Cuándo consideras que sería bueno utilizarlas?
 			</h3>
 			<p>
-				
+				Los sitios complejos pueden tener una gran cantidad de CSS, frecuentemente con muchos valores repetidos. Por ejemplo, el mismo color puede estar siendo usado en decenas de lugares distintos, haciendo que si se quiere cambiar ese color, se deba buscar y reemplazar manualmente en cada una de las instancias en las que aparece.
 			</p>
+			<p>
+				Un navegador no compatible con las variables CSS las ignorará, obligándonos a tener reglas de resguardo, duplicando el trabajo.
+				<br>
+				Sumado a esto, una variable mal declarada hará que el valor de una propiedad &quot;resetee&quot; a su valor inicial o heredado, independientemente de si se declaró otro valor antes. Por ejemplo
+			</p>
+			<pre><code>:root { --color: 20px }
+p { background-color: red; }
+p { background-color: var(--color); }</code></pre>
+			<p>
+				Resultará en <code>background-color: transparent</code>, su valor inicial, mientras que
+			</p>
+			<pre><code>:root { --color: 20px }
+p { background-color: red; }
+p { background-color: 20px; }</code></pre>
+			<p>
+				Resultará en <code>background-color: red</code>, ya que la regla definida es inválida.
+			</p>
+			<p>
+				Las variables CSS son convenientes cuando
+			</p>
+			<ul>
+				<li>
+					<p>
+						Una propiedad se define múltiples veces en muchas páginas (sitios complejos) y resultaría engorroso cambiar esa propiedad de otra manera
+					</p>
+				</li>
+				<li>
+					<p>
+						Resulta útil identificar semánticamente una propiedad. Por ejemplo, <code>--main-color</code> resulta más fácil de entender en contexto que <code>#f8f8f8</code>
+					</p>
+				</li>
+			</ul>
 		</section>
 		<section>
 			<h3>
@@ -219,6 +286,8 @@
 			<ul>
 				<li><a href="https://css-tricks.com/specifics-on-css-specificity/">Specifics on CSS Specificity - Chris Coyier 2010</a></li>
 				<li><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Cascade_and_inheritance">Cascade and Inheritance - MDN web docs</a></li>
+				<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">Using CSS custom properties (variables) - MDN web docs</a></li>
+				<li><a href="https://medium.freecodecamp.org/everything-you-need-to-know-about-css-variables-c74d922ea855">Everything you need to know about CSS Variables - Ohans Emmanuel, freeCodeCamp</a></li>
 			</ul>
 		</section>
 	</main>
