@@ -19,54 +19,60 @@ if (!empty($idpost)) {
 	$post->setAll($post->select()[0]);
 }
 
-# Reemplazar con los datos ingresados
-$post->setAll($datos);
+try {
+	# Reemplazar con los datos ingresados
+	$post->setAll($datos);
 
-$tempname = $_FILES["imagen_up"]["tmp_name"];
+	$tempname = $_FILES["imagen_up"]["tmp_name"];
 
-if (!is_uploaded_file($tempname)) {
-	# Si no se subió una imagen, mantener la anterior
-	$imagen = $post->getImagen();
-} else {	
-	# Si se subió una imagen
-	
-	# Numerar 001...999
-	$idimg = $post->getIdpost() ? $post->getIdpost() : Post::getMaxId() + 1;
-	if ((int) $idimg < 100) {
-		$idimg = "0" . $idimg;
-		if ((int) $idimg < 10) {
+	if (!is_uploaded_file($tempname)) {
+		# Si no se subió una imagen, mantener la anterior
+		$imagen = $post->getImagen();
+	} else {	
+		# Si se subió una imagen
+		
+		# Numerar 001...999
+		$idimg = $post->getIdpost() ? $post->getIdpost() : Post::getMaxId() + 1;
+		if ((int) $idimg < 100) {
 			$idimg = "0" . $idimg;
+			if ((int) $idimg < 10) {
+				$idimg = "0" . $idimg;
+			}
+		}
+
+		$filename = $_FILES["imagen_up"]["name"];
+		$imgtype = pathinfo($filename, PATHINFO_EXTENSION);
+		$imagen = "images/img" . $idimg . "." . $imgtype;
+		
+		# Si se guardó correctamente
+		if (upload_img($filename, $tempname, $imagen, $imgtype, $error_imagen)) {
+			if (empty($post->getImagen())) {
+				# Si no tenía una imagen asociada, se agrega
+				$post->setImagen($imagen);
+			} else {
+				# De otra forma, se elimina la anterior
+				unlink($post->getImagen());
+				$post->setImagen($imagen);
+			}
 		}
 	}
 
-	$filename = $_FILES["imagen_up"]["name"];
-	$imgtype = pathinfo($filename, PATHINFO_EXTENSION);
-	$imagen = "images/img" . $idimg . "." . $imgtype;
-	
-	# Si se guardó correctamente
-	if (upload_img($filename, $tempname, $imagen, $imgtype, $error_imagen)) {
-		if (empty($post->getImagen())) {
-			# Si no tenía una imagen asociada, se agrega
-			$post->setImagen($imagen);
+	# Lo único que puede dar error es la subida de la imagen
+	if ($error_imagen == "") {
+		if (!empty($idpost)) {
+			# Se está modificando un post
+			$post->update();
 		} else {
-			# De otra forma, se elimina la anterior
-			unlink($post->getImagen());
-			$post->setImagen($imagen);
+			# Se está agregando un post
+			$post->insert();
 		}
-	}
-}
-
-# Lo único que puede dar error es la subida de la imagen
-if ($error_imagen == "") {
-	if (!empty($idpost)) {
-		# Se está modificando un post
-		$post->update();
+		$resultado_post = "El post se publicó correctamente";
 	} else {
-		# Se está agregando un post
-		$post->insert();
+		$resultado_post = "No se pudo publicar el post";
 	}
-	$resultado_post = "El post se publicó correctamente";
-} else {
-	$resultado_post = "No se pudo publicar el post";
+
+} catch (Exception $e) {
+	# Si el setAll no funcionó (no se ingresó un título)
+	$resultado_post = $e->getMessage();
 }
 

@@ -25,12 +25,12 @@ class Comentario extends Persistible {
 	}
 	
 	public function setAll($datos) {
-		if (is_null($datos["idcomm"])) {
-			throw new Exception("El comentario debe tener un id", 1);
-		}
-		if (is_null($datos["autor"])) {
+		if (!$datos["autor"]) {
 			throw new Exception("El comentario debe tener un autor", 1);	
 		}
+        if (!$datos["idcomm"]) {
+            throw new Exception("El comentario debe tener un id", 1);
+        }
 	
 		foreach ($this->campos as $campo) {
             if (isset($datos[$campo])) {

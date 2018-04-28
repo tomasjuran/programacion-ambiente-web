@@ -25,11 +25,7 @@ header > p {
 }
 
 nav {
-	margin: 1em 0;
-}
-
-form > input[type="submit"] {
-
+	margin: 0;
 }
 
 section.panel-superior {
@@ -81,6 +77,7 @@ article.article-post {
     border-radius: 32px;
     background-color: #f8f8f8;
     font-size: 0.8em;
+    position: relative;
 }
 
 @media only screen and (min-width: 768px) {
@@ -101,8 +98,23 @@ article.article-post > img {
 	font-size: 0.6em;
 }
 
-article.article-post .post-cuerpo {
+article.article-post .post-cuerpo,
+article.article-post .post-titulo {
 	text-align: left;
+}
+
+
+@media only screen and (min-width: 768px) {
+	article.article-post .form-mod-del {
+		position: absolute;
+		right: 1em;
+		top: 1.5em;
+		width: 33%;
+	}
+
+	article.article-post .post-titulo {
+		width: 66%;
+	}
 }
 
 article.article-post-edit label {
@@ -236,9 +248,20 @@ div.arrow-right {
 		font-size: 1em;
 		page-break-after: always;
 	}
-}
 
-@page {
-	size: 29.7cm 21cm;
-	margin: 3cm;
+	@page {
+		size: A4;
+		
+		@top-left {
+			content: "Mi tercer blog";
+		}
+
+		@top-right {
+			content: "http://localhost/tp3/13/index.php";
+		}
+
+		@bottom-left {
+			content: counter(page) " de " counter(pages);
+		}
+	}
 }

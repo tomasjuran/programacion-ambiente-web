@@ -1,5 +1,7 @@
 <nav>
-	<a href="index.php">Volver a la página principal</a>
+	<section class="panel-superior">
+		<a href="index.php">Volver a la página principal</a>
+	</section>
 </nav>
 <section class="aviso-usuario">
 	<?php if ($resultado_post) : ?>

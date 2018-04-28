@@ -29,7 +29,7 @@ class Post extends Persistible {
 	}
 
 	public function setAll($datos) {
-		if (is_null($datos["titulo"])) {
+		if (!$datos["titulo"]) {
 			throw new Exception("El post debe tener un título", 1);
 		}
 	

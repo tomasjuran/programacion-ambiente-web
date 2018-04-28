@@ -7,11 +7,11 @@
 		<input type="submit" name="nuevo" value="Publicar nuevo">
 	</form>
 </section>
+<?php if ($resultado_eliminar) : ?>
 <section class="aviso-usuario">
-	<?php if ($resultado_eliminar) : ?>
 	<p class="aviso"><?= $resultado_eliminar ?></p>
-	<?php endif; ?>
 </section>
+<?php endif; ?>
 <main>
 	<section id="view_posts">
 	<?php if ($posts) : ?>
@@ -19,24 +19,26 @@
 		<?php foreach ($posts as $key => $post) : ?>
 			<li>
 				<article class="article-post">
+					<form class="form-mod-del" action="editar.php" method="post">
+						<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
+						<input type="submit" name="modificar" value="Modificar">
+						<input type="submit" name="eliminar" value="Eliminar" formaction="index	.php">
+					</form>
+
 					<h2 class="post-titulo"><?= $post["titulo"] ?></h2>
 					<p class="fecha">Publicado <?= $post["fecha"] ?></p>
 					<p class="post-cuerpo"><?= $post["cuerpo"] ?></p>
 					<img src="<?= $post["imagen"] ?>" alt="">
-					<form action="editar.php" method="post">
-						<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
-						<input type="submit" name="modificar" value="Modificar">
-						<input type="submit" name="eliminar" value="Eliminar" formaction="eliminar.php">
-					</form>
+
 					<section class="section-comentarios">
-						
 						<div class="div-nuevo-comentario">
 							<p>Escriba un comentario</p>
 							<div class="arrow-down"></div>
 						</div>
+
 						<form class="nuevo-comentario">
 							<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
-							<input type="text" name="com-autor<?= $post["idpost"] ?>" id="com-autor<?= $post["idpost"] ?>" maxlength="60" placeholder="Ingrese su nombre" >
+							<input type="text" name="com-autor<?= $post["idpost"] ?>" id="com-autor<?= $post["idpost"] ?>" maxlength="60" placeholder="Ingrese su nombre" required>
 							<textarea name="com-cuerpo<?= $post["idpost"] ?>" id="com-cuerpo<?= $post["idpost"] ?>" maxlength="1000"></textarea>
 							<input type="submit" name="comentar" value="Comentar">
 						</form>	
@@ -49,6 +51,7 @@
 						</div>
 						<?php endforeach; ?>
 					</section>
+
 				</article>
 			</li>
 		<?php endforeach; ?>

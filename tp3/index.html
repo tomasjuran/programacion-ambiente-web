@@ -116,7 +116,6 @@
 			</h3>
 			<p>
 				Calcular la prioridad (qué regla se aplica) de una regla CSS es un proceso complejo pero con pasos definidos, de mayor a menor prioridad, que se detallan a continuación:
-				important>inline>specificity(style tag(order) > stylesheet(order))>browser default
 			</p>
 			<ol>
 				<li>
@@ -124,6 +123,7 @@
 					<p>
 						Cuando se utiliza !important en una regla de estilo, esta tiene prioridad sobre todo lo demás. La única manera de sobreescribir una regla !important es con otra regla !important. En ese caso, la prioridad la determina la especificidad (punto 3).
 					</p>
+					<code>a { color: blue !important; }</code>
 				</li>
 				<li>
 					<h4>Estilo "inline"</h4>
@@ -142,17 +142,93 @@
 							<p>
 								La prioridad estará determinada por cuán específica es una regla. Para esto, se definen tres números:
 							</p>
+							<figure>
+								<img src="res/specificity-calculationbase.png" alt="Especificidad en CSS">
+								<figcaption>Especificidad en CSS</figcaption>
+							</figure>
 							<ul>
 								<li>
-									<p></p>
+									<p><strong>A</strong>: selectores de ID (e.g. #ejemplo)</p>
 								</li>
 								<li>
-									<p></p>
+									<p><strong>B</strong>: selectores de clase (e.g. .ejemplo), de atributo (e.g. [type=&quot;radio&quot;]) y pseudo-clases (e.g. :hover)</p>
 								</li>
 								<li>
-									<p></p>
+									<p><strong>C</strong>: selectores de tipo (e.g. h1) y pseudo-elementos (e.g. ::before)</p>
 								</li>
 							</ul>
+							<p>
+								Dadas dos reglas CSS que afectarían al estilo de un elemento, se calculan los valores para cada regla y se aplica la más específica (número más grande), comparando primero por A, luego por B y finalmente por C. Algunos ejemplos:
+							</p>
+							<ul>
+								<li>
+									<p>
+										<strong>(p) vs. (p::first-line)</strong>
+										<br>
+										A,B,C de (p) = 0,0,1
+										<br>
+										A,B,C de (p::first-line) = 0,0,2
+										<br>
+										Como los A y B son iguales, pero los C son distintos, toma prioridad (p::first-line)
+									</p>
+								</li>
+								<li>
+									<p>
+										<strong>(p::first-line) vs. (p.ejemplo)</strong>
+										<br>
+										A,B,C de (p::first-line) = 0,0,2
+										<br>
+										A,B,C de (p.ejemplo) = 0,1,1
+										<br>
+										Gana (p.ejemplo) por tener un B mayor
+									</p>
+								</li>
+								<li>
+									<p>
+										<strong>(p.ejemplo) vs (div p.ejemplo)</strong>
+										<br>
+										A,B,C de (p.ejemplo) = 0,1,1
+										<br>
+										A,B,C de (div p.ejemplo) = 0,1,2
+										<br>
+										Gana div (p.ejemplo) por un C mayor
+									</p>
+								</li>
+								<li>
+									<p>
+										<strong>(form > input.boton[type=&quot;submit&quot;]) vs. (div.formularios form > input)</strong>
+										<br>
+										A,B,C de (form > input.boton[type=&quot;submit&quot;]) = 0,2,2
+										<br>
+										A,B,C de (div.formularios form > input) = 0,1,3
+										<br>
+										Gana el primero por un B mayor
+									</p>
+								</li>
+								<li>
+									<p>
+										<strong>(section.deportes ul > li a.link-raro) vs. (a#link-unico)</strong>
+										<br>
+										A,B,C de (section.deportes ul > li a.link-raro) = 0,2,4
+										<br>
+										A,B,C de (a#link-unico) = 1,0,1
+										<br>
+										Gana (a#link-unico) por un A mayor
+									</p>
+								</li>
+								<li>
+									<p>
+										<strong>(a#link-unico) vs. (li a#link-unico)</strong>
+										<br>
+										A,B,C de (a#link-unico) = 1,0,1
+										<br>
+										A,B,C de (li a#link-unico) = 1,0,2
+										<br>
+										Gana (li a#link-unico) por un C mayor
+									</p>
+								</li>
+							</ul>
+							<p>Nótese que la pseudo-clase <code>:not</code>, los combinadores (+, >, ~, &apos; &apos;) y el selector universal (*) no afectan a la especificidad (los selectores <strong>adentro</strong> del <code>:not()</code>, sin embargo, sí afectan).</p>
 						</li>
 						<li>
 							<h4>Ubicación de la regla</h4>
@@ -346,7 +422,10 @@ p { background-color: 20px; }</code></pre>
 				13. Ampliar las hojas de Estilo para el ejercicio 4 del TP 2 parte 2 (El Blog) de modo que cuando se quiera imprimir el artículo se imprima en una página y los comentarios en las siguientes, agregando números de página, encabezado y pie de página y acomodando el contenido para que quede más legible en papel.
 			</h3>
 			<p>
-				
+				El ejercicio resuelto se encuentra en <a href="13/index.php">Mi tercer blog</a>.
+			</p>
+			<p>
+				En particular, la hoja de estilo se encuentra en <a href="13/styles/style.css">style.css</a>.
 			</p>
 		</section>
 
@@ -355,8 +434,7 @@ p { background-color: 20px; }</code></pre>
 		<section>
 			<h2>Bibliografía</h2>
 			<ul>
-				<li><a href="https://www.w3.org/TR/selectors/">Selectors Level 4
-- W3C Working Draft, 2 February 2018</a></li>
+				<li><a href="https://www.w3.org/TR/selectors/">Selectors Level 4 - W3C Working Draft, 2 February 2018</a></li>
 				<li><a href="https://css-tricks.com/specifics-on-css-specificity/">Specifics on CSS Specificity - Chris Coyier 2010</a></li>
 				<li><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Cascade_and_inheritance">Cascade and Inheritance - MDN web docs</a></li>
 				<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">Using CSS custom properties (variables) - MDN web docs</a></li>
