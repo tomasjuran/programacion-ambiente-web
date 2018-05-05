@@ -25,9 +25,9 @@
 						<input type="submit" name="eliminar" value="Eliminar" formaction="index	.php">
 					</form>
 
-					<h2 class="post-titulo"><?= $post["titulo"] ?></h2>
+					<h2 class="post-titulo"><?= htmlspecialchars($post["titulo"]) ?></h2>
 					<p class="fecha">Publicado <?= $post["fecha"] ?></p>
-					<p class="post-cuerpo"><?= $post["cuerpo"] ?></p>
+					<p class="post-cuerpo"><?= htmlspecialchars($post["cuerpo"]) ?></p>
 					<img src="<?= $post["imagen"] ?>" alt="">
 
 					<section class="section-comentarios">
@@ -36,7 +36,7 @@
 							<div class="arrow-down"></div>
 						</div>
 
-						<form class="nuevo-comentario">
+						<form class="nuevo-comentario" action="index.php" method="post">
 							<input type="hidden" name="idpost" value="<?= $post["idpost"] ?>">
 							<input type="text" name="com-autor<?= $post["idpost"] ?>" id="com-autor<?= $post["idpost"] ?>" maxlength="60" placeholder="Ingrese su nombre" required>
 							<textarea name="com-cuerpo<?= $post["idpost"] ?>" id="com-cuerpo<?= $post["idpost"] ?>" maxlength="1000"></textarea>
@@ -45,9 +45,9 @@
 						
 						<?php foreach ($post["comentarios"] as $comentario) : ?>
 						<div class="div-comentario">
-							<p class="comentario-autor"><?= $comentario["autor"] ?></p>
+							<p class="comentario-autor"><?= htmlspecialchars($comentario["autor"]) ?></p>
 							<p class="fecha"><?= $comentario["fecha"] ?></p>
-							<p class="comentario-cuerpo"><?= $comentario["cuerpo"] ?></p>
+							<p class="comentario-cuerpo"><?= htmlspecialchars($comentario["cuerpo"]) ?></p>
 						</div>
 						<?php endforeach; ?>
 					</section>

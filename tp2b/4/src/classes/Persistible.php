@@ -11,10 +11,10 @@ abstract class Persistible {
 	abstract protected function getCampo($campo);
 
 	public function select() {
-		$where = $this->getWhere();
+		$where = $this->getWhere(false);
 		$pdo = Conexion::getPDO();
 		$query = $pdo->prepare("SELECT * FROM ".$this->tabla." $where");
-		$query->execute($this->getKeys());
+		$query->execute($this->getValues());
 		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 
@@ -29,7 +29,7 @@ abstract class Persistible {
 
 	public function update() {
 		$set = $this->getSet();
-		$where = $this->getWhere();
+		$where = $this->getWhere(true);
 
 		$pdo = Conexion::getPDO();
 		$query = $pdo->prepare("UPDATE " .$this->tabla." $set $where");
@@ -37,7 +37,7 @@ abstract class Persistible {
 	}
 
 	public function delete() {
-		$where = $this->getWhere();
+		$where = $this->getWhere(true);
 		$pdo = Conexion::getPDO();
 		$query = $pdo->prepare("DELETE FROM ".$this->tabla." $where");
 		$query->execute($this->getKeys());
@@ -48,37 +48,40 @@ abstract class Persistible {
 	  * @return type
 	  */
 	protected function getSet() {
-		$camposConDatos = $this->getCamposConDatos();
-		$set = "";
-		if ($camposConDatos) {
-			$set = "SET " . $camposConDatos[0] . " = :" . $camposConDatos[0];
-			for ($i = 1; $i < count($camposConDatos); $i++) {
-				$set .= ", " . $camposConDatos[$i] . "= :" . $camposConDatos[$i];
-			}
-		}
-		return $set;
+		return $this->fieldIterator("SET ", ", ", false);
 	}
 
 	/**
-	 * Devuelve el string "WHERE id1 = :id1, id2 = :id2"
+	 * Devuelve el string "WHERE campo1 = :campo1, campo2 = :campo2"
 	 * @return type
 	 */
-	protected function getWhere() {
-		$camposConDatos = $this->getCamposConDatos();
-		$where = "";
-		$first = true;
-		
-		foreach ($camposConDatos as $campo) {
-			if ($first) {
-				$where = "WHERE ";
-				$first = false;
-			} else {
-				$where .= " AND ";
-			}
-			$where .= $campo . " = :" . $campo;
+	protected function getWhere($keysonly) {
+		return $this->fieldIterator("WHERE ", " AND ", $keysonly);
+	}
+
+	/**
+	 * Arma un string iterando sobre los campos que contienen datos.
+	 * Utilizado para armar WHERE y SET
+	 * @return string El string armado
+	 */
+	protected function fieldIterator($first, $separator, $keysonly) {
+		if ($keysonly) {
+			$camposConDatos = $this->getClavesConDatos();
+		} else {
+			$camposConDatos = $this->getCamposConDatos();
 		}
-		
-		return $where;
+		$string = "";
+		$b = true;
+		foreach ($camposConDatos as $campo) {
+			if ($b) {
+				$string = $first;
+				$b = false;
+			} else {
+				$string .= $separator;
+			}
+			$string .= $campo . " = :" . $campo;
+		}
+		return $string;
 	}
 
 	/**
@@ -96,18 +99,27 @@ abstract class Persistible {
 		return $camposConDatos;
 	}
 
+		/**
+	 * Devuelve un Array con los nombres de las claves que contienen datos
+	 * para la función getWhere
+	 * @return Array
+	 */
+	protected function getClavesConDatos() {
+		$clavesConDatos = [];
+		foreach ($this->claves as $clave) {
+			if ($this->getCampo($clave)) {
+				$clavesConDatos[] = $clave;
+			}
+		}
+		return $clavesConDatos;
+	}
+
 	/**
 	 * Devuelve los campos en un String separados por coma 
 	 * @return String
 	 */
 	protected function getCols() {
-		$camposConDatos = [];
-		foreach ($this->campos as $campo) {
-			if ($this->getCampo($campo)) {
-				$camposConDatos[] = $campo;
-			}
-		}
-		return implode(",", $camposConDatos);
+		return implode(", ", $this->getCamposConDatos());
 	}
 
 	/**
@@ -116,13 +128,7 @@ abstract class Persistible {
 	 * @return type
 	 */
 	protected function getVals() {
-		$camposConDatos = [];
-		foreach ($this->campos as $campo) {
-			if ($this->getCampo($campo)) {
-				$camposConDatos[] = $campo;
-			}
-		}
-		return ":".implode(", :", $camposConDatos);
+		return ":".implode(", :", $this->getCamposConDatos());
 	}
 
 	/**
@@ -140,16 +146,16 @@ abstract class Persistible {
 	}
 
 	/**
-	 * Devuelve un array asociativo, tal que $keys[":key" => key]
+	 * Devuelve un array asociativo, tal que $data[":id" => id]
 	 * @return type
 	 */
 	protected function getKeys() {
-		$keys = [];
+		$data = [];
 		foreach ($this->claves as $clave) {
 			if ($this->getCampo($clave)) {
-				$keys[":".$clave] = $this->getCampo($clave);
+				$data[":".$clave] = $this->getCampo($clave);
 			}
 		}
-		return $keys;
+		return $data;
 	}
 }

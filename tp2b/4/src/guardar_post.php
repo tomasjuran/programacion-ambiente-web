@@ -46,25 +46,24 @@ try {
 		
 		# Si se guardó correctamente
 		if (upload_img($filename, $tempname, $imagen, $imgtype, $error_imagen)) {
-			if (empty($post->getImagen())) {
-				# Si no tenía una imagen asociada, se agrega
-				$post->setImagen($imagen);
-			} else {
-				# De otra forma, se elimina la anterior
+			if ($post->getImagen()) {
+				# Si tenía una imagen asociada, se elimina la anterior
 				unlink($post->getImagen());
-				$post->setImagen($imagen);
 			}
+			$post->setImagen($imagen);
 		}
 	}
 
 	# Lo único que puede dar error es la subida de la imagen
 	if ($error_imagen == "") {
-		if (!empty($idpost)) {
+		if ($idpost) {
 			# Se está modificando un post
 			$post->update();
 		} else {
 			# Se está agregando un post
 			$post->insert();
+			# Mantener la referencia del post que se editó
+			$idpost = Post::getMaxId();
 		}
 		$resultado_post = "El post se publicó correctamente";
 	} else {
