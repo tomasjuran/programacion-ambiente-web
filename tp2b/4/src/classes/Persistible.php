@@ -30,8 +30,8 @@ abstract class Persistible {
 	public function update() {
 		$set = $this->getSet();
 		$where = $this->getWhere(true);
-
 		$pdo = Conexion::getPDO();
+		echo "UPDATE " .$this->tabla." $set $where";
 		$query = $pdo->prepare("UPDATE " .$this->tabla." $set $where");
 		$query->execute(array_merge($this->getValues(),$this->getKeys()));
 	}
@@ -99,7 +99,7 @@ abstract class Persistible {
 		return $camposConDatos;
 	}
 
-		/**
+	/**
 	 * Devuelve un Array con los nombres de las claves que contienen datos
 	 * para la función getWhere
 	 * @return Array
@@ -152,9 +152,7 @@ abstract class Persistible {
 	protected function getKeys() {
 		$data = [];
 		foreach ($this->claves as $clave) {
-			if ($this->getCampo($clave)) {
 				$data[":".$clave] = $this->getCampo($clave);
-			}
 		}
 		return $data;
 	}
