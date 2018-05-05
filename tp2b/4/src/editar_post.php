@@ -9,6 +9,6 @@ $post->setIdpost($_POST["idpost"]);
 
 # Cargar los valores del post
 foreach ($post->select()[0] as $key => $value) {
-	$$key = $value;
+	$$key = htmlspecialchars($value);
 }
 

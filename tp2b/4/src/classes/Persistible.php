@@ -48,17 +48,12 @@ abstract class Persistible {
 	  * @return type
 	  */
 	protected function getSet() {
-		$campoConDatos = [];
-		foreach ($this->campos as $campo) {
-			if ($this->getCampo($campo)) {
-				$campoConDatos[] = $campo;
-			}
-		}
+		$camposConDatos = $this->getCamposConDatos();
 		$set = "";
-		if ($campoConDatos) {
-			$set = "SET " . $campoConDatos[0] . " = :" . $campoConDatos[0];
-			for ($i = 1; $i < count($campoConDatos); $i++) {
-				$set .= ", " . $campoConDatos[$i] . "= :" . $campoConDatos[$i];
+		if ($camposConDatos) {
+			$set = "SET " . $camposConDatos[0] . " = :" . $camposConDatos[0];
+			for ($i = 1; $i < count($camposConDatos); $i++) {
+				$set .= ", " . $camposConDatos[$i] . "= :" . $camposConDatos[$i];
 			}
 		}
 		return $set;
@@ -69,21 +64,36 @@ abstract class Persistible {
 	 * @return type
 	 */
 	protected function getWhere() {
-		$claveConDatos = [];
-		foreach ($this->claves as $clave) {
-			if ($this->getCampo($clave)) {
-				$claveConDatos[] = $clave;
-			}
-		}
+		$camposConDatos = $this->getCamposConDatos();
 		$where = "";
-		if ($claveConDatos) {
-			$where = "WHERE " . $claveConDatos[0] . " = :" . $claveConDatos[0];
-			for ($i = 1; $i < count($claveConDatos); $i++) {
-				$where .= "AND " . $claveConDatos[$i] . " = :" . $claveConDatos[$i];
-			}	
+		$first = true;
+		
+		foreach ($camposConDatos as $campo) {
+			if ($first) {
+				$where = "WHERE ";
+				$first = false;
+			} else {
+				$where .= " AND ";
+			}
+			$where .= $campo . " = :" . $campo;
 		}
 		
 		return $where;
+	}
+
+	/**
+	 * Devuelve un Array con los nombres de los campos que contienen datos
+	 * para las funciones getWhere y getSet
+	 * @return Array
+	 */
+	protected function getCamposConDatos() {
+		$camposConDatos = [];
+		foreach ($this->campos as $campo) {
+			if ($this->getCampo($campo)) {
+				$camposConDatos[] = $campo;
+			}
+		}
+		return $camposConDatos;
 	}
 
 	/**
@@ -91,13 +101,13 @@ abstract class Persistible {
 	 * @return String
 	 */
 	protected function getCols() {
-		$campoConDatos = [];
+		$camposConDatos = [];
 		foreach ($this->campos as $campo) {
 			if ($this->getCampo($campo)) {
-				$campoConDatos[] = $campo;
+				$camposConDatos[] = $campo;
 			}
 		}
-		return implode(",", $campoConDatos);
+		return implode(",", $camposConDatos);
 	}
 
 	/**
@@ -106,13 +116,13 @@ abstract class Persistible {
 	 * @return type
 	 */
 	protected function getVals() {
-		$campoConDatos = [];
+		$camposConDatos = [];
 		foreach ($this->campos as $campo) {
 			if ($this->getCampo($campo)) {
-				$campoConDatos[] = $campo;
+				$camposConDatos[] = $campo;
 			}
 		}
-		return ":".implode(", :", $campoConDatos);
+		return ":".implode(", :", $camposConDatos);
 	}
 
 	/**
