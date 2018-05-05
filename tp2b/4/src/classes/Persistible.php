@@ -31,7 +31,6 @@ abstract class Persistible {
 		$set = $this->getSet();
 		$where = $this->getWhere(true);
 		$pdo = Conexion::getPDO();
-		echo "UPDATE " .$this->tabla." $set $where";
 		$query = $pdo->prepare("UPDATE " .$this->tabla." $set $where");
 		$query->execute(array_merge($this->getValues(),$this->getKeys()));
 	}
@@ -52,7 +51,10 @@ abstract class Persistible {
 	}
 
 	/**
-	 * Devuelve el string "WHERE campo1 = :campo1, campo2 = :campo2"
+	 * Devuelve el string "WHERE campo1 = :campo1, campo2 = :campo2".
+	 * Si $keysonly es true, armará el where sólo con las claves.
+	 * De lo contrario, armará el where sólo con los campos.
+	 * @param boolean $keysonly Bandera para usar sólo las claves
 	 * @return type
 	 */
 	protected function getWhere($keysonly) {
@@ -62,6 +64,11 @@ abstract class Persistible {
 	/**
 	 * Arma un string iterando sobre los campos que contienen datos.
 	 * Utilizado para armar WHERE y SET
+	 * Si $keysonly es true, armará el string sólo con las claves.
+	 * De lo contrario, armará el string sólo con los campos.
+	 * @param string $first El string con el que debe empezar la sentencia
+	 * @param string $separator El string separador de campos
+	 * @param boolean $keysonly Bandera para usar sólo las claves
 	 * @return string El string armado
 	 */
 	protected function fieldIterator($first, $separator, $keysonly) {
