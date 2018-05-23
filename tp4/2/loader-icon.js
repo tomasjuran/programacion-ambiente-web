@@ -3,8 +3,8 @@ var console = console || {},
 
 	LoaderIcon = {
 
-		duration: 2000,
-		intervals: 10,
+		duration: 4000,
+		intervals: 40,
 		colors: [
 			[251,226,104], /* #fbe268 yellow */
 			[174,221,166], /* #aedda6 green */
