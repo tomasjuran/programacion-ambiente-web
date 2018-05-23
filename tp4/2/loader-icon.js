@@ -1,9 +1,6 @@
-var console = console || {},
-	document = document || {},
-
 "use strict";
 
-LoaderIcon = {
+var LoaderIcon = {
 
 	duration: 4000,
 	intervals: 40,
