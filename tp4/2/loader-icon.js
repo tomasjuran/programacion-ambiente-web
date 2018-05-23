@@ -86,7 +86,7 @@ var console = console || {},
 			for (var k = 0; k < 4; k++) {
 				allColors[k] = [];
 				for (var i = 0; i < truncColor.length; i++) {
-					allColors[k][i] = truncColor[i] + 10 * k;
+					allColors[k][i] = truncColor[i] + 20 * k;
 				}
 				border += "rgb(" + allColors[k].join(",") + ") ";
 			}
