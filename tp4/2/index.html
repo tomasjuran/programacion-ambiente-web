@@ -5,8 +5,13 @@
 	<title>Cargando...</title>
 	<link rel="stylesheet" href="loader-icon.css">
 	<script src="loader-icon.js" type="text/javascript"></script>
+	<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      LoaderIcon.init("loader-icon");
+    });
+  	</script>
 </head>
 <body>
-	<div class="loader-icon loader-icon-red"></div>
+	<div id="loader-icon"></div>
 </body>
 </html>
