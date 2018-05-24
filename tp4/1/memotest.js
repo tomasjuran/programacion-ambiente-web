@@ -2,11 +2,12 @@
 
 var Memotest = {
 container:	"",				// Id del div contenedor principal
-board:		"board",		// Id del tablero de juego
-gameNav:	"game-nav",		// Id del nav para ir al menú, pasar de nivel, etc.
-statusMsg:	"status-msg",	// Id del p para mostrar el estado del juego
-turnName:	"turn-name", 	// Id del p para mostrar el nombre del jugador
-turnTimer:	"turn-timer",	// Id del p para mostrar el tiempo restante
+board:		"tbl-board",	// Id del tablero de juego
+navGame:	"nav-game",		// Id del nav para ir al menú, pasar de nivel, etc.
+btnNext:	"btn-next", 	// Id del botón "siguiente nivel"
+statusMsg:	"p-status-msg",	// Id del p para mostrar el estado del juego
+turnName:	"p-turn-name", 	// Id del p para mostrar el nombre del jugador
+turnTimer:	"p-turn-timer",	// Id del p para mostrar el tiempo restante
 
 prepare: 0,			// <
 playing: 1,			//  |- Posibles estados del juego
@@ -185,6 +186,7 @@ createGameScreen: function() {
 		Memotest.init(Memotest.container);
 	});
 	navGame.appendChild(butBack);
+	navGame.setAttribute("id", this.navGame);
 
 	screen.appendChild(secTurn);
 	screen.appendChild(secStatus);
@@ -196,10 +198,32 @@ createGameScreen: function() {
 },
 
 nextLevel: function() {
+	var rows, cols,
+		board = document.getElementById(this.board),
+		navGame = document.getElementById(this.navGame),
+		btnNext = document.getElementById(this.btnNext);
+
+	// Quitar el botón de siguiente nivel
+	if (btnNext) {
+		navGame.removeChild(btnNext);
+	}
+
 	this.level++;
+	[rows, cols] = this.setupBoard();
 
-	var [rows, cols] = this.setupBoard();
-
+	for (var i = 0; i < rows; i++) {
+		var tr = document.createElement("tr");
+		for (var j = 0; j < cols; j++) {
+			var td = document.createElement("td"),
+				index = i * cols + j;
+			td.setAttribute("id", "card-" + (index));
+			td.addEventListener("click", function() {
+				Memotest.play(index);
+			});
+			tr.appendChild(td);
+		}
+		board.appendChild(tr);
+	}
 	this.startGame();
 },
 
@@ -262,8 +286,8 @@ startGame: function() {
 		element.playing = true;
 	});
 
-	this.currentPlayer = -1;
 	this.currentState = this.playing;
+	this.currentPlayer = -1;
 	this.nextTurn();
 
 	clearInterval(this.timer);
@@ -307,13 +331,12 @@ startTimer: function() {
  */
 play: function(cardIndex) {
 
+	console.log("Me hizo click " + cardIndex);
+
 	// Se dieron vuelta todas las tarjetas
 	if (this.cards.length == this.found.length) {
 		this.endGame(true);
-		return;
 	}
-
-
 },
 
 /**
