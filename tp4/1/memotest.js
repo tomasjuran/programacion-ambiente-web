@@ -1,9 +1,12 @@
 "use_strict";
 
 var Memotest = {
-container: "",		// Id del div contenedor principal
-statusMsg: "",	 	// Id del p para mostrar el estado del juego
-countdown: "",		// Id del p para mostrar el tiempo restante
+container:	"",				// Id del div contenedor principal
+board:		"board",		// Id del tablero de juego
+gameNav:	"game-nav",		// Id del nav para ir al menú, pasar de nivel, etc.
+statusMsg:	"status-msg",	// Id del p para mostrar el estado del juego
+turnName:	"turn-name", 	// Id del p para mostrar el nombre del jugador
+turnTimer:	"turn-timer",	// Id del p para mostrar el tiempo restante
 
 prepare: 0,			// <
 playing: 1,			//  |- Posibles estados del juego
@@ -12,14 +15,14 @@ currentState: 2,	// Estado actual del juego
 
 players: [],		// Jugadores
 currentPlayer: 0,	// Jugador actual
-level: 1,			// Nivel de la ronda
+level: 0,			// Nivel de la ronda
 
 cardTypes: 12,		// Cantidad de tipos de tarjetas
 cards: [],			// Tarjetas jugables
 found: [],			// Tarjetas encontradas
 flipped: [],		// Tarjetas dadas vuelta en el turno actual
 
-roundTime: 10,		// Un minuto de duración de ronda
+roundTime: 10,		// Duración de la ronda en segundos
 timer: null,		// Handler que decrementa el tiempo
 
 
@@ -45,7 +48,7 @@ init: function(container) {
 
 	if (this.currentState == this.prepare) {
 		main.appendChild(this.createGameScreen());
-		this.startGame();
+		this.nextLevel();
 	} else {
 		main.appendChild(this.createSelectScreen());
 	}
@@ -85,7 +88,6 @@ createSelectScreen: function() {
 			for (var i = 1; i <= amount; i++) {
 				names.push(document.getElementById("player-name-" + i).value);
 			}
-
 			Memotest.selectPlayers(names);
 		}
 	});
@@ -138,15 +140,67 @@ addPlayers: function() {
 },
 
 /**
+ *	Carga los jugadores en el juego y llama a cambiar la pantalla
+ */
+selectPlayers: function(names) {
+	for (var i = 0; i < names.length; i++) {
+		var player = new this.Player();
+		player.name = names[i];
+		this.players.push(player);
+	}
+
+	this.currentState = this.prepare;
+	this.init(this.container);
+},
+
+/**
  *	Crea la pantalla con el tablero para empezar a jugar
  */
 createGameScreen: function() {
-	var screen = document.createElement("div");
-		[rows, cols] = this.setupBoard();
+	var screen = document.createElement("div"),
+		secTurn = document.createElement("section"),
+		pTurnName = document.createElement("p"),
+		pTurnTimer = document.createElement("p"),
+		secStatus = document.createElement("section"),
+		pStatus = document.createElement("p"),
+		artBoard = document.createElement("article"),
+		board = document.createElement("table"),
+		navGame = document.createElement("nav"),
+		butBack = document.createElement("button");
 
+	pTurnName.setAttribute("id", this.turnName);
+	pTurnTimer.setAttribute("id", this.turnTimer);
+	secTurn.appendChild(pTurnName);
+	secTurn.appendChild(pTurnTimer);
 
+	pStatus.setAttribute("id", this.statusMsg);
+	secStatus.appendChild(pStatus);
 
+	board.setAttribute("id", this.board);
+	artBoard.appendChild(board);
+
+	butBack.appendChild(document.createTextNode("Volver al menú"));
+	butBack.addEventListener("click", function() {
+		Memotest.currentState = Memotest.finished;
+		Memotest.init(Memotest.container);
+	});
+	navGame.appendChild(butBack);
+
+	screen.appendChild(secTurn);
+	screen.appendChild(secStatus);
+	screen.appendChild(artBoard);
+	screen.appendChild(navGame);
+
+	this.level = 0;
 	return screen;
+},
+
+nextLevel: function() {
+	this.level++;
+
+	var [rows, cols] = this.setupBoard();
+
+	this.startGame();
 },
 
 /**
@@ -198,21 +252,6 @@ shuffle: function(array) {
 },
 
 /**
- *	Carga los jugadores en el juego y llama a cambiar la pantalla
- */
-selectPlayers: function(names) {
-	for (var i = 0; i < names.length; i++) {
-		var player = new this.Player();
-		player.name = names[i];
-		this.players.push(player);
-	}
-
-	this.currentState = this.prepare;
-	this.level = 1;
-	this.init(this.container);
-},
-
-/**
  *	Inicializa los jugadores y comienza el juego
  */
 startGame: function() {
@@ -223,41 +262,45 @@ startGame: function() {
 		element.playing = true;
 	});
 
-	this.currentPlayer = 0;
-
-	this.timer = setInterval(function() {
-		if (Memotest.currentState == Memotest.playing) {
-			var player = Memotest.players[Memotest.currentPlayer];
-
-			player.timeLeft--;
-			console.log(player.name + " (" + Memotest.currentPlayer
-				+ ") tiene " + player.timeLeft + " segundos.");
-
-			if (player.timeLeft <= 0) {
-				console.log("¡" + player.name + " (" 
-					+ Memotest.currentPlayer + ") se quedó sin tiempo!");
-				player.playing = false;
-				Memotest.nextTurn();
-			}
-		}
-	}, 1000);
-
+	this.currentPlayer = -1;
 	this.currentState = this.playing;
+	this.nextTurn();
+
+	clearInterval(this.timer);
+	this.startTimer();
+	this.timer = setInterval(Memotest.startTimer.bind(Memotest), 1000);
 },
 
 /**
- *	Termina el juego
+ *	Inicializa el contador para los turnos
  */
-endGame: function(win) {
-	if (win) {
+startTimer: function() {
+	if (this.currentState == this.playing) {
+		var player = this.players[this.currentPlayer],
+			statusMsg = document.getElementById(this.statusMsg),
+			turnTimer = document.getElementById(this.turnTimer),
+			minutos, segundos;
 
-	} else {
-
+		if (player.timeLeft <= 0) {
+			statusMsg.innerHTML = "¡" + player.name + " (" 
+				+ this.currentPlayer + ") se quedó sin tiempo!";
+			player.playing = false;
+			this.nextTurn();
+		} else {
+			player.timeLeft--;
+			minutos = Math.trunc(player.timeLeft / 60);
+			if (minutos < 10) {
+				minutos = "0" + minutos;
+			}
+			segundos = (player.timeLeft % 60);
+			if (segundos < 10) {
+				segundos = "0" + segundos;
+			}
+			turnTimer.innerHTML = "Tiempo restante " + minutos + ":" + segundos;
+		}
 	}
-
-	clearInterval(this.timer);
-	this.currentState = this.finished;
 },
+
 
 /**
  *	Realiza una jugada (acción del jugador al hacer click en una tarjeta)
@@ -289,8 +332,13 @@ nextTurn: function() {
 		player = this.players[this.currentPlayer];
 	}
 
-	// Si ningún jugador está en juego
-	if (i >= this.players.length) {
+	if (player.playing) {
+	// Actualizar el turno
+		document.getElementById(this.turnName).innerHTML =
+			"Turno de " + player.name + " (" 
+			+ this.currentPlayer + ")";
+	} else {
+	// Ningún jugador está en juego
 		this.endGame(false);
 		return;
 	}
@@ -304,6 +352,20 @@ nextTurn: function() {
  */
 faceDown: function() {
 
+},
+
+/**
+ *	Termina el juego
+ */
+endGame: function(win) {
+	if (win) {
+
+	} else {
+
+	}
+
+	clearInterval(this.timer);
+	this.currentState = this.finished;
 }
 
 }
