@@ -25,6 +25,7 @@ cardsFound: [],		// Tarjetas que encontraron par
 
 roundTime: 10,		// Duración de la ronda en segundos
 timer: null,		// Handler que decrementa el tiempo
+facedownTime: null,	// Handler que muestra las tarjetas antes de pasar de turno
 
 Card: function() {
 	this.type = 0;
@@ -35,13 +36,12 @@ Card: function() {
 Player: function() {
 	this.name = "",			// Nombre del jugador
 	this.timeLeft = 0, 		// Tiempo restante
-	this.flipped = 0;		// Cantidad de tarjetas dadas vuelta en el turno actual
 	this.found = 0,			// Pares encontrados
 	this.playing = false;	// Jugando o no jugando
 },
 
 /**
- *	Intercambia las pantallas del juego
+ *	Intercambia las pantallas del juego.
  */
 init: function(container) {
 	var main = document.getElementById(container);
@@ -61,7 +61,7 @@ init: function(container) {
 },
 
 /**
- *	Crea la pantalla principal donde se eligen los jugadores
+ *	Crea la pantalla principal donde se eligen los jugadores.
  */
 createSelectScreen: function() {
 	var screen = document.createElement("div"),
@@ -114,7 +114,7 @@ createSelectScreen: function() {
 },
 
 /**
- *	Añade input text en la vista para los nombres de los jugadores
+ *	Añade input text en la vista para los nombres de los jugadores.
  */
 addPlayers: function() {
 	var amount = document.getElementById("q-players").value,
@@ -146,7 +146,7 @@ addPlayers: function() {
 },
 
 /**
- *	Carga los jugadores en el juego y llama a cambiar la pantalla
+ *	Carga los jugadores en el juego y llama a cambiar la pantalla.
  */
 selectPlayers: function(names) {
 	for (var i = 0; i < names.length; i++) {
@@ -160,7 +160,7 @@ selectPlayers: function(names) {
 },
 
 /**
- *	Crea la pantalla con el tablero para empezar a jugar
+ *	Crea la pantalla con el tablero para empezar a jugar.
  */
 createGameScreen: function() {
 	var screen = document.createElement("div"),
@@ -202,6 +202,9 @@ createGameScreen: function() {
 	return screen;
 },
 
+/**
+ *	Pasa al siguiente nivel.
+ */
 nextLevel: function() {
 	var rows, cols,
 		board = document.getElementById(this.board),
@@ -239,7 +242,7 @@ nextLevel: function() {
 },
 
 /**
- * 	Cosas raras que hay que hacer en Javascript
+ * 	Cosas raras que hay que hacer en Javascript.
  */
 cardListener(cardIndex) {
 	return function() {Memotest.play(cardIndex)};
@@ -282,7 +285,7 @@ generateCard: function() {
 },
 
 /**
- *	Mezcla aleatoriamente los elementos de un Array
+ *	Mezcla aleatoriamente los elementos de un Array.
  */
 shuffle: function(array) {
 	var aux, swap, len = array.length;
@@ -296,7 +299,7 @@ shuffle: function(array) {
 },
 
 /**
- *	Inicializa los jugadores y comienza el juego
+ *	Inicializa los jugadores y comienza el juego.
  */
 startGame: function() {
 	this.players.forEach(function(element, index) {
@@ -316,7 +319,7 @@ startGame: function() {
 },
 
 /**
- *	Inicializa el contador para los turnos
+ *	Inicializa el contador para los turnos.
  */
 startTimer: function() {
 	if (this.currentState == this.playing) {
@@ -346,7 +349,7 @@ startTimer: function() {
 },
 
 /**
- *	Pasa al siguiente turno
+ *	Pasa al siguiente turno.
  */
 nextTurn: function() {
 	// Pasar de turno
@@ -374,42 +377,66 @@ nextTurn: function() {
 },
 
 /**
- *	Realiza una jugada (acción del jugador al hacer click en una tarjeta)
+ *	Realiza una jugada (acción del jugador al hacer click en una tarjeta).
  */
 play: function(cardIndex) {
+	var card1, card2;
+
+	// Para la gente apurada
+	if (this.cardsFlipped.length > 1) {
+		clearTimeout(this.facedownTime);
+		this.facedown();
+	}
+
 	this.flip(cardIndex);
 
+	card1 = this.cards[this.cardsFlipped[0]];
+
+	// Si dio vuelta un comodín
+	if (card1.type == 0) {
+		this.players[this.currentPlayer].found++;
+		// Quitarla de las tarjetas dadas vuelta
+		this.cardsFound.push(this.cardsFlipped.splice(0, 1));
+	}
+	// Si es la segunda tarjeta que da vuelta
+	if (this.cardsFlipped.length > 1) {
+		
+		card2 = this.cards[this.cardsFlipped[1]];
+		
+		// Encontró un par
+		if (card1.type == card2.type) {
+			this.players[this.currentPlayer].found++;
+			// Quitar las tarjetas dadas vuelta de la lista del turno actual
+			// y ponerlas en la lista de tarjetas que encontraron par
+			this.cardsFound.push(this.cardsFlipped.splice(0, 2));
+		
+		// Dio vuelta dos tarjetas que no hicieron par
+		} else {
+			// Dar un segundo para que se vea la tarjeta
+			this.facedownTime = setTimeout(Memotest.facedown.bind(Memotest), 1000);
+			// Pierde el turno	
+			this.nextTurn();
+			return;
+		}
+	}
 
 	// Chequear si se dieron vuelta todas las tarjetas
 	if (this.cardsFound.length == this.cards.length) {
 		this.endGame(true);
+		return;
 	}
 },
 
 /**
- *	Da vuelta una tarjeta
+ *	Da vuelta una tarjeta.
  */
 flip: function(cardIndex) {
 	var card = this.cards[cardIndex],
 		td = document.getElementById("card-" + cardIndex),
 		img = td.firstChild;
-		
-	// La carta ya se encontraba volteada
-	if (card.flipped) {
-		card.flipped = false;
-		var i = 0, remIndex;
-		while (i < this.cardsFlipped.length && !remIndex) {
-			if (this.cardsFlipped[i] == cardIndex) {
-				remIndex = i;
-				this.cardsFlipped.splice(remIndex, 1);
-				td.setAttribute("class", "card card-down");
-				img.setAttribute("src", "images/facedown.png");
-				img.setAttribute("alt", "-");
-			}
-			i++;
-		}
-	// Voltear la carta
-	} else {
+	
+	// No intentar dar vuelta una tarjeta boca arriba	
+	if (!card.flipped) {
 		card.flipped = true;
 		this.cardsFlipped.push(cardIndex);
 		td.setAttribute("class", "card card-up");
@@ -419,11 +446,44 @@ flip: function(cardIndex) {
 },
 
 /**
- *	Termina el juego
+ *	Voltear boca abajo las tarjetas del turno actual.
+ */
+facedown: function() {
+	for (var i = 0; i < this.cardsFlipped.length; i++) {
+		var td = document.getElementById("card-" + this.cardsFlipped[i]),
+					img = td.firstChild;
+
+		td.setAttribute("class", "card card-down");
+		img.setAttribute("src", "images/facedown.png");
+		img.setAttribute("alt", "-");
+
+		this.cards[this.cardsFlipped[i]].flipped = false;
+	}
+	this.cardsFlipped = [];
+},
+
+/**
+ *	Termina el juego.
  */
 endGame: function(win) {
-	if (win) {
+	var winners = [], 
+		maxFound = -1;
 
+	this.players.forEach(function(element, index) {
+		if (element.found >= maxFound) {
+			if (element.found > maxFound) {
+				winners = [];
+			}
+			winners.push(element);
+		}
+	});
+
+	// Se dieron vuelta todas las cartas
+	if (win) {
+		var btnNext = document.createElement("button");
+			navGame = document.getElementById(this.navGame);
+
+	// Se terminó el tiempo para todos los jugadores
 	} else {
 
 	}
