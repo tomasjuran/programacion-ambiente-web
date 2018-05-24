@@ -2,7 +2,7 @@
 
 var Memotest = {
 container:	"",				// Id del div contenedor principal
-board:		"tbl-board",	// Id del tablero de juego
+board:		"art-board",	// Id del tablero de juego
 navGame:	"nav-game",		// Id del nav para ir al menú, pasar de nivel, etc.
 btnNext:	"btn-next", 	// Id del botón "siguiente nivel"
 statusMsg:	"p-status-msg",	// Id del p para mostrar el estado del juego
@@ -170,7 +170,6 @@ createGameScreen: function() {
 		secStatus = document.createElement("section"),
 		pStatus = document.createElement("p"),
 		artBoard = document.createElement("article"),
-		board = document.createElement("table"),
 		navGame = document.createElement("nav"),
 		butBack = document.createElement("button");
 
@@ -182,8 +181,7 @@ createGameScreen: function() {
 	pStatus.setAttribute("id", this.statusMsg);
 	secStatus.appendChild(pStatus);
 
-	board.setAttribute("id", this.board);
-	artBoard.appendChild(board);
+	artBoard.setAttribute("id", this.board);
 
 	butBack.appendChild(document.createTextNode("Volver al menú"));
 	butBack.addEventListener("click", function() {
@@ -207,7 +205,8 @@ createGameScreen: function() {
  */
 nextLevel: function() {
 	var rows, cols,
-		board = document.getElementById(this.board),
+		board = document.createElement("table"),
+		artBoard = document.getElementById(this.board),
 		navGame = document.getElementById(this.navGame),
 		btnNext = document.getElementById(this.btnNext);
 
@@ -218,6 +217,12 @@ nextLevel: function() {
 
 	this.level++;
 	[rows, cols] = this.setupBoard();
+
+	// Quitar la tabla anterior
+	while (artBoard.firstChild) {
+		artBoard.removeChild(artBoard.firstChild);
+	}
+	board.setAttribute("class", "tbl-board");
 
 	for (var i = 0; i < rows; i++) {
 		var tr = document.createElement("tr");
@@ -238,6 +243,9 @@ nextLevel: function() {
 		}
 		board.appendChild(tr);
 	}
+
+	artBoard.appendChild(board);
+
 	this.startGame();
 },
 
@@ -408,7 +416,8 @@ play: function(cardIndex) {
 			this.players[this.currentPlayer].found++;
 			// Quitar las tarjetas dadas vuelta de la lista del turno actual
 			// y ponerlas en la lista de tarjetas que encontraron par
-			this.cardsFound.push(this.cardsFlipped.splice(0, 2));
+			this.cardsFound = this.cardsFound
+					.concat(this.cardsFlipped.splice(0, 2));
 		
 		// Dio vuelta dos tarjetas que no hicieron par
 		} else {
@@ -482,6 +491,11 @@ endGame: function(win) {
 	if (win) {
 		var btnNext = document.createElement("button");
 			navGame = document.getElementById(this.navGame);
+
+		btnNext.innerHTML = "Siguiente nivel";
+		btnNext.setAttribute("id", this.btnNext);
+		btnNext.addEventListener("click", Memotest.nextLevel.bind(Memotest));
+		navGame.appendChild(btnNext);
 
 	// Se terminó el tiempo para todos los jugadores
 	} else {
