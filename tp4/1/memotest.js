@@ -20,19 +20,24 @@ level: 0,			// Nivel de la ronda
 
 cardTypes: 12,		// Cantidad de tipos de tarjetas
 cards: [],			// Tarjetas jugables
-found: [],			// Tarjetas encontradas
-flipped: [],		// Tarjetas dadas vuelta en el turno actual
+cardsFlipped: [],	// Tarjetas boca arriba actualmente
+cardsFound: [],		// Tarjetas que encontraron par
 
 roundTime: 10,		// Duración de la ronda en segundos
 timer: null,		// Handler que decrementa el tiempo
 
+Card: function() {
+	this.type = 0;
+	this.found = false;		// Encontraron su par
+	this.flipped = false;	// Está dada vuelta
+},
 
 Player: function() {
-	var name = "",			// Nombre del jugador
-		timeLeft = 0, 		// Tiempo restante
-		flipped = 0;		// Cantidad de tarjetas dadas vuelta en el turno actual
-		found = 0,			// Pares encontrados
-		playing = false;	// Jugando o no jugando
+	this.name = "",			// Nombre del jugador
+	this.timeLeft = 0, 		// Tiempo restante
+	this.flipped = 0;		// Cantidad de tarjetas dadas vuelta en el turno actual
+	this.found = 0,			// Pares encontrados
+	this.playing = false;	// Jugando o no jugando
 },
 
 /**
@@ -215,11 +220,17 @@ nextLevel: function() {
 		var tr = document.createElement("tr");
 		for (var j = 0; j < cols; j++) {
 			var td = document.createElement("td"),
+				img = document.createElement("img"),
 				index = i * cols + j;
+			
 			td.setAttribute("id", "card-" + (index));
-			td.addEventListener("click", function() {
-				Memotest.play(index);
-			});
+			td.setAttribute("class", "card card-down");
+			td.addEventListener("click", Memotest.cardListener(index));
+			
+			img.setAttribute("src", "images/facedown.png");
+			img.setAttribute("alt", "-");
+
+			td.appendChild(img);
 			tr.appendChild(td);
 		}
 		board.appendChild(tr);
@@ -228,25 +239,32 @@ nextLevel: function() {
 },
 
 /**
+ * 	Cosas raras que hay que hacer en Javascript
+ */
+cardListener(cardIndex) {
+	return function() {Memotest.play(cardIndex)};
+},
+
+/**
  *	Inicializa el tablero
- *	y devuelve la cantidad de filas y columnas
+ *	y devuelve la cantidad de filas y columnas.
  */
 setupBoard: function() {
 	var size = Math.pow(this.level + 2, 2);
 
 	this.cards = [];
-	this.found = [];
-	this.flipped = [];
+	this.cardsFlipped = [];
+	this.cardsFound = [];
 
-	for (var i = 0; i < size; i = i + 2) {
+	for (var i = 0; i < size - 1; i = i + 2) {
 		var card = this.generateCard();
-		this.cards.push(card, card);
+		this.cards.push(card, Object.assign({}, card));
 	}
 
 	// En matrices impares queda un lugar por cubrir,
 	// se le asigna el comodín
 	if (size % 2 != 0) {
-		this.cards.push(0);
+		this.cards.push(new this.Card());
 	}
 
 	this.shuffle(this.cards);
@@ -254,11 +272,13 @@ setupBoard: function() {
 },
 
 /**
- *	Devuelve un número entre 1 y cardTypes,
- *	ya que 0 es el comodín.
+ *	Genera una carta con un tipo entre 1 y cardTypes,
+ *	ya que el 0 es el comodín.
  */
 generateCard: function() {
-	return Math.trunc(Math.random() * (this.cardTypes - 1)) + 1;
+	var card = new this.Card();
+	card.type = Math.trunc(Math.random() * (this.cardTypes - 1)) + 1;
+	return card;
 },
 
 /**
@@ -267,7 +287,7 @@ generateCard: function() {
 shuffle: function(array) {
 	var aux, swap, len = array.length;
 	for (var i = 0; i < len; i++) {
-		swap = Math.random() * (len - 1);
+		swap = Math.trunc(Math.random() * (len - 1));
 		aux = array[i];
 		array[i] = array[swap];
 		array[swap] = aux;
@@ -325,20 +345,6 @@ startTimer: function() {
 	}
 },
 
-
-/**
- *	Realiza una jugada (acción del jugador al hacer click en una tarjeta)
- */
-play: function(cardIndex) {
-
-	console.log("Me hizo click " + cardIndex);
-
-	// Se dieron vuelta todas las tarjetas
-	if (this.cards.length == this.found.length) {
-		this.endGame(true);
-	}
-},
-
 /**
  *	Pasa al siguiente turno
  */
@@ -365,16 +371,51 @@ nextTurn: function() {
 		this.endGame(false);
 		return;
 	}
-
-	// Dar vuelta las tarjetas del turno
-	this.faceDown();
 },
 
 /**
- *	Da vuelta boca abajo las tarjetas volteadas que no formaron pareja
+ *	Realiza una jugada (acción del jugador al hacer click en una tarjeta)
  */
-faceDown: function() {
+play: function(cardIndex) {
+	this.flip(cardIndex);
 
+
+	// Chequear si se dieron vuelta todas las tarjetas
+	if (this.cardsFound.length == this.cards.length) {
+		this.endGame(true);
+	}
+},
+
+/**
+ *	Da vuelta una tarjeta
+ */
+flip: function(cardIndex) {
+	var card = this.cards[cardIndex],
+		td = document.getElementById("card-" + cardIndex),
+		img = td.firstChild;
+		
+	// La carta ya se encontraba volteada
+	if (card.flipped) {
+		card.flipped = false;
+		var i = 0, remIndex;
+		while (i < this.cardsFlipped.length && !remIndex) {
+			if (this.cardsFlipped[i] == cardIndex) {
+				remIndex = i;
+				this.cardsFlipped.splice(remIndex, 1);
+				td.setAttribute("class", "card card-down");
+				img.setAttribute("src", "images/facedown.png");
+				img.setAttribute("alt", "-");
+			}
+			i++;
+		}
+	// Voltear la carta
+	} else {
+		card.flipped = true;
+		this.cardsFlipped.push(cardIndex);
+		td.setAttribute("class", "card card-up");
+		img.setAttribute("src", "images/" + card.type + ".png");
+		img.setAttribute("alt", card.type);
+	}
 },
 
 /**
