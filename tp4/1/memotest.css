@@ -7,24 +7,66 @@ body {
   text-align: center;
 }
 
-@media only screen and (min-width: 768px) {
-  body {
-    font-size: 16pt;
-  }
+p {
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
-.tbl-board {
+@media only screen and (min-width: 768px) {
+	body {
+    	font-size: 16pt;
+	}
+}
+
+table.tbl-board {
 	margin: auto;
+	width: 90vmin;
+	height: 90vmin;
+	border-spacing: 4vmin;
+	border-collapse: separate;
+	table-layout: fixed;
 }
 
 td.card {
-	width: 100px;
-	height: 100px;
-	border: dashed black 3px;
+	border: dashed blue 3px;
+	border-radius: 10%;
+	overflow: hidden;
+}
+
+@media only screen and (min-width: 768px) {
+	td.card-down {
+		cursor: pointer;
+		transition: 0.5s;
+	}	
+
+	td.card-down:hover,
+	td.card-selected,
+	td.card-found {
+		transform: scale(1.1);
+	}
+}
+
+td.card-selected {
+	border-style: solid;
+	border-color: yellow;
+	box-shadow: 0px 0px 5px 2px;
+}
+
+td.card-found {
+	border-style: solid;
+	border-color: green;
 }
 
 td.card > img {
 	display: block;
 	margin: auto;
-	text-align: center;
+	width: 80%;
+}
+
+@media only screen and (min-width: 768px) {
+	#p-turn-name,
+	#p-turn-timer {
+		display: inline-block;
+		width: 50%;
+	}
 }

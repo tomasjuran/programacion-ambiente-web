@@ -4,6 +4,7 @@ var Memotest = {
 container:	"",				// Id del div contenedor principal
 board:		"art-board",	// Id del tablero de juego
 navGame:	"nav-game",		// Id del nav para ir al menú, pasar de nivel, etc.
+btnTurn:	"btn-turn",		// Id del botón "pasar turno"
 btnNext:	"btn-next", 	// Id del botón "siguiente nivel"
 statusMsg:	"p-status-msg",	// Id del p para mostrar el estado del juego
 turnName:	"p-turn-name", 	// Id del p para mostrar el nombre del jugador
@@ -20,10 +21,10 @@ level: 0,			// Nivel de la ronda
 
 cardTypes: 12,		// Cantidad de tipos de tarjetas
 cards: [],			// Tarjetas jugables
-cardsFlipped: [],	// Tarjetas boca arriba actualmente
-cardsFound: [],		// Tarjetas que encontraron par
+cardsFlipped: [],	// Índices de las tarjetas boca arriba actualmente
+cardsFound: [],		// Índices de las tarjetas que encontraron par
 
-roundTime: 10,		// Duración de la ronda en segundos
+roundTime: 61,		// Duración de la ronda en segundos
 timer: null,		// Handler que decrementa el tiempo
 facedownTime: null,	// Handler que muestra las tarjetas antes de pasar de turno
 
@@ -75,10 +76,9 @@ createSelectScreen: function() {
 
 	screen.setAttribute("id", "select-screen");
 	
-	h1.appendChild(document.createTextNode("¡Jugar al Memotest!"));
+	h1.innerHTML = "¡Jugar al Memotest!";
 	
-	label.appendChild(document
-		.createTextNode("Elija la cantidad de jugadores"));
+	label.innerHTML = "Elija la cantidad de jugadores";
 	label.setAttribute("for", "q-players");
 	
 	qPlayers.setAttribute("type", "number");
@@ -86,7 +86,7 @@ createSelectScreen: function() {
 	qPlayers.setAttribute("oninput", "Memotest.addPlayers()");
 	qPlayers.setAttribute("value", "0");
 	
-	button.appendChild(document.createTextNode("Jugar"));
+	button.innerHTML = "Jugar";
 	button.addEventListener("click", function() {
 		var amount = document.getElementById("q-players").value,
 			names = [];
@@ -130,8 +130,7 @@ addPlayers: function() {
 				label = document.createElement("label"),
 				name = document.createElement("input");
 
-			label.appendChild(document
-				.createTextNode("Nombre del jugador " + i));
+			label.innerHTML = "Nombre del jugador " + i;
 			label.setAttribute("for", "player-name-" + i);
 
 			name.setAttribute("type", "text");
@@ -149,6 +148,7 @@ addPlayers: function() {
  *	Carga los jugadores en el juego y llama a cambiar la pantalla.
  */
 selectPlayers: function(names) {
+	this.players = [];
 	for (var i = 0; i < names.length; i++) {
 		var player = new this.Player();
 		player.name = names[i];
@@ -183,7 +183,7 @@ createGameScreen: function() {
 
 	artBoard.setAttribute("id", this.board);
 
-	butBack.appendChild(document.createTextNode("Volver al menú"));
+	butBack.innerHTML = "Volver al menú";
 	butBack.addEventListener("click", function() {
 		Memotest.currentState = Memotest.finished;
 		Memotest.init(Memotest.container);
@@ -204,47 +204,16 @@ createGameScreen: function() {
  *	Pasa al siguiente nivel.
  */
 nextLevel: function() {
-	var rows, cols,
-		board = document.createElement("table"),
-		artBoard = document.getElementById(this.board),
-		navGame = document.getElementById(this.navGame),
-		btnNext = document.getElementById(this.btnNext);
+	var btnNext = document.getElementById(this.btnNext);
 
 	// Quitar el botón de siguiente nivel
 	if (btnNext) {
-		navGame.removeChild(btnNext);
+		btnNext.parentNode.removeChild(btnNext);
 	}
 
-	this.level++;
-	[rows, cols] = this.setupBoard();
-
-	// Quitar la tabla anterior
-	while (artBoard.firstChild) {
-		artBoard.removeChild(artBoard.firstChild);
+	if (this.level < 4) {
+		this.level++;
 	}
-	board.setAttribute("class", "tbl-board");
-
-	for (var i = 0; i < rows; i++) {
-		var tr = document.createElement("tr");
-		for (var j = 0; j < cols; j++) {
-			var td = document.createElement("td"),
-				img = document.createElement("img"),
-				index = i * cols + j;
-			
-			td.setAttribute("id", "card-" + (index));
-			td.setAttribute("class", "card card-down");
-			td.addEventListener("click", Memotest.cardListener(index));
-			
-			img.setAttribute("src", "images/facedown.png");
-			img.setAttribute("alt", "-");
-
-			td.appendChild(img);
-			tr.appendChild(td);
-		}
-		board.appendChild(tr);
-	}
-
-	artBoard.appendChild(board);
 
 	this.startGame();
 },
@@ -283,7 +252,7 @@ setupBoard: function() {
 },
 
 /**
- *	Genera una carta con un tipo entre 1 y cardTypes,
+ *	Genera una tarjeta con un tipo entre 1 y cardTypes,
  *	ya que el 0 es el comodín.
  */
 generateCard: function() {
@@ -307,9 +276,13 @@ shuffle: function(array) {
 },
 
 /**
- *	Inicializa los jugadores y comienza el juego.
+ *	Inicializa los jugadores, la tabla y comienza el juego.
  */
 startGame: function() {
+	var rows, cols,
+		board = document.createElement("table"),
+		artBoard = document.getElementById(this.board);
+
 	this.players.forEach(function(element, index) {
 		element.timeLeft = Memotest.roundTime;
 		element.flipped = 0;
@@ -317,13 +290,39 @@ startGame: function() {
 		element.playing = true;
 	});
 
+	[rows, cols] = this.setupBoard();
+
+	// Quitar la tabla anterior
+	while (artBoard.firstChild) {
+		artBoard.removeChild(artBoard.firstChild);
+	}
+	board.setAttribute("class", "tbl-board");
+
+	for (var i = 0; i < rows; i++) {
+		var tr = document.createElement("tr");
+		for (var j = 0; j < cols; j++) {
+			var td = document.createElement("td"),
+				img = document.createElement("img"),
+				index = i * cols + j;
+			
+			td.setAttribute("id", "card-" + (index));
+			td.setAttribute("class", "card card-down");
+			td.addEventListener("click", Memotest.cardListener(index));
+			
+			img.setAttribute("src", "images/facedown.png");
+			img.setAttribute("alt", "-");
+
+			td.appendChild(img);
+			tr.appendChild(td);
+		}
+		board.appendChild(tr);
+	}
+
+	artBoard.appendChild(board);
+
 	this.currentState = this.playing;
 	this.currentPlayer = -1;
 	this.nextTurn();
-
-	clearInterval(this.timer);
-	this.startTimer();
-	this.timer = setInterval(Memotest.startTimer.bind(Memotest), 1000);
 },
 
 /**
@@ -338,9 +337,9 @@ startTimer: function() {
 
 		if (player.timeLeft <= 0) {
 			statusMsg.innerHTML = "¡" + player.name + " (" 
-				+ this.currentPlayer + ") se quedó sin tiempo!";
+				+ (this.currentPlayer + 1) + ") se quedó sin tiempo!";
 			player.playing = false;
-			this.nextTurn();
+			this.lostTurn();
 		} else {
 			player.timeLeft--;
 			minutos = Math.trunc(player.timeLeft / 60);
@@ -360,6 +359,14 @@ startTimer: function() {
  *	Pasa al siguiente turno.
  */
 nextTurn: function() {
+	// Quitar el botón "pasar turno"
+	var btnTurn = document.getElementById(this.btnTurn);
+	if (btnTurn) {
+		btnTurn.parentNode.removeChild(btnTurn);
+	}
+
+	this.facedownFlipped();
+
 	// Pasar de turno
 	this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
 	
@@ -376,7 +383,11 @@ nextTurn: function() {
 	// Actualizar el turno
 		document.getElementById(this.turnName).innerHTML =
 			"Turno de " + player.name + " (" 
-			+ this.currentPlayer + ")";
+			+ (this.currentPlayer + 1) + ")";
+
+		clearInterval(this.timer);
+		this.startTimer();
+		this.timer = setInterval(Memotest.startTimer.bind(Memotest), 1000);
 	} else {
 	// Ningún jugador está en juego
 		this.endGame(false);
@@ -388,43 +399,44 @@ nextTurn: function() {
  *	Realiza una jugada (acción del jugador al hacer click en una tarjeta).
  */
 play: function(cardIndex) {
-	var card1, card2;
+	var currentCard, lastCard;
 
-	// Para la gente apurada
+	// Si facedownTime no llegó a dar vuelta las tarjetas luego de pasar el turno
 	if (this.cardsFlipped.length > 1) {
 		clearTimeout(this.facedownTime);
-		this.facedown();
+		this.facedownFlipped();
 	}
 
-	this.flip(cardIndex);
+	this.faceup(cardIndex);
 
-	card1 = this.cards[this.cardsFlipped[0]];
+	currentCard = this.cards[cardIndex];
 
 	// Si dio vuelta un comodín
-	if (card1.type == 0) {
+	if (currentCard.type == 0) {
 		this.players[this.currentPlayer].found++;
-		// Quitarla de las tarjetas dadas vuelta
-		this.cardsFound.push(this.cardsFlipped.splice(0, 1));
+		// Agregar la tarjeta a la lista de encontradas
+		this.removeFromArray(this.cardsFlipped, cardIndex);
+		this.found(cardIndex);
 	}
 	// Si es la segunda tarjeta que da vuelta
 	if (this.cardsFlipped.length > 1) {
 		
-		card2 = this.cards[this.cardsFlipped[1]];
+		lastCard = this.cards[this.cardsFlipped[0]];
 		
 		// Encontró un par
-		if (card1.type == card2.type) {
+		if (currentCard.type == lastCard.type) {
 			this.players[this.currentPlayer].found++;
-			// Quitar las tarjetas dadas vuelta de la lista del turno actual
-			// y ponerlas en la lista de tarjetas que encontraron par
-			this.cardsFound = this.cardsFound
-					.concat(this.cardsFlipped.splice(0, 2));
+			this.flippedToFound();
 		
 		// Dio vuelta dos tarjetas que no hicieron par
 		} else {
-			// Dar un segundo para que se vea la tarjeta
-			this.facedownTime = setTimeout(Memotest.facedown.bind(Memotest), 1000);
-			// Pierde el turno	
-			this.nextTurn();
+			if (this.players.length > 1) {
+				// Pierde el turno	
+				this.lostTurn();
+			} else {
+				// Dar un segundo para que se vea la tarjeta
+				this.facedownTime = setTimeout(Memotest.facedownFlipped.bind(Memotest), 1000);
+			}
 			return;
 		}
 	}
@@ -432,14 +444,30 @@ play: function(cardIndex) {
 	// Chequear si se dieron vuelta todas las tarjetas
 	if (this.cardsFound.length == this.cards.length) {
 		this.endGame(true);
-		return;
 	}
 },
 
 /**
- *	Da vuelta una tarjeta.
+ *	El jugador actual pierde el turno
  */
-flip: function(cardIndex) {
+lostTurn: function() {
+	// Detener el tiempo (wow!)
+	clearInterval(this.timer);
+
+	var btnTurn = document.createElement("button"),
+		navGame = document.getElementById(this.navGame),
+		statusMsg = document.getElementById(this.statusMsg);
+	
+	btnTurn.setAttribute("id", this.btnTurn);
+	btnTurn.innerHTML = "Pasar turno";
+	btnTurn.addEventListener("click", Memotest.nextTurn.bind(Memotest));
+	navGame.appendChild(btnTurn);
+},
+
+/**
+ *	Voltear boca arriba una tarjeta.
+ */
+faceup: function(cardIndex) {
 	var card = this.cards[cardIndex],
 		td = document.getElementById("card-" + cardIndex),
 		img = td.firstChild;
@@ -448,27 +476,69 @@ flip: function(cardIndex) {
 	if (!card.flipped) {
 		card.flipped = true;
 		this.cardsFlipped.push(cardIndex);
-		td.setAttribute("class", "card card-up");
-		img.setAttribute("src", "images/" + card.type + ".png");
+		// Esta parte es gráfica y debería separarse del modelo
+		td.setAttribute("class", "card card-up card-selected");
 		img.setAttribute("alt", card.type);
+		img.setAttribute("src", "images/" + card.type + ".png");
+		return true;
+	} else {
+		return false;
 	}
 },
 
 /**
- *	Voltear boca abajo las tarjetas del turno actual.
+ *	Voltear boca abajo una tarjeta.
  */
-facedown: function() {
-	for (var i = 0; i < this.cardsFlipped.length; i++) {
-		var td = document.getElementById("card-" + this.cardsFlipped[i]),
-					img = td.firstChild;
-
+facedown: function(cardIndex) {
+	var card = this.cards[cardIndex],
+		td = document.getElementById("card-" + cardIndex),
+		img = td.firstChild;
+	
+	// No intentar dar vuelta una tarjeta boca abajo
+	if (card.flipped) {
+		card.flipped = false;
+		this.removeFromArray(this.cardsFlipped, cardIndex);
+		// Esta parte es gráfica y debería separarse del modelo
 		td.setAttribute("class", "card card-down");
-		img.setAttribute("src", "images/facedown.png");
 		img.setAttribute("alt", "-");
-
-		this.cards[this.cardsFlipped[i]].flipped = false;
+		img.setAttribute("src", "images/facedown.png");
+		return true;
+	} else {
+		return false;
 	}
-	this.cardsFlipped = [];
+},
+
+/**
+ *	Agrega una tarjeta a la lista de encontradas
+ */
+found: function(cardIndex) {
+	var td = document.getElementById("card-" + cardIndex);
+	this.cardsFound.push(cardIndex);
+	td.setAttribute("class", "card card-up card-found");
+},
+
+/**
+ *	Voltear boca abajo todas las tarjetas del turno actual.
+ */
+facedownFlipped: function() {
+	// Quitar las tarjetas dadas vuelta de la lista del turno actual
+	var cardIndexes = this.cardsFlipped.splice(0, this.cardsFlipped.length);
+	
+	cardIndexes.forEach(function(element, index) {
+		Memotest.facedown(element);
+	});
+},
+
+/**
+ *	Agregar el par encontrado a la lista.
+ */
+flippedToFound: function() {
+	// Quitar las tarjetas dadas vuelta de la lista del turno actual
+	var cardIndexes = this.cardsFlipped.splice(0, this.cardsFlipped.length);
+	
+	cardIndexes.forEach(function(element, index) {
+		Memotest.found(element);
+	});
 },
 
 /**
@@ -504,6 +574,28 @@ endGame: function(win) {
 
 	clearInterval(this.timer);
 	this.currentState = this.finished;
+},
+
+/**
+ *	Función que por alguna razón no está en Javascript.
+ *	Removes from <em>array</em> the first <em>element</em> found.
+ *	@return the element spliced from the original array,
+ *	or <b>null</b> if the element wasn't found.
+ */
+removeFromArray: function(array, element) {
+	var found = false,
+		i = 0;
+	while (i < array.length && !found) {
+		if (array[i] === element) {
+			found = true;
+		}
+		i++;
+	}
+	if (found) {
+		return array.splice(i-1, 1)[0];
+	} else {
+		return null;
+	}
 }
 
 }
