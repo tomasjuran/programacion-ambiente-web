@@ -1,31 +1,31 @@
 "use_strict";
 
 var Memotest = {
-container:	"",				// Id del div contenedor principal
-board:		"art-board",	// Id del tablero de juego
-navGame:	"nav-game",		// Id del nav para ir al menú, pasar de nivel, etc.
-btnTurn:	"btn-turn",		// Id del botón "pasar turno"
-btnNext:	"btn-next", 	// Id del botón "siguiente nivel"
+container:	"",							// Id del div contenedor principal
+board:		"art-board",			// Id del tablero de juego
+navGame:	"nav-game",				// Id del nav para ir al menú, pasar de nivel, etc.
+btnTurn:	"btn-turn",				// Id del botón "pasar turno"
+btnNext:	"btn-next", 			// Id del botón "siguiente nivel"
 statusMsg:	"p-status-msg",	// Id del p para mostrar el estado del juego
-turnName:	"p-turn-name", 	// Id del p para mostrar el nombre del jugador
+turnName:	"p-turn-name", 		// Id del p para mostrar el nombre del jugador
 turnTimer:	"p-turn-timer",	// Id del p para mostrar el tiempo restante
 
-prepare: 0,			// <
-playing: 1,			//  |- Posibles estados del juego
-finished: 2,		// <
+prepare: 0,				// <
+playing: 1,				//  |- Posibles estados del juego
+finished: 2,			// <
 currentState: 2,	// Estado actual del juego
 
-players: [],		// Jugadores
+players: [],			// Jugadores
 currentPlayer: 0,	// Jugador actual
-level: 0,			// Nivel de la ronda
+level: 0,					// Nivel de la ronda
 
 cardTypes: 12,		// Cantidad de tipos de tarjetas
-cards: [],			// Tarjetas jugables
+cards: [],				// Tarjetas jugables
 cardsFlipped: [],	// Índices de las tarjetas boca arriba actualmente
 cardsFound: [],		// Índices de las tarjetas que encontraron par
 
-roundTime: 61,		// Duración de la ronda en segundos
-timer: null,		// Handler que decrementa el tiempo
+roundTime: 61,			// Duración de la ronda en segundos
+timer: null,				// Handler que decrementa el tiempo
 facedownTime: null,	// Handler que muestra las tarjetas antes de pasar de turno
 
 Card: function() {
@@ -35,9 +35,9 @@ Card: function() {
 },
 
 Player: function() {
-	this.name = "",			// Nombre del jugador
+	this.name = "",				// Nombre del jugador
 	this.timeLeft = 0, 		// Tiempo restante
-	this.found = 0,			// Pares encontrados
+	this.found = 0,				// Pares encontrados
 	this.playing = false;	// Jugando o no jugando
 },
 
@@ -74,7 +74,7 @@ createSelectScreen: function() {
 		button = document.createElement("button"),
 		playersNames = document.createElement("section");
 
-	screen.setAttribute("id", "select-screen");
+	screen.setAttribute("class", "screen-select");
 	
 	h1.innerHTML = "¡Jugar al Memotest!";
 	
@@ -173,12 +173,16 @@ createGameScreen: function() {
 		navGame = document.createElement("nav"),
 		butBack = document.createElement("button");
 
+	screen.setAttribute("class", "screen-game");
+
 	pTurnName.setAttribute("id", this.turnName);
 	pTurnTimer.setAttribute("id", this.turnTimer);
+	secTurn.setAttribute("class", "sec-turn");
 	secTurn.appendChild(pTurnName);
 	secTurn.appendChild(pTurnTimer);
 
 	pStatus.setAttribute("id", this.statusMsg);
+	secStatus.setAttribute("class", "sec-status-msg")
 	secStatus.appendChild(pStatus);
 
 	artBoard.setAttribute("id", this.board);
@@ -211,18 +215,9 @@ nextLevel: function() {
 		btnNext.parentNode.removeChild(btnNext);
 	}
 
-	if (this.level < 4) {
-		this.level++;
-	}
+	this.level++;
 
 	this.startGame();
-},
-
-/**
- * 	Cosas raras que hay que hacer en Javascript.
- */
-cardListener(cardIndex) {
-	return function() {Memotest.play(cardIndex)};
 },
 
 /**
@@ -230,7 +225,9 @@ cardListener(cardIndex) {
  *	y devuelve la cantidad de filas y columnas.
  */
 setupBoard: function() {
-	var size = Math.pow(this.level + 2, 2);
+	var size = this.level < 4 
+		? Math.pow(this.level + 2, 2) 
+		: 36;
 
 	this.cards = [];
 	this.cardsFlipped = [];
@@ -281,7 +278,8 @@ shuffle: function(array) {
 startGame: function() {
 	var rows, cols,
 		board = document.createElement("table"),
-		artBoard = document.getElementById(this.board);
+		artBoard = document.getElementById(this.board),
+		statusMsg = document.getElementById(this.statusMsg);
 
 	this.players.forEach(function(element, index) {
 		element.timeLeft = Memotest.roundTime;
@@ -301,24 +299,30 @@ startGame: function() {
 	for (var i = 0; i < rows; i++) {
 		var tr = document.createElement("tr");
 		for (var j = 0; j < cols; j++) {
-			var td = document.createElement("td"),
+			let td = document.createElement("td"),
 				img = document.createElement("img"),
 				index = i * cols + j;
 			
 			td.setAttribute("id", "card-" + (index));
 			td.setAttribute("class", "card card-down");
-			td.addEventListener("click", Memotest.cardListener(index));
+
+			td.addEventListener("click", function() {
+				Memotest.play(index)
+			});
 			
 			img.setAttribute("src", "images/facedown.png");
 			img.setAttribute("alt", "-");
-
 			td.appendChild(img);
+			
 			tr.appendChild(td);
 		}
 		board.appendChild(tr);
 	}
 
 	artBoard.appendChild(board);
+
+	statusMsg.innerHTML = "¡Comienza el juego!<br>"
+			+ "Estás en el nivel " + this.level;
 
 	this.currentState = this.playing;
 	this.currentPlayer = -1;
@@ -339,7 +343,11 @@ startTimer: function() {
 			statusMsg.innerHTML = "¡" + player.name + " (" 
 				+ (this.currentPlayer + 1) + ") se quedó sin tiempo!";
 			player.playing = false;
-			this.lostTurn();
+			if (this.players.length > 1) {
+				this.lostTurn();
+			} else {
+				this.nextTurn();
+			}
 		} else {
 			player.timeLeft--;
 			minutos = Math.trunc(player.timeLeft / 60);
@@ -385,13 +393,14 @@ nextTurn: function() {
 			"Turno de " + player.name + " (" 
 			+ (this.currentPlayer + 1) + ")";
 
+		this.currentState = this.playing;
+
 		clearInterval(this.timer);
 		this.startTimer();
 		this.timer = setInterval(Memotest.startTimer.bind(Memotest), 1000);
 	} else {
 	// Ningún jugador está en juego
 		this.endGame(false);
-		return;
 	}
 },
 
@@ -399,51 +408,64 @@ nextTurn: function() {
  *	Realiza una jugada (acción del jugador al hacer click en una tarjeta).
  */
 play: function(cardIndex) {
-	var currentCard, lastCard;
+	if (this.currentState == this.playing) {
 
-	// Si facedownTime no llegó a dar vuelta las tarjetas luego de pasar el turno
-	if (this.cardsFlipped.length > 1) {
-		clearTimeout(this.facedownTime);
-		this.facedownFlipped();
-	}
+		var currentCard, lastCard;
 
-	this.faceup(cardIndex);
-
-	currentCard = this.cards[cardIndex];
-
-	// Si dio vuelta un comodín
-	if (currentCard.type == 0) {
-		this.players[this.currentPlayer].found++;
-		// Agregar la tarjeta a la lista de encontradas
-		this.removeFromArray(this.cardsFlipped, cardIndex);
-		this.found(cardIndex);
-	}
-	// Si es la segunda tarjeta que da vuelta
-	if (this.cardsFlipped.length > 1) {
-		
-		lastCard = this.cards[this.cardsFlipped[0]];
-		
-		// Encontró un par
-		if (currentCard.type == lastCard.type) {
-			this.players[this.currentPlayer].found++;
-			this.flippedToFound();
-		
-		// Dio vuelta dos tarjetas que no hicieron par
-		} else {
-			if (this.players.length > 1) {
-				// Pierde el turno	
-				this.lostTurn();
-			} else {
-				// Dar un segundo para que se vea la tarjeta
-				this.facedownTime = setTimeout(Memotest.facedownFlipped.bind(Memotest), 1000);
-			}
-			return;
+		// Si facedownTime no llegó a dar vuelta las tarjetas luego de pasar el turno
+		if (this.cardsFlipped.length > 1) {
+			clearTimeout(this.facedownTime);
+			this.facedownFlipped();
 		}
-	}
 
-	// Chequear si se dieron vuelta todas las tarjetas
-	if (this.cardsFound.length == this.cards.length) {
-		this.endGame(true);
+		this.faceup(cardIndex);
+
+		currentCard = this.cards[cardIndex];
+
+		// Si dio vuelta un comodín
+		if (currentCard.type == 0) {
+			this.players[this.currentPlayer].found++;
+			// Agregar la tarjeta a la lista de encontradas
+			this.removeFromArray(this.cardsFlipped, cardIndex);
+			this.found(cardIndex);
+		}
+		// Si es la segunda tarjeta que da vuelta
+		if (this.cardsFlipped.length > 1) {
+			
+			lastCard = this.cards[this.cardsFlipped[0]];
+			
+			// Encontró un par
+			if (currentCard.type == lastCard.type) {
+				this.players[this.currentPlayer].found++;
+				this.flippedToFound();
+			
+			// Dio vuelta dos tarjetas que no hicieron par
+			} else {
+				
+				var playing = 0;
+				this.players.forEach(function(element, index) {
+					if (element.playing) {
+						playing++;
+					}
+				});
+
+				if (playing > 1) {
+					// Pierde el turno
+					this.lostTurn();
+				
+				// Una sola persona jugando
+				} else {
+					// Dar un segundo para que se vea la tarjeta
+					this.facedownTime = setTimeout(Memotest.facedownFlipped.bind(Memotest), 1000);
+				}
+				return;
+			}
+		}
+
+		// Chequear si se dieron vuelta todas las tarjetas
+		if (this.cardsFound.length == this.cards.length) {
+			this.endGame(true);
+		}
 	}
 },
 
@@ -453,6 +475,7 @@ play: function(cardIndex) {
 lostTurn: function() {
 	// Detener el tiempo (wow!)
 	clearInterval(this.timer);
+	this.currentState = this.prepare;
 
 	var btnTurn = document.createElement("button"),
 		navGame = document.getElementById(this.navGame),
@@ -478,8 +501,10 @@ faceup: function(cardIndex) {
 		this.cardsFlipped.push(cardIndex);
 		// Esta parte es gráfica y debería separarse del modelo
 		td.setAttribute("class", "card card-up card-selected");
+		
 		img.setAttribute("alt", card.type);
 		img.setAttribute("src", "images/" + card.type + ".png");
+
 		return true;
 	} else {
 		return false;
@@ -500,8 +525,10 @@ facedown: function(cardIndex) {
 		this.removeFromArray(this.cardsFlipped, cardIndex);
 		// Esta parte es gráfica y debería separarse del modelo
 		td.setAttribute("class", "card card-down");
+		
 		img.setAttribute("alt", "-");
 		img.setAttribute("src", "images/facedown.png");
+		
 		return true;
 	} else {
 		return false;
@@ -546,18 +573,23 @@ flippedToFound: function() {
  */
 endGame: function(win) {
 	var winners = [], 
-		maxFound = -1;
+		maxFound = -1,
+		statusMsg = document.getElementById(this.statusMsg),
+		statusString = "";
 
 	this.players.forEach(function(element, index) {
 		if (element.found >= maxFound) {
 			if (element.found > maxFound) {
 				winners = [];
 			}
-			winners.push(element);
+			maxFound = element.found;
+			var player = Object.assign({}, element);
+			player.name += "(" + index + ")";
+			winners.push(player);
 		}
 	});
 
-	// Se dieron vuelta todas las cartas
+	// Permitir pasar al siguiente nivel
 	if (win) {
 		var btnNext = document.createElement("button");
 			navGame = document.getElementById(this.navGame);
@@ -566,12 +598,48 @@ endGame: function(win) {
 		btnNext.setAttribute("id", this.btnNext);
 		btnNext.addEventListener("click", Memotest.nextLevel.bind(Memotest));
 		navGame.appendChild(btnNext);
+	}
 
-	// Se terminó el tiempo para todos los jugadores
+	// Un jugador
+	if (this.players.length <= 1) {
+		if (win) {
+			statusString = "¡Ganaste la ronda!";
+		} else {
+			statusString = "¡Te quedaste sin tiempo!";
+		}
+		statusString += "<br><br>Tus puntos son: " + winners[0].found;
+
+	// Más de un jugador
 	} else {
+		if (win) {
+			var i = 0;
+			statusString = "";
+			while (i < winners.length) {
+				statusString += winners[i].name + "<br>";
+				i++;
+			}
+
+			// Hubo más de un ganador (empate de puntos)
+			if (i > 1) {
+				statusString = "Ganaron en esta ronda:<br>" + statusString;
+			} else {
+				statusString = "Ganó en esta ronda:<br>" + statusString;
+			}
+
+		} else {
+			statusString = "¡Se les acabó el tiempo a todos los jugadores!<br>";
+		}
+
+		statusString += "<br>Puntos:<br>";
+
+		this.players.forEach(function(element, index) {
+			statusString += element.name + " (" + index + ") - "
+					+ element.found + " puntos<br>";
+		});
 
 	}
 
+	statusMsg.innerHTML = statusString;
 	clearInterval(this.timer);
 	this.currentState = this.finished;
 },

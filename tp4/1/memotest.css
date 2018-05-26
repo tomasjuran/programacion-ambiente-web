@@ -7,11 +7,6 @@ body {
   text-align: center;
 }
 
-p {
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
 @media only screen and (min-width: 768px) {
 	body {
     	font-size: 16pt;
@@ -20,17 +15,16 @@ p {
 
 table.tbl-board {
 	margin: auto;
-	width: 90vmin;
-	height: 90vmin;
 	border-spacing: 4vmin;
 	border-collapse: separate;
 	table-layout: fixed;
 }
 
 td.card {
+	width: 12vmin;
+	height: 12vmin;
 	border: dashed blue 3px;
 	border-radius: 10%;
-	overflow: hidden;
 }
 
 @media only screen and (min-width: 768px) {
@@ -58,15 +52,45 @@ td.card-found {
 }
 
 td.card > img {
-	display: block;
-	margin: auto;
-	width: 80%;
+	width: 94%;
+	position: relative;
+	top: 3%;
 }
 
 @media only screen and (min-width: 768px) {
-	#p-turn-name,
-	#p-turn-timer {
-		display: inline-block;
-		width: 50%;
+
+	.screen-game,
+	#art-board,
+	section.sec-turn,
+	section.sec-status-msg,
+	#nav-game {
+		position: relative;
+	}
+
+	#art-board {
+		float: left;
+	}
+
+	section.sec-turn,
+	section.sec-status-msg,
+	#nav-game {
+		float: right;
+	}
+
+	#art-board {
+		width: 70%;
+	}
+
+	section.sec-turn,
+	section.sec-status-msg,
+	#nav-game {
+		width: 30%;
+	}
+
+	
+	section.sec-turn,
+	section.sec-status-msg,
+	#nav-game {
+		clear: right;
 	}
 }
