@@ -164,24 +164,24 @@ selectPlayers: function(names) {
  */
 createGameScreen: function() {
 	var screen = document.createElement("div"),
-		artBoard = document.createElement("article"),
 		secTurn = document.createElement("section"),
 		pTurnName = document.createElement("p"),
 		pTurnTimer = document.createElement("p"),
 		secStatus = document.createElement("section"),
+		artBoard = document.createElement("article"),
 		pStatus = document.createElement("p"),
 		navGame = document.createElement("nav"),
 		butBack = document.createElement("button");
 
 	screen.setAttribute("class", "screen-game");
 
-	artBoard.setAttribute("id", this.board);
-
 	pTurnName.setAttribute("id", this.turnName);
 	pTurnTimer.setAttribute("id", this.turnTimer);
 	secTurn.setAttribute("class", "sec-turn");
 	secTurn.appendChild(pTurnName);
 	secTurn.appendChild(pTurnTimer);
+
+	artBoard.setAttribute("id", this.board);
 
 	pStatus.setAttribute("id", this.statusMsg);
 	secStatus.setAttribute("class", "sec-status-msg")
@@ -195,12 +195,12 @@ createGameScreen: function() {
 	navGame.appendChild(butBack);
 	navGame.setAttribute("id", this.navGame);
 
-	screen.appendChild(artBoard);
 	screen.appendChild(secTurn);
+	screen.appendChild(artBoard);
 	screen.appendChild(secStatus);
 	screen.appendChild(navGame);
 
-	this.level = 0;
+	this.level = 3;
 	return screen;
 },
 
