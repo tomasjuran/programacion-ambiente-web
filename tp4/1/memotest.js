@@ -164,16 +164,18 @@ selectPlayers: function(names) {
  */
 createGameScreen: function() {
 	var screen = document.createElement("div"),
+		artBoard = document.createElement("article"),
 		secTurn = document.createElement("section"),
 		pTurnName = document.createElement("p"),
 		pTurnTimer = document.createElement("p"),
 		secStatus = document.createElement("section"),
 		pStatus = document.createElement("p"),
-		artBoard = document.createElement("article"),
 		navGame = document.createElement("nav"),
 		butBack = document.createElement("button");
 
 	screen.setAttribute("class", "screen-game");
+
+	artBoard.setAttribute("id", this.board);
 
 	pTurnName.setAttribute("id", this.turnName);
 	pTurnTimer.setAttribute("id", this.turnTimer);
@@ -185,8 +187,6 @@ createGameScreen: function() {
 	secStatus.setAttribute("class", "sec-status-msg")
 	secStatus.appendChild(pStatus);
 
-	artBoard.setAttribute("id", this.board);
-
 	butBack.innerHTML = "Volver al menú";
 	butBack.addEventListener("click", function() {
 		Memotest.currentState = Memotest.finished;
@@ -195,9 +195,9 @@ createGameScreen: function() {
 	navGame.appendChild(butBack);
 	navGame.setAttribute("id", this.navGame);
 
+	screen.appendChild(artBoard);
 	screen.appendChild(secTurn);
 	screen.appendChild(secStatus);
-	screen.appendChild(artBoard);
 	screen.appendChild(navGame);
 
 	this.level = 0;
@@ -215,7 +215,9 @@ nextLevel: function() {
 		btnNext.parentNode.removeChild(btnNext);
 	}
 
-	this.level++;
+	if (this.level < 4) {
+		this.level++;
+	}
 
 	this.startGame();
 },
@@ -282,7 +284,7 @@ startGame: function() {
 		statusMsg = document.getElementById(this.statusMsg);
 
 	this.players.forEach(function(element, index) {
-		element.timeLeft = Memotest.roundTime;
+		element.timeLeft = Math.trunc(Memotest.roundTime / Memotest.players.length);
 		element.flipped = 0;
 		element.found = 0;
 		element.playing = true;
@@ -343,7 +345,7 @@ startTimer: function() {
 			statusMsg.innerHTML = "¡" + player.name + " (" 
 				+ (this.currentPlayer + 1) + ") se quedó sin tiempo!";
 			player.playing = false;
-			if (this.players.length > 1) {
+			if (this.playersPlaying() > 0) {
 				this.lostTurn();
 			} else {
 				this.nextTurn();
@@ -364,11 +366,26 @@ startTimer: function() {
 },
 
 /**
+ *	@return la cantidad de jugadores activos en la ronda actual.
+ */
+playersPlaying: function() {
+	var playing = 0;
+	this.players.forEach(function(element, index) {
+		if (element.playing) {
+			playing++;
+		}
+	});
+	return playing;
+},
+
+/**
  *	Pasa al siguiente turno.
  */
 nextTurn: function() {
+	var btnTurn = document.getElementById(this.btnTurn),
+		player, i;
+	
 	// Quitar el botón "pasar turno"
-	var btnTurn = document.getElementById(this.btnTurn);
 	if (btnTurn) {
 		btnTurn.parentNode.removeChild(btnTurn);
 	}
@@ -379,8 +396,8 @@ nextTurn: function() {
 	this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
 	
 	// Chequear que el jugador está en juego
-	var player = this.players[this.currentPlayer],
-		i = 0;
+	player = this.players[this.currentPlayer],
+	i = 0;
 	while (i < this.players.length && !player.playing) {
 		i++;
 		this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
@@ -391,6 +408,10 @@ nextTurn: function() {
 	// Actualizar el turno
 		document.getElementById(this.turnName).innerHTML =
 			"Turno de " + player.name + " (" 
+			+ (this.currentPlayer + 1) + ")";
+
+		document.getElementById(this.statusMsg).innerHTML =
+			"Ahora es el turno de " + player.name + " (" 
 			+ (this.currentPlayer + 1) + ")";
 
 		this.currentState = this.playing;
@@ -410,7 +431,8 @@ nextTurn: function() {
 play: function(cardIndex) {
 	if (this.currentState == this.playing) {
 
-		var currentCard, lastCard;
+		var currentCard, lastCard,
+			player = this.players[this.currentPlayer];
 
 		// Si facedownTime no llegó a dar vuelta las tarjetas luego de pasar el turno
 		if (this.cardsFlipped.length > 1) {
@@ -428,6 +450,9 @@ play: function(cardIndex) {
 			// Agregar la tarjeta a la lista de encontradas
 			this.removeFromArray(this.cardsFlipped, cardIndex);
 			this.found(cardIndex);
+			document.getElementById(this.statusMsg).innerHTML =
+				"¡" + player.name + " (" + (this.currentPlayer + 1) + ")"
+				+ " encontró un comodín!";
 		}
 		// Si es la segunda tarjeta que da vuelta
 		if (this.cardsFlipped.length > 1) {
@@ -438,19 +463,15 @@ play: function(cardIndex) {
 			if (currentCard.type == lastCard.type) {
 				this.players[this.currentPlayer].found++;
 				this.flippedToFound();
+				document.getElementById(this.statusMsg).innerHTML =
+				"¡" + player.name + " (" + (this.currentPlayer + 1) + ")"
+				+ " encontró un par!";
 			
 			// Dio vuelta dos tarjetas que no hicieron par
 			} else {
 				
-				var playing = 0;
-				this.players.forEach(function(element, index) {
-					if (element.playing) {
-						playing++;
-					}
-				});
-
-				if (playing > 1) {
-					// Pierde el turno
+				// Hay más jugadores activos, pierde el turno
+				if (this.playersPlaying() > 1) {
 					this.lostTurn();
 				
 				// Una sola persona jugando
@@ -485,6 +506,8 @@ lostTurn: function() {
 	btnTurn.innerHTML = "Pasar turno";
 	btnTurn.addEventListener("click", Memotest.nextTurn.bind(Memotest));
 	navGame.appendChild(btnTurn);
+
+	statusMsg.innerHTML = '¡Perdiste el turno!<br>Hacé click en "Pasar turno" para continuar';
 },
 
 /**
@@ -584,7 +607,7 @@ endGame: function(win) {
 			}
 			maxFound = element.found;
 			var player = Object.assign({}, element);
-			player.name += "(" + index + ")";
+			player.name += " (" + (index + 1) + ")";
 			winners.push(player);
 		}
 	});
@@ -633,7 +656,7 @@ endGame: function(win) {
 		statusString += "<br>Puntos:<br>";
 
 		this.players.forEach(function(element, index) {
-			statusString += element.name + " (" + index + ") - "
+			statusString += element.name + " (" + (index + 1) + ") - "
 					+ element.found + " puntos<br>";
 		});
 
