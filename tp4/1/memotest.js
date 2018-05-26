@@ -256,7 +256,7 @@ setupBoard: function() {
  */
 generateCard: function() {
 	var card = new this.Card();
-	card.type = Math.trunc(Math.random() * (this.cardTypes - 1)) + 1;
+	card.type = Math.trunc(Math.random() * (this.cardTypes)) + 1;
 	return card;
 },
 
