@@ -94,16 +94,13 @@ init: function(container) {
  *	Si <em>add</em> es <b>true</b>, suma al índice actual en lugar de cambiarlo.
  */
 showImage: function(index, add) {
-	var lastIndex, ani;
+	var lastIndex, ani, urlImg;
 
+	// Detener las animaciones
 	clearTimeout(this.auto);
 
-	$(".carousel-dot-active").each(function() {
-		$(this).removeClass("carousel-dot-active");
-	})
-
+	// Cambiar de índice
 	lastIndex = this.slideIndex;
-
 	if (add) {
 		this.slideIndex = (this.slideIndex +
 			 index + this.images.length) % this.images.length;
@@ -111,21 +108,31 @@ showImage: function(index, add) {
 		this.slideIndex = index;
 	}
 
-	$("#carousel-img-bot").attr({
-		"src": Carousel.imgFolder + Carousel.images[Carousel.slideIndex]
+	// Cambiar el botón activo
+	$(".carousel-dot-active").each(function() {
+		$(this).removeClass("carousel-dot-active");
 	});
+	$(".carousel-dot").eq(this.slideIndex).addClass("carousel-dot-active");
 
+	// Animar la imagen anterior
 	ani = this.slideIndex % this.animations.length;
 	$("#carousel-img-top")
 		.attr("src", Carousel.imgFolder + Carousel.images[lastIndex])
 		.removeClass();
 	$("#carousel-img-top").addClass(Carousel.animations[ani]);
-
-	$(".carousel-dot").eq(this.slideIndex).addClass("carousel-dot-active");
-
-	this.auto = setTimeout(function() {
-		Carousel.showImage(1, true)
-	}, 3000);
+	
+	// Petición asíncrona para cambiar la imagen
+	urlImg = this.imgFolder + this.images[this.slideIndex];
+	$.ajax({
+		url: urlImg,
+		context: $("#carousel-img-bot")
+	})
+		.done(function() {
+			$(this).attr("src", urlImg);
+			Carousel.auto = setTimeout(function() {
+				Carousel.showImage(1, true)
+			}, 3000);
+		});
 }
 
 }
