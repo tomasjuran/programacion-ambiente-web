@@ -18,7 +18,7 @@ animations: [	// Nombres de las clases de animaciones
 	"move-bottom"
 ],
 slideIndex: 0,	// Índice actual del carrusel
-auto: null,	// Handler del timeout
+autoHandler: null,	// Handler del slide
 
 init: function(container) {
 	var main, sectionDot, prev, next;
@@ -86,19 +86,6 @@ init: function(container) {
 		})
 			.appendTo(sectionDot);
 	}
-/*
-	$("<div>", {
-		"id":"progressbar-wrapper"
-	})
-		.css({
-			"display":"none";
-		})
-		.appendTo(main);
-	<div id="progressbar-wrapper">
-		<div id="progressbar-bar">
-			<p id="progressbar-text">0%</p>
-		</div>
-	</div> */
 
 	this.showImage(0);
 },
@@ -108,10 +95,10 @@ init: function(container) {
  *	Si <em>add</em> es <b>true</b>, suma al índice actual en lugar de cambiarlo.
  */
 showImage: function(index, add) {
-	var lastIndex, ani, urlImg;
+	var lastIndex, currentIndex, ani, urlImg;
 
 	// Detener las animaciones
-	clearTimeout(this.auto);
+	clearTimeout(this.autoHandler);
 
 	// Cambiar de índice
 	lastIndex = this.slideIndex;
@@ -121,6 +108,7 @@ showImage: function(index, add) {
 	} else {
 		this.slideIndex = index;
 	}
+	currentIndex = this.slideIndex;
 
 	// Cambiar el botón activo
 	$(".carousel-dot-active").each(function() {
@@ -159,15 +147,18 @@ showImage: function(index, add) {
 		}
 	})
 		.done(function() {
-			$(this).attr("src", urlImg);
-			// El navegador tarda un rato en mostrar la imagen nueva
-			setTimeout(function() {
-				$("#carousel-img-bot").show();
-			}, 500);
+			// No intentar cambiar la imagen si ya no es la actual
+			if (currentIndex === Carousel.slideIndex) {
+				$(this).attr("src", urlImg);
+				// El navegador tarda un rato en mostrar la imagen nueva
+				setTimeout(function() {
+					$("#carousel-img-bot").show();
+				}, 500);
+			}
 		})
 		.always(function() {
 			ProgressBar.display(false);
-			Carousel.auto = setTimeout(function() {
+			Carousel.autoHandler = setTimeout(function() {
 				Carousel.showImage(1, true)
 			}, 3000);
 		});

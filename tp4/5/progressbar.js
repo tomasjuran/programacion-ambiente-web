@@ -14,6 +14,7 @@ init: function(container) {
 	$("<div>", {
 		"id":"progressbar-bar"
 	})
+		.css("width", "0%")
 		.appendTo(wrapper);
 
 	$("<p>", {

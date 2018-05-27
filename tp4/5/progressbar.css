@@ -16,7 +16,6 @@ div[id|="progressbar-wrapper"] {
 }
 
 div[id|="progressbar-bar"] {
-	width: 0%;
 	height: 100%;
 	background: linear-gradient(90deg, green, lightgreen);
 	transition: width 0.5s;
