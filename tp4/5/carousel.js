@@ -5,9 +5,10 @@ imgFolder: "images/",	// Carpeta de imágenes
 images: [	// Imágenes del carrusel
 	"1.png",
 	"2.gif",
-	"3.png",
+	//"3.png",
 	"4.jpg",
-	"5.jpeg"
+	"5.jpeg",
+	"6.gif"
 ],
 animations: [	// Nombres de las clases de animaciones
 	"fade",
@@ -25,7 +26,7 @@ init: function(container) {
 	main = $("<div>", {
 		"class":"carousel-main"
 	})
-		.appendTo($("#" + container));
+		.appendTo($(container));
 
 	prev = $("<a>", {
 		"class":"carousel-prev",
@@ -85,6 +86,19 @@ init: function(container) {
 		})
 			.appendTo(sectionDot);
 	}
+/*
+	$("<div>", {
+		"id":"progressbar-wrapper"
+	})
+		.css({
+			"display":"none";
+		})
+		.appendTo(main);
+	<div id="progressbar-wrapper">
+		<div id="progressbar-bar">
+			<p id="progressbar-text">0%</p>
+		</div>
+	</div> */
 
 	this.showImage(0);
 },
@@ -120,6 +134,7 @@ showImage: function(index, add) {
 		.attr("src", Carousel.imgFolder + Carousel.images[lastIndex])
 		.removeClass();
 	$("#carousel-img-top").addClass(Carousel.animations[ani]);
+	$("#carousel-img-bot").hide();
 	
 	// Petición asíncrona para cambiar la imagen
 	urlImg = this.imgFolder + this.images[this.slideIndex];
@@ -130,17 +145,14 @@ showImage: function(index, add) {
 			var xhr = $.ajaxSettings.xhr();
 
 			xhr.onloadstart = function(event) {
-				
+				// Esperar un poco antes de mostrar la barra de progreso
+				ProgressBar.display(true, 500);
 			};
 
 			xhr.onprogress = function(event) {
 				if (event.loaded !== event.total) {
-					console.log("progress", event.loaded / event.total * 100);
+					ProgressBar.change(Math.trunc(event.loaded / event.total * 100));
 				}
-			};
-
-			xhr.onload = function(event) {
-
 			};
 
 			return xhr;
@@ -148,8 +160,13 @@ showImage: function(index, add) {
 	})
 		.done(function() {
 			$(this).attr("src", urlImg);
+			// El navegador tarda un rato en mostrar la imagen nueva
+			setTimeout(function() {
+				$("#carousel-img-bot").show();
+			}, 500);
 		})
 		.always(function() {
+			ProgressBar.display(false);
 			Carousel.auto = setTimeout(function() {
 				Carousel.showImage(1, true)
 			}, 3000);
