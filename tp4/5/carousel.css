@@ -18,9 +18,10 @@ div.carousel-main {
 	margin: auto;
 	height: 50vh;
 	background-color: black;
+  overflow: hidden;
 }
 
-#carousel-img {
+img[id|="carousel-img"] {
 	z-index: 0;
 	max-height: 100%;
 	max-width: 100%;
@@ -32,14 +33,73 @@ div.carousel-main {
   margin: auto;
 }
 
+#carousel-img-top {
+  z-index: 1;
+}
+
+.fade,
+.move-right,
+.move-left,
+.move-top,
+.move-bottom {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.fade {
+  animation-name: fade;
+}
+
+@keyframes fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.move-right {
+  animation-name: move-right;
+}
+
+@keyframes move-right {
+  from { left: 0; }
+  to { left: 100%; }
+}
+
+.move-left {
+  animation-name: move-left;
+}
+
+@keyframes move-left {
+  from { left: 0; }
+  to { left: -200%; }
+}
+
+.move-top {
+  animation-name: move-top;
+}
+
+@keyframes move-top {
+  from { top: 0; }
+  to { top: -200%; }
+}
+
+.move-bottom {
+  animation-name: move-bottom;
+}
+
+@keyframes move-bottom {
+  from { top: 0; }
+  to { top: 200%; }
+}
+
 a.carousel-prev,
 a.carousel-next {
-	z-index: 1;
+	z-index: 2;
+  color: #eee;
+  text-shadow: 0 0 0.2em #333;
   cursor: pointer;
   position: absolute;
   height: 100%;
   padding: 4vmin;
-  transition: 0.6s ease;
 }
 
 a.carousel-prev {
@@ -50,21 +110,25 @@ a.carousel-next {
   right: 0;
 }
 
+a.carousel-prev:hover,
 a.carousel-next:hover {
-  background: linear-gradient(270deg, rgba(50,50,50,1), rgba(50,50,50,0));
+  color: white;
 }
 
 a.carousel-prev:hover {
   background: linear-gradient(90deg, rgba(50,50,50,1), rgba(50,50,50,0));
 }
 
+a.carousel-next:hover {
+  background: linear-gradient(270deg, rgba(50,50,50,1), rgba(50,50,50,0));
+}
+
 span.carousel-left,
 span.carousel-right {
   position: absolute;
-  color: white;
   font-weight: bold;
   font-size: 1.5em;
-  margin-top: -1em;
+  margin-top: -0.6em;
   top: 50%;
 }
 
@@ -77,7 +141,7 @@ span.carousel-right {
 }
 
 section.carousel-section-dot {
-	z-index: 1;
+	z-index: 2;
 	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
