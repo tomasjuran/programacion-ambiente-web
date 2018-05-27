@@ -200,7 +200,7 @@ createGameScreen: function() {
 	screen.appendChild(secStatus);
 	screen.appendChild(navGame);
 
-	this.level = 3;
+	this.level = 0;
 	return screen;
 },
 
