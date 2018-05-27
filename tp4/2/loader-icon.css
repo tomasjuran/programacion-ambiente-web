@@ -2,10 +2,10 @@
 	margin: auto;
 	border: 10px dotted #fbe268;
 	border-style: dotted;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: rotate 4s linear infinite;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: rotate 4s linear infinite;
 }
 
 @keyframes rotate {

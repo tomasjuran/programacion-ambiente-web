@@ -5,15 +5,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Carousel</title>
 	<script src="../jquery.js" type="text/javascript"></script>
+	<script src="progressbar.js" type="text/javascript"></script>
 	<script src="carousel.js" type="text/javascript"></script>
 	<script>
 		$(function() {
 			Carousel.init("carousel");
+			ProgressBar.change(70);
+			setTimeout(function() {
+				ProgressBar.change(100)
+			}, 1000);
 		});
   </script>
+  <link rel="stylesheet" href="progressbar.css">
   <link rel="stylesheet" href="carousel.css">
 </head>
 <body>
 	<div id="carousel"></div>
+	<div id="progressbar-wrapper">
+		<div id="progressbar-bar">
+			<p id="progressbar-text">0%</p>
+		</div>
+	</div>
 </body>
 </html>

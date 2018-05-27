@@ -125,10 +125,31 @@ showImage: function(index, add) {
 	urlImg = this.imgFolder + this.images[this.slideIndex];
 	$.ajax({
 		url: urlImg,
-		context: $("#carousel-img-bot")
+		context: $("#carousel-img-bot"),
+		xhr: function() {
+			var xhr = $.ajaxSettings.xhr();
+
+			xhr.onloadstart = function(event) {
+				
+			};
+
+			xhr.onprogress = function(event) {
+				if (event.loaded !== event.total) {
+					console.log("progress", event.loaded / event.total * 100);
+				}
+			};
+
+			xhr.onload = function(event) {
+
+			};
+
+			return xhr;
+		}
 	})
 		.done(function() {
 			$(this).attr("src", urlImg);
+		})
+		.always(function() {
 			Carousel.auto = setTimeout(function() {
 				Carousel.showImage(1, true)
 			}, 3000);
