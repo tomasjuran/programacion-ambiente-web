@@ -1,0 +1,104 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 12pt;
+  text-align: center;
+}
+
+@media only screen and (min-width: 768px) {
+	body {
+    	font-size: 16pt;
+	}
+}
+
+div.carousel-main {
+	position: relative;
+	margin: auto;
+	height: 50vh;
+	background-color: black;
+}
+
+#carousel-img {
+	z-index: 0;
+	max-height: 100%;
+	max-width: 100%;
+	position: absolute;  
+  top: 0;  
+  bottom: 0;  
+  left: 0;  
+  right: 0;  
+  margin: auto;
+}
+
+a.carousel-prev,
+a.carousel-next {
+	z-index: 1;
+  cursor: pointer;
+  position: absolute;
+  height: 100%;
+  padding: 4vmin;
+  transition: 0.6s ease;
+}
+
+a.carousel-prev {
+	left: 0;
+}
+
+a.carousel-next {
+  right: 0;
+}
+
+a.carousel-next:hover {
+  background: linear-gradient(270deg, rgba(50,50,50,1), rgba(50,50,50,0));
+}
+
+a.carousel-prev:hover {
+  background: linear-gradient(90deg, rgba(50,50,50,1), rgba(50,50,50,0));
+}
+
+span.carousel-left,
+span.carousel-right {
+  position: absolute;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-top: -1em;
+  top: 50%;
+}
+
+span.carousel-left {
+  left: 50%;
+}
+
+span.carousel-right {
+  right: 50%;
+}
+
+section.carousel-section-dot {
+	z-index: 1;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 30px;
+}
+
+div.carousel-dot {
+	cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 3px;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+div.carousel-dot-active {
+	background-color: white;
+	transform: scale(1.1);
+}
