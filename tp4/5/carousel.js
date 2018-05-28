@@ -1,6 +1,9 @@
 "use strict";
 
 var Carousel = {
+imgTop: "carousel-img-top",	// Id de la imagen anterior
+imgBot: "carousel-img-bot",	// Id de la imagen actual
+
 imgFolder: "images/",	// Carpeta de imágenes
 images: [	// Imágenes del carrusel
 	"1.png",
@@ -21,12 +24,34 @@ slideIndex: 0,	// Índice actual del carrusel
 autoHandler: null,	// Handler del slide
 
 init: function(container) {
-	var main, sectionDot, prev, next;
+	var main, progressbar, sectionDot, prev, next;
 
 	main = $("<div>", {
 		"class":"carousel-main"
+	});
+		
+	progressbar = $("<div>", {
+		"id":"carousel-progressbar"
 	})
-		.appendTo($(container));
+		.appendTo(main);
+
+	ProgressBar.init(progressbar);
+
+	$("<img>", {
+		"id":Carousel.imgTop,
+		click: function() {
+			Carousel.showImage(1, true);
+		}
+	})
+		.appendTo(main);
+
+	$("<img>", {
+		"id":Carousel.imgBot,
+		click: function() {
+			Carousel.showImage(1, true);
+		}
+	})
+		.appendTo(main);
 
 	prev = $("<a>", {
 		"class":"carousel-prev",
@@ -55,22 +80,6 @@ init: function(container) {
 		"html":"&#10095;"
 	})
 		.appendTo(next);
-		
-	$("<img>", {
-		"id":"carousel-img-top",
-		click: function() {
-			Carousel.showImage(1, true);
-		}
-	})
-		.appendTo(main);
-
-	$("<img>", {
-		"id":"carousel-img-bot",
-		click: function() {
-			Carousel.showImage(1, true);
-		}
-	})
-		.appendTo(main);
 
 	sectionDot = $("<section>", {
 		"class":"carousel-section-dot"
@@ -87,6 +96,8 @@ init: function(container) {
 			.appendTo(sectionDot);
 	}
 
+	main.appendTo($(container));
+
 	this.showImage(0);
 },
 
@@ -95,7 +106,8 @@ init: function(container) {
  *	Si <em>add</em> es <b>true</b>, suma al índice actual en lugar de cambiarlo.
  */
 showImage: function(index, add) {
-	var lastIndex, currentIndex, ani, urlImg;
+	var lastIndex, currentIndex, ani, urlImg,
+		imgTop, imgBot;
 
 	// Detener las animaciones
 	clearTimeout(this.autoHandler);
@@ -118,17 +130,20 @@ showImage: function(index, add) {
 
 	// Animar la imagen anterior
 	ani = this.slideIndex % this.animations.length;
-	$("#carousel-img-top")
-		.attr("src", Carousel.imgFolder + Carousel.images[lastIndex])
-		.removeClass();
-	$("#carousel-img-top").addClass(Carousel.animations[ani]);
-	$("#carousel-img-bot").hide();
+	
+	imgTop = document.getElementById(this.imgTop);
+	imgTop.src = this.imgFolder + this.images[lastIndex];
+	imgTop.className = this.animations[ani];
+	
+	// Ocultar mientras se carga la nueva imagen
+	imgBot = document.getElementById(this.imgBot);
+	imgBot.style.display = "none";
 	
 	// Petición asíncrona para cambiar la imagen
 	urlImg = this.imgFolder + this.images[this.slideIndex];
 	$.ajax({
 		url: urlImg,
-		context: $("#carousel-img-bot"),
+		//cache: false,
 		xhr: function() {
 			var xhr = $.ajaxSettings.xhr();
 
@@ -138,8 +153,10 @@ showImage: function(index, add) {
 			};
 
 			xhr.onprogress = function(event) {
-				if (event.loaded !== event.total) {
-					ProgressBar.change(Math.trunc(event.loaded / event.total * 100));
+				if (currentIndex === Carousel.slideIndex) {
+					if (event.loaded !== event.total) {
+						ProgressBar.change(Math.trunc(event.loaded / event.total * 100));
+					}
 				}
 			};
 
@@ -149,18 +166,20 @@ showImage: function(index, add) {
 		.done(function() {
 			// No intentar cambiar la imagen si ya no es la actual
 			if (currentIndex === Carousel.slideIndex) {
-				$(this).attr("src", urlImg);
+				imgBot.src = urlImg;
 				// El navegador tarda un rato en mostrar la imagen nueva
 				setTimeout(function() {
-					$("#carousel-img-bot").show();
+					imgBot.style.display = "block";
 				}, 500);
 			}
 		})
 		.always(function() {
-			ProgressBar.display(false);
-			Carousel.autoHandler = setTimeout(function() {
-				Carousel.showImage(1, true)
-			}, 3000);
+			if (currentIndex === Carousel.slideIndex) {
+				ProgressBar.display(false);
+				Carousel.autoHandler = setTimeout(function() {
+					Carousel.showImage(1, true)
+				}, 3000);
+			}
 		});
 }
 

@@ -2,9 +2,21 @@
   box-sizing: border-box;
 }
 
+div.progressbar-main {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
 div[id|="progressbar-wrapper"] {
 	display: none;
-	position: relative;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
 	width: 30vw;
 	height: 7vh;
 	border: 4px solid black;
@@ -18,7 +30,9 @@ div[id|="progressbar-wrapper"] {
 div[id|="progressbar-bar"] {
 	height: 100%;
 	background: linear-gradient(90deg, green, lightgreen);
+	/*
 	transition: width 0.5s;
+	*/
 }
 
 p[id|="progressbar-text"] {

@@ -6,63 +6,81 @@ incrementHandler: null,
 delayHandler: null,
 
 init: function(container) {
-	var wrapper = $("<div>", {
+	var main, wrapper;
+	wrapper = $("<div>", {
 		"id":"progressbar-wrapper"
-	})
-		.appendTo($(container));
+	});
 
 	$("<div>", {
 		"id":"progressbar-bar"
 	})
-		.css("width", "0%")
+		.width("0%")
 		.appendTo(wrapper);
 
 	$("<p>", {
-		"id":"progressbar-text",
-		"text":"0%"
+		"id":"progressbar-text"
 	})
+		.text("0%")
 		.appendTo(wrapper);
+
+	main = $("<div>", {
+		"class":"progressbar-main"
+	});
+
+	wrapper.appendTo(main);
+	main.appendTo($(container));
 },
 
 display: function(show, delay, index) {
-	var wrapper = index 
-		? "#progressbar-wrapper-" + index
-		: "#progressbar-wrapper";
+	var id, wrapper;
+	
+	clearTimeout(this.delayHandler);
+	
+	id = "progressbar-wrapper";
+	if (index) {
+		id += "-" + index;
+	}
+	
+	wrapper = document.getElementById(id);
 	
 	if (show) {
 		delay = delay || 0;
 		this.delayHandler = setTimeout(function() {
-			$(wrapper).show();
+			wrapper.style.display = "block";
 		}, delay);
 	} else {
-		clearTimeout(this.delayHandler);
-		$(wrapper).hide();
+		wrapper.style.display = "none";
 	}
 },
 
 change: function(percent, index) {
-	var bar, text;
-	if (index) {
-		bar = "#progressbar-bar-" + index;
-		text = "#progressbar-text-" + index;
-	} else {
-		bar = "#progressbar-bar";
-		text = "#progressbar-text";
-	}
-
-	$(bar).width(percent + "%");
+	var bar, text, pText;
 
 	clearInterval(this.incrementHandler);
+
+	bar = "progressbar-bar";
+	text = "progressbar-text";
+	if (index) {
+		bar += "-" + index;
+		text = "-" + index;
+	}
+
+	(document.getElementById(bar)).style.width = percent + "%";
+	(document.getElementById(text)).innerHTML = percent + "%";
+
+/* Esto sirve si hay saltos grandes entre changes
+	pText = document.getElementById(text);
 	this.incrementHandler = setInterval(function() {
-		var current = parseInt($(text).text());
+		var current = parseInt(pText.innerHTML);
 		if (current < percent) {
-			$(text).text((current+1) + "%");
+			pText.innerHTML = (current+1) + "%";
 		} else if (current > percent) {
-			$(text).text((current-1) + "%");
+			pText.innerHTML = (current-1) + "%";
 		} else {
 			clearInterval(ProgressBar.incrementHandler);
 		}
 	}, 1);
+*/
 }
 
 }
