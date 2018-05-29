@@ -32,6 +32,8 @@ div[id|="carousel-progressbar"] {
   margin: auto;
 }
 
+/* Para la versión 1 */
+
 #carousel-section-img {
   position: absolute;
   height: 100%;
@@ -40,6 +42,24 @@ div[id|="carousel-progressbar"] {
 }
 
 img.carousel-img {
+  z-index: 0;
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;  
+  top: 0;  
+  bottom: 0;  
+  left: 0;  
+  right: 0;  
+  margin: auto;
+}
+
+img.carousel-img-top {
+  z-index: 1;
+}
+
+/* Para la versión 2 */
+
+img[id|="carousel-img"] {
 	z-index: 0;
 	max-height: 100%;
 	max-width: 100%;
@@ -51,7 +71,7 @@ img.carousel-img {
   margin: auto;
 }
 
-img.carousel-img-top {
+#carousel-img-top {
   z-index: 1;
 }
 
