@@ -1,14 +1,11 @@
 "use strict";
 
 var Carousel = {
-imgTop: "carousel-img-top",	// Id de la imagen anterior
-imgBot: "carousel-img-bot",	// Id de la imagen actual
-
 imgFolder: "images/",	// Carpeta de imágenes
 images: [	// Imágenes del carrusel
 	"1.png",
 	"2.gif",
-	//"3.png",
+	"3.png",
 	"4.jpg",
 	"5.jpeg",
 	"6.gif"
@@ -24,34 +21,57 @@ slideIndex: 0,	// Índice actual del carrusel
 autoHandler: null,	// Handler del slide
 
 init: function(container) {
-	var main, progressbar, sectionDot, prev, next;
+	var main, progressbar, sectionImg, ulImg, sectionDot, ulDot, prev, next;
 
-	main = $("<div>", {
-		"class":"carousel-main"
-	});
+	main = document.createElement("div");
+	main.className = "carousel-main";
 		
-	progressbar = $("<div>", {
-		"id":"carousel-progressbar"
-	})
-		.appendTo(main);
-
+	progressbar = document.createElement("div");
+	progressbar.id = "carousel-progressbar";
+	main.appendChild(progressbar);
 	ProgressBar.init(progressbar);
 
-	$("<img>", {
-		"id":Carousel.imgTop,
-		click: function() {
-			Carousel.showImage(1, true);
-		}
-	})
-		.appendTo(main);
+	sectionImg = document.createElement("section");
+	sectionImg.id = "carousel-section-img";
+	main.appendChild(sectionImg);
 
-	$("<img>", {
-		"id":Carousel.imgBot,
-		click: function() {
+	ulImg = document.createElement("ul");
+	sectionImg.appendChild(ulImg);
+
+	for (var i = 0; i < this.images.length; i++) {
+		let li, img, currentIndex;
+
+		img = document.createElement("img");
+		img.className = "carousel-img";
+		img.addEventListener("click", function() {
 			Carousel.showImage(1, true);
-		}
-	})
-		.appendTo(main);
+		});
+		img.addEventListener("loadstart", function() {
+			currentIndex = Carousel.slideIndex;
+			this.style.display = "none";
+			// Esperar un poco antes de mostrar la barra de progreso
+			ProgressBar.display(true, 500);
+		});
+		img.addEventListener("progress", function(event) {
+			// No actuar si la imagen cambió
+			if (currentIndex === Carousel.slideIndex) {
+				ProgressBar.change(Math.trunc(event.loaded / event.total * 100));
+			}
+		});
+		img.addEventListener("loadend", function() {
+			if (currentIndex === Carousel.slideIndex) {
+				this.style.display = "block";
+				ProgressBar.display(false);
+				Carousel.autoHandler = setTimeout(function() {
+					Carousel.showImage(1, true)
+				}, 3000);
+			}
+		});
+
+		li = document.createElement("li");
+		li.appendChild(img);
+		ulImg.appendChild(li);
+	}
 
 	prev = $("<a>", {
 		"class":"carousel-prev",
@@ -84,19 +104,23 @@ init: function(container) {
 	sectionDot = $("<section>", {
 		"class":"carousel-section-dot"
 	})
-		.appendTo(main);
+		.appendTo(main)
+		.get(0);
+
+	ulDot = document.createElement("ul");
+	sectionDot.appendChild(ulDot);
 
 	for (let i = 0; i < this.images.length; i++) {
-		$("<div>", {
+		$("<li>", {
 			"class":"carousel-dot",
 			click: function() {
 				Carousel.showImage(i);
 			}
 		})
-			.appendTo(sectionDot);
+			.appendTo(ulDot);
 	}
 
-	main.appendTo($(container));
+	document.getElementById(container).appendChild(main);
 
 	this.showImage(0);
 },
@@ -106,8 +130,8 @@ init: function(container) {
  *	Si <em>add</em> es <b>true</b>, suma al índice actual en lugar de cambiarlo.
  */
 showImage: function(index, add) {
-	var lastIndex, currentIndex, ani, urlImg,
-		imgTop, imgBot;
+	var lastIndex, ani,
+		imageList, imgTop, imgBot;
 
 	// Detener las animaciones
 	clearTimeout(this.autoHandler);
@@ -120,7 +144,6 @@ showImage: function(index, add) {
 	} else {
 		this.slideIndex = index;
 	}
-	currentIndex = this.slideIndex;
 
 	// Cambiar el botón activo
 	$(".carousel-dot-active").each(function() {
@@ -128,59 +151,17 @@ showImage: function(index, add) {
 	});
 	$(".carousel-dot").eq(this.slideIndex).addClass("carousel-dot-active");
 
+	imageList = $("#carousel-section-img img");
+
 	// Animar la imagen anterior
-	ani = this.slideIndex % this.animations.length;
+	ani = Math.trunc(Math.random() * this.animations.length);
+	imgTop = imageList.eq(lastIndex)[0];
+	imgTop.className = "carousel-img carousel-img-top " + this.animations[ani];
 	
-	imgTop = document.getElementById(this.imgTop);
-	imgTop.src = this.imgFolder + this.images[lastIndex];
-	imgTop.className = this.animations[ani];
-	
-	// Ocultar mientras se carga la nueva imagen
-	imgBot = document.getElementById(this.imgBot);
-	imgBot.style.display = "none";
-	
-	// Petición asíncrona para cambiar la imagen
-	urlImg = this.imgFolder + this.images[this.slideIndex];
-	$.ajax({
-		url: urlImg,
-		//cache: false,
-		xhr: function() {
-			var xhr = $.ajaxSettings.xhr();
-
-			xhr.onloadstart = function(event) {
-				// Esperar un poco antes de mostrar la barra de progreso
-				ProgressBar.display(true, 500);
-			};
-
-			xhr.onprogress = function(event) {
-				if (currentIndex === Carousel.slideIndex) {
-					if (event.loaded !== event.total) {
-						ProgressBar.change(Math.trunc(event.loaded / event.total * 100));
-					}
-				}
-			};
-
-			return xhr;
-		}
-	})
-		.done(function() {
-			// No intentar cambiar la imagen si ya no es la actual
-			if (currentIndex === Carousel.slideIndex) {
-				imgBot.src = urlImg;
-				// El navegador tarda un rato en mostrar la imagen nueva
-				setTimeout(function() {
-					imgBot.style.display = "block";
-				}, 500);
-			}
-		})
-		.always(function() {
-			if (currentIndex === Carousel.slideIndex) {
-				ProgressBar.display(false);
-				Carousel.autoHandler = setTimeout(function() {
-					Carousel.showImage(1, true)
-				}, 3000);
-			}
-		});
+	// Cargar la nueva imagen
+	imgBot = imageList.eq(this.slideIndex)[0];
+	imgBot.className = "carousel-img";
+	imgBot.src = this.imgFolder + this.images[this.slideIndex];
 }
 
 }
