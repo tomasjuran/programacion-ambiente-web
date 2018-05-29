@@ -41,6 +41,10 @@ div[id|="carousel-progressbar"] {
   margin: auto;
 }
 
+#carousel-section-img li {
+  list-style-type: none;
+}
+
 img.carousel-img {
   z-index: 0;
   max-height: 100%;
