@@ -72,7 +72,7 @@
 				5. Crear un slide de imágenes de tipo “carrusel”, (Es para el ej 6 del TP1). Debe cumplir con las reglas del Diseño Responsive y deberá contar con diferentes efectos de transición en el pasaje de imágenes (3 como mínimo).
 			</h3>
 			<p>
-				El ejercicio resuelto se encuentra en <a href="5/index.html">Carousel v1</a> y <a href="5/index2.html">Carousel v2</a> (para Chrome).
+				El ejercicio resuelto se encuentra en <a href="5/index.html">Carousel v1</a> y <a href="5/index2.html">Carousel v2</a>.
 			</p>
 		</section>
 		<section>
@@ -80,7 +80,10 @@
 				6. Agregar una barra de progreso, integrada al carrusel del punto anterior, que muestre el avance de la carga de las imágenes.
 			</h3>
 			<p>
-				El ejercicio resuelto se encuentra en <a href="5/index.html">Carousel v1</a> y <a href="5/index2.html">Carousel v2</a> (para Chrome).
+				El ejercicio resuelto se encuentra en <a href="5/index.html">Carousel v1</a> y <a href="5/index2.html">Carousel v2</a>.
+			</p>
+			<p>
+				La versión 1 no funciona en algunos navegadores que ignoran la propiedad "onprogress" (e.g. Chrome) <a href="#BUG2" target="_self">[BUG2]</a>, mientras que la versión 2 utiliza Ajax y depende de cómo maneja cada navegador la caché (a veces la barra de progreso se vuelve "intermitente", o el navegador va a buscar la imagen dos veces).
 			</p>
 		</section>
 		<section>
@@ -105,7 +108,10 @@
 		<section>
 			<h2>Bibliografía</h2>
 			<ul>
-				<li><a href=""></a></li>
+				<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN web docs | Javascript</a></li>
+				<li><a href="http://api.jquery.com/">jQuery API Documentation</a></li>
+				<li><a id="BUG1" href="https://bugs.chromium.org/p/chromium/issues/detail?id=773">[BUG1] "Broken/missing/not found images should display ALT text"</a></li>
+				<li><a id="BUG2" href="https://bugs.chromium.org/p/chromium/issues/detail?id=458851">[BUG2] "loadstart event is not fired when &lt;img&gt; resource starts loading."</a></li>
 			</ul>
 		</section>
 	</main>
