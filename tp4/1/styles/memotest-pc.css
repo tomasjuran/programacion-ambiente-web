@@ -1,0 +1,48 @@
+body {
+    	font-size: 16pt;
+}
+
+td.card-down {
+	cursor: pointer;
+	transition: 0.5s;
+}	
+
+td.card-down:hover,
+td.card-selected,
+td.card-found {
+	transform: scale(1.1);
+}
+
+.screen-game,
+#art-board,
+section.sec-turn,
+section.sec-status-msg,
+#nav-game {
+	position: relative;
+}
+
+#art-board {
+	float: left;
+}
+
+section.sec-turn,
+section.sec-status-msg,
+#nav-game {
+	float: right;
+}
+
+#art-board {
+	width: 70%;
+}
+
+section.sec-turn,
+section.sec-status-msg,
+#nav-game {
+	width: 30%;
+}
+
+section.sec-turn,
+section.sec-status-msg,
+#nav-game {
+	clear: right;
+}
