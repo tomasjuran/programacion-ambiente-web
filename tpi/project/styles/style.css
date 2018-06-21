@@ -1,0 +1,12 @@
+.chess-square {
+	width: 10vmin;
+	height: 10vmin;
+}
+
+.chess-pawn-b {
+	background: url(images/pawnb.min.svg);
+}
+
+.chess-square {
+	background: url(images/pawnb.min.svg);	
+}
